@@ -4,7 +4,7 @@
  *
  * stageVars = ['repo': 'vim', 'branch': 'f28']
  * executeInContainer(containerName: 'rpmbuild', containerScript: 'rpmbuild.sh', stageVars: stageVars)
- * 
+ *
  * @param parameters
  * @return
  */

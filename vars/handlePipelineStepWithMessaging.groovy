@@ -2,9 +2,13 @@
  * Wrapper step to print debugging information and record the time spent running the wrapped code
  * Example Usage:
  *
- * msgProperties = ['msgTopic': 'stageName', 'msgProps': 'stage=stage1', 'msgContent': '{"pipelineResult":"success"}']
+ * beforeRunMsg = ['msgTopic': 'stageName', 'msgProps': 'stage=stage1', 'msgContent': '{"pipelineResult":"stage1 queued"}']
+ * afterRunMsg = ['msgTopic': 'stageName', 'msgProps': 'stage=stage1', 'msgContent': '{"pipelineResult":"stage1 success"}']
+ * failedRunMsg = ['msgTopic': 'stageName', 'msgProps': 'stage=stage1', 'msgContent': '{"pipelineResult":"stage failed"}']
  * stage('mystage') {
- *     handlePipelineStepWithMessaging(msgProperties) {
+ *     handlePipelineStepWithMessaging(beforeRunMsg: beforeRunMsg,
+ *                                     afterRunMsg: afterRunMsg,
+ *                                     failedRunMsg: failedRunMsg) {
  *         runCode()
  *     }
  * }
@@ -18,16 +22,19 @@
 def call(Map parameters, Closure body) {
     def measurementName = parameters.get('measurement', env.JOB_NAME)
     def name = parameters.get('stageName', env.STAGE_NAME ?: env.JOB_NAME)
-    def msgProperties = parameters.get('msg', ['msgTopic': null, 'msgProps': null, 'msgContent': null])
+    def beforeRunMsg = parameters.get('beforeRunMsg')
+    def afterRunMsg = parameters.get('afterRunMsg')
+    def failedRunMsg = parameters.get('failedRunMsg')
 
     try {
         print "running pipeline step: ${name}"
         this.ciMetrics.timed measurementName, name, {
-            sendMessageWithAudit(msgProperties)
+            sendMessageWithAudit(beforeRunMsg)
             body()
-            sendMessageWithAudit(msgProperties)
+            sendMessageWithAudit(afterRunMsg)
         }
     } catch(e) {
+        sendMessageWithAudit(failedRunMsg)
         throw e
     } finally {
         print "end of pipeline step: ${name}"
