@@ -55,6 +55,10 @@ def call(Map parameters, Closure body) {
         ciMetrics.setMetricField(packageMeasurement, 'build_time', currentBuild.getDuration())
         ciMetrics.setMetricTag(packageMeasurement, 'package_name', buildVars['package_name'])
         //this.ciMetrics.writeToInflux()
+
+        print "printing cimetrics"
+        print ciMetrics.customDataMap
+        print ciMetrics.customDataMapTags
     }
 
 }
