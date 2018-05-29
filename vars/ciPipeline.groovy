@@ -15,6 +15,8 @@
  * @param body
  * @return
  */
+import org.contralib.ciMetrics
+
 
 def call(Map parameters, Closure body) {
     def buildPrefix = parameters.get('buildPrefix', 'contra-pipeline')
@@ -47,11 +49,11 @@ def call(Map parameters, Closure body) {
         currentBuild.displayName = buildVars['displayName'] ?: "Build #${env.BUILD_NUMBER}"
         currentBuild.description = buildVars['buildDescription'] ?: currentBuild.result
 
-        this.ciMetrics.setMetricTag(jobMeasurement, 'package_name', buildVars['package_name'])
-        this.ciMetrics.setMetricTag(jobMeasurement, 'build_result', currentBuild.result)
-        this.ciMetrics.setMetricField(jobMeasurement, 'build_time', currentBuild.getDuration())
-        this.ciMetrics.setMetricField(packageMeasurement, 'build_time', currentBuild.getDuration())
-        this.ciMetrics.setMetricTag(packageMeasurement, 'package_name', buildVars['package_name'])
+        ciMetrics.setMetricTag(jobMeasurement, 'package_name', buildVars['package_name'])
+        ciMetrics.setMetricTag(jobMeasurement, 'build_result', currentBuild.result)
+        ciMetrics.setMetricField(jobMeasurement, 'build_time', currentBuild.getDuration())
+        ciMetrics.setMetricField(packageMeasurement, 'build_time', currentBuild.getDuration())
+        ciMetrics.setMetricTag(packageMeasurement, 'package_name', buildVars['package_name'])
         //this.ciMetrics.writeToInflux()
     }
 

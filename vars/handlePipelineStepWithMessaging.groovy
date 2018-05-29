@@ -19,6 +19,8 @@
  * @return
  */
 
+import org.contralib.ciMetrics
+
 
 def call(Map parameters = [:], Closure body) {
     def measurementName = parameters.get('measurement', env.JOB_NAME)
@@ -29,7 +31,7 @@ def call(Map parameters = [:], Closure body) {
 
     try {
         print "running pipeline step: ${name}"
-        this.ciMetrics.timed measurementName, name, {
+        ciMetrics.timed measurementName, name, {
             sendMessageWithAudit(beforeRunMsg)
             body()
             sendMessageWithAudit(afterRunMsg)
