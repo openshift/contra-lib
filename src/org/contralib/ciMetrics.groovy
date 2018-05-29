@@ -18,6 +18,8 @@ try {
     ciMetrics.writeToInflux()
 }
  */
+package org.contralib
+
 
 @Singleton
 class ciMetrics {
