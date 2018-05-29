@@ -1,3 +1,11 @@
+/**
+ * Schedule a Jenkins job
+ * Example Usage:
+ *
+ * scheduleBuild(buildName: 'job-to-schedule', params: ['CI_MESSAGE': env.CI_MESSAGE])
+ * @param parameters
+ * @return
+ */
 def call(Map parameters) {
 
     def triggerRetryCount = parameters.get('triggerRetryCount', 3)
