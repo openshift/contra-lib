@@ -19,9 +19,11 @@ def call(Map parameters = [:], Closure body) {
     def measurementName = parameters.get('measurement', env.JOB_NAME)
     def name = parameters.get('stageName', env.STAGE_NAME ?: env.JOB_NAME)
 
+    def cimetrics = new ciMetrics()
+
     try {
         print "running pipeline step: ${name}"
-        ciMetrics.timed measurementName, name, {
+        cimetrics.timed measurementName, name, {
             body()
         }
     } catch(e) {

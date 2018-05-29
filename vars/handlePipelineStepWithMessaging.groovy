@@ -29,9 +29,11 @@ def call(Map parameters = [:], Closure body) {
     def afterRunMsg = parameters.get('afterRunMsg')
     def failedRunMsg = parameters.get('failedRunMsg')
 
+    def cimetrics = new ciMetrics()
+
     try {
         print "running pipeline step: ${name}"
-        ciMetrics.timed measurementName, name, {
+        cimetrics.timed measurementName, name, {
             sendMessageWithAudit(beforeRunMsg)
             body()
             sendMessageWithAudit(afterRunMsg)
