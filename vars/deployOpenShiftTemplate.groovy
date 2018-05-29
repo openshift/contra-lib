@@ -1,4 +1,17 @@
-def call(parameters = [:], Closure body) {
+/**
+ * Define containers to deploy to openshift
+ * Example Usage in Jenkinsfile:
+ *
+ * ocContainers = ['rpmbuild': [tag: 'latest']]
+ * deployOpenShiftTemplate(containers: ocContainers, podName: "fedora-${UUID.randomUUID().toString()}") {
+ *     deployCode()
+ * }
+ * 
+ * @param parameters
+ * @param body
+ * @return
+ */
+def call(Map parameters, Closure body) {
 
     timestamps {
 
