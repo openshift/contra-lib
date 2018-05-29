@@ -1,6 +1,8 @@
 #!groovy
 package org.contralib
 
+import com.cloudbees.groovy.cps.NonCPS
+
 /*
 A class to store build metrics over the lifetime of the build.
 Metrics are stored in customDataMap and then sent to influx at
@@ -22,7 +24,6 @@ try {
 }
  */
 
-
 @Singleton
 class ciMetrics {
 
@@ -40,6 +41,7 @@ class ciMetrics {
      * @param name - the step name
      * @param body - the enclosing step body
      */
+    @NonCPS
     def timed(String measurement, String name, Closure body) {
 		def start = System.currentTimeMillis()
 
@@ -57,6 +59,7 @@ class ciMetrics {
      * @param value
      * @return
      */
+    @NonCPS
     def setMetricField(String measurement, String key, def value) {
         if (!customDataMap[measurement]) {
             customDataMap[measurement] = [:]
@@ -72,6 +75,7 @@ class ciMetrics {
      * @param value
      * @return
      */
+    @NonCPS
     def setMetricTag(String measurement, String key, String value) {
         if (!customDataMapTags[measurement]) {
             customDataMapTags[measurement] = [:]
@@ -86,6 +90,7 @@ class ciMetrics {
      * @param tags
      * @return
      */
+    @NonCPS
     def setMetricTags(String measurement, Map tags) {
         if (!customDataMapTags[measurement]) {
             customDataMapTags[measurement] = [:]
@@ -100,6 +105,7 @@ class ciMetrics {
      * @param fields
      * @return
      */
+    @NonCPS
     def setMetricFields(String measurement, Map fields) {
         if (!customDataMap[measurement]) {
             customDataMap[measurement] = [:]
