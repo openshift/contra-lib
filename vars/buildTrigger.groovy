@@ -1,4 +1,4 @@
-def call(Map parameters, Closure body = {}) {
+def call(Closure body = {}) {
 
     def result = false
     handlePipelineStep {
