@@ -25,7 +25,7 @@ def call(Map parameters, Closure body) {
     def jobMeasurement = "${buildPrefix}-${env.JOB_NAME}"
     def packageMeasurement = "${buildPrefix}-${buildVars['package_name']}"
 
-    def cimetrics = ciMetrics.instance
+    //def cimetrics = ciMetrics.instance
 
     try {
         body()
@@ -51,16 +51,16 @@ def call(Map parameters, Closure body) {
         currentBuild.displayName = buildVars['displayName'] ?: "Build #${env.BUILD_NUMBER}"
         currentBuild.description = buildVars['buildDescription'] ?: currentBuild.result
 
-        cimetrics.setMetricTag(jobMeasurement, 'package_name', buildVars['package_name'])
-        cimetrics.setMetricTag(jobMeasurement, 'build_result', currentBuild.result)
-        cimetrics.setMetricField(jobMeasurement, 'build_time', currentBuild.getDuration())
-        cimetrics.setMetricField(packageMeasurement, 'build_time', currentBuild.getDuration())
-        cimetrics.setMetricTag(packageMeasurement, 'package_name', buildVars['package_name'])
+        //cimetrics.setMetricTag(jobMeasurement, 'package_name', buildVars['package_name'])
+        //cimetrics.setMetricTag(jobMeasurement, 'build_result', currentBuild.result)
+        //cimetrics.setMetricField(jobMeasurement, 'build_time', currentBuild.getDuration())
+        //cimetrics.setMetricField(packageMeasurement, 'build_time', currentBuild.getDuration())
+        //cimetrics.setMetricTag(packageMeasurement, 'package_name', buildVars['package_name'])
         //this.ciMetrics.writeToInflux()
 
         print "printing cimetrics"
-        print cimetrics.customDataMap
-        print cimetrics.customDataMapTags
+        //print cimetrics.customDataMap
+        //print cimetrics.customDataMapTags
     }
 
 }
