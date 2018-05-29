@@ -1,6 +1,4 @@
-env.CI_MESSAGE = '{"info": {"weight": 0.20000000000000001, "parent": null, "completion_time": "2018-05-25 17:15:31.634257", "request": ["git://pkgs.devel.redhat.com/rpms/ltrace?#10a7a10d1e1008c2f812b7f034b2dc54b1ca1d82", "rhel-7.6-candidate", {"scratch": true}], "start_time": "2018-05-25 17:04:06.417765", "start_ts": 1527267846.4177599, "state": 2, "awaited": null, "label": null, "priority": 20, "channel_id": 11, "waiting": false, "create_time": "2018-05-25 17:04:05.088410", "id": 16468173, "create_ts": 1527267845.0884099, "owner": 665, "host_id": 176, "completion_ts": 1527268531.6342599, "arch": "noarch", "method": "build", "result": null}, "attribute": "state", "old": "OPEN", "new": "CLOSED"}'
-
-def libraries = ['ci-pipeline': ['pipelineStep', 'https://github.com/joejstuart/contra-lib.git']]
+def libraries = ['ci-pipeline': ['pipelineStep', 'https://github.com/contra-lib/contra-lib.git']]
 
     libraries.each { name, repo ->
         library identifier: "${name}@${repo[0]}",
@@ -8,11 +6,11 @@ def libraries = ['ci-pipeline': ['pipelineStep', 'https://github.com/joejstuart/
                                       remote: repo[1]])
     }
 
-containers = ['rpmbuild-rhel': [:]]
+containers = ['rpmbuild': [:]]
 
 deployOpenShiftTemplate(containers: containers, docker_repo_url: 'docker-registry.default.svc:5000') {
 
-    ciPipeline(buildPrefix: 'downstream-rhel-build', buildVars: [package_name: 'vim']) {
+    ciPipeline(buildPrefix: 'package-build', buildVars: [package_name: 'vim']) {
 
         stageName = 'build-trigger'
         stage(stageName) {
