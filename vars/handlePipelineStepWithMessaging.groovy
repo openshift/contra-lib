@@ -1,5 +1,6 @@
 /**
- * Wrapper step to print debugging information and record the time spent running the wrapped code
+ * Wrapper step to print debugging information and record the time spent running the wrapped code.
+ * This will also put a message on a topic before and after a stage runs. Also, if the stage fails.
  * Example Usage:
  *
  * beforeRunMsg = ['msgTopic': 'stageName', 'msgProps': 'stage=stage1', 'msgContent': '{"pipelineResult":"stage1 queued"}']
