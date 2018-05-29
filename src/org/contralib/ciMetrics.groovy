@@ -28,13 +28,13 @@ try {
 class ciMetrics {
 
     // A map to store the data sent to influx
-    def customDataMap = [:]
+    public def customDataMap = [:]
     // Global tags
-    def customDataMapTags = [:]
+    public def customDataMapTags = [:]
     // This will prefix the data sent to influx. Usually set to the job name.
-    def prefix = "ci_pipeline"
+    public def prefix = "ci_pipeline"
     // The influx target configured in jenkins
-    def influxTarget = "localInflux"
+    public def influxTarget = "localInflux"
 
     /**
      * Call this method to record the step run time
