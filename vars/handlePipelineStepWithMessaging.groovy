@@ -29,7 +29,7 @@ def call(Map parameters = [:], Closure body) {
     def afterRunMsg = parameters.get('afterRunMsg')
     def failedRunMsg = parameters.get('failedRunMsg')
 
-    def cimetrics = new ciMetrics()
+    def cimetrics = ciMetrics.instance
 
     try {
         print "running pipeline step: ${name}"
