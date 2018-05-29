@@ -1,3 +1,6 @@
+#!groovy
+package org.contralib
+
 /*
 A class to store build metrics over the lifetime of the build.
 Metrics are stored in customDataMap and then sent to influx at
@@ -18,7 +21,6 @@ try {
     ciMetrics.writeToInflux()
 }
  */
-package org.contralib
 
 
 @Singleton
