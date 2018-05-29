@@ -5,7 +5,7 @@
  * def valid = buildTrigger {
  *     return runValidation(env.CI_MESSAGE)
  * }
- * 
+ *
  * @param body
  * @return
  */

@@ -1,13 +1,22 @@
 /**
  * requires: buildVars['package_name']
  * optional: buildVars['displayName'], buildVars['buildDescription']
+ * Example Usage:
+ *
+ * ciPipeline(buildPrefix: 'fedora-pipeline', buildVars: [package_name: 'vim']) {
+ *     stage('run-job') {
+ *         handlePipelineStep {
+ *             runCode()
+ *         }
+ *     }
+ * }
+ *
  * @param parameters
  * @param body
  * @return
  */
 
 def call(Map parameters, Closure body) {
-
     def buildPrefix = parameters.get('buildPrefix', 'contra-pipeline')
     def buildVars = parameters.get('buildVars', [:])
 
