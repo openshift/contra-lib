@@ -19,7 +19,7 @@
  */
 
 
-def call(Map parameters, Closure body) {
+def call(Map parameters = [:], Closure body) {
     def measurementName = parameters.get('measurement', env.JOB_NAME)
     def name = parameters.get('stageName', env.STAGE_NAME ?: env.JOB_NAME)
     def beforeRunMsg = parameters.get('beforeRunMsg')
