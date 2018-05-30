@@ -59,8 +59,8 @@ def call(Map parameters, Closure body) {
         //this.ciMetrics.writeToInflux()
 
         print "printing cimetrics"
-        //print cimetrics.customDataMap
-        //print cimetrics.customDataMapTags
+        print cimetrics.customDataMap
+        print cimetrics.customDataMapTags
     }
 
 }
