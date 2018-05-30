@@ -1,0 +1,33 @@
+def libraries = ['ci-pipeline': ['pipelineStep', 'https://github.com/openshift/contra-lib.git']]
+
+    libraries.each { name, repo ->
+        library identifier: "${name}@${repo[0]}",
+                retriever: modernSCM([$class: 'GitSCMSource',
+                                      remote: repo[1]])
+    }
+
+containers = ['rpmbuild': [:]]
+
+deployOpenShiftTemplate(containers: containers, docker_repo_url: 'docker-registry.default.svc:5000') {
+
+    ciPipeline(buildPrefix: 'package-build', buildVars: [package_name: 'vim']) {
+
+        stageName = 'build-trigger'
+        stage(stageName) {
+            validMessage = buildTrigger {
+                true
+            }
+
+        }
+
+        if (validMessage) {
+            stageName = 'schedule-build'
+            params = ['CI_MESSAGE': env.CI_MESSAGE]
+            stage(stageName) {
+                scheduleBuild(buildName: 'my-build', params: params)
+
+            }
+        }
+    }
+}
+
