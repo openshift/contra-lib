@@ -1,7 +1,6 @@
 #!groovy
 package org.contralib
 
-import com.cloudbees.groovy.cps.NonCPS
 
 /*
 A class to store build metrics over the lifetime of the build.
