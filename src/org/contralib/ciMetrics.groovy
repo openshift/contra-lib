@@ -39,7 +39,7 @@ class ciMetrics {
     // The influx target configured in jenkins
     def influxTarget = "localInflux"
 
-    private ciMetrics() {
+    ciMetrics() {
 
     }
 
