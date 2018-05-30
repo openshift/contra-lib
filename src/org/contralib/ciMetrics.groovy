@@ -37,10 +37,7 @@ class ciMetrics {
     def prefix = "ci_pipeline"
     // The influx target configured in jenkins
     def influxTarget = "localInflux"
-
-    def static getMetricsInstance() {
-        return metricsInstance
-    }
+    
 
     /**
      * Call this method to record the step run time
