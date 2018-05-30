@@ -27,7 +27,7 @@ try {
 
 class ciMetrics {
 
-    def static final instance = new ciMetrics()
+    def static final metricsInstance = new ciMetrics()
 
     // A map to store the data sent to influx
     def customDataMap = [:]
@@ -38,12 +38,8 @@ class ciMetrics {
     // The influx target configured in jenkins
     def influxTarget = "localInflux"
 
-    ciMetrics() {
-
-    }
-
-    def static getInstance() {
-        return instance
+    def static getMetricsInstance() {
+        return metricsInstance
     }
 
     /**

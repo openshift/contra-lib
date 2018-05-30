@@ -25,7 +25,7 @@ def call(Map parameters, Closure body) {
     def jobMeasurement = "${buildPrefix}-${env.JOB_NAME}"
     def packageMeasurement = "${buildPrefix}-${buildVars['package_name']}"
 
-    def cimetrics = ciMetrics.instance
+    def cimetrics = ciMetrics.metricsInstance
 
     try {
         body()
