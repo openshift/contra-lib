@@ -28,7 +28,7 @@ try {
 
 class ciMetrics {
 
-    private static final ciMetrics instance = new ciMetrics()
+    def static instance = new ciMetrics()
 
     // A map to store the data sent to influx
     def customDataMap = [:]
