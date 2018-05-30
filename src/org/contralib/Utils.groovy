@@ -23,3 +23,29 @@ def repoFromRequest(String request) {
     return repo
 }
 
+/**
+ * Set branch and repo_branch based on the candidate branch
+ * This is meant to be run with a CI_MESSAGE from a build task
+ * @param tag - The tag from the request field e.g. f27-candidate
+ * @return
+ */
+def setBuildBranch(String tag) {
+    def branch = null
+    def repo_branch = null
+
+    try {
+        if (tag.toLowerCase() == 'rawhide') {
+            branch = tag
+            repo_branch = 'master'
+        } else {
+            // assume that tag is branch-candidate
+            tokentag = tag.tokenize('-')
+            repo_branch = tokentag[0..tokentag.size()-2].join('-')
+            branch = repo_branch
+        }
+    } catch(e) {
+        throw new Exception('Something went wrong parsing branch', e)
+    }
+
+    return [branch, repo_branch]
+}
