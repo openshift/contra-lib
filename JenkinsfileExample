@@ -1,0 +1,111 @@
+properties(
+        [
+                buildDiscarder(logRotator(artifactDaysToKeepStr: '30', artifactNumToKeepStr: '100', daysToKeepStr: '90', numToKeepStr: '100')),
+                [$class: 'JobPropertyImpl', throttle: [count: 150, durationName: 'hour', userBoost: false]],
+                parameters(
+                        [
+                                string(name: 'PROVIDED_KOJI_TASKID',
+                                        defaultValue: '',
+                                        description: 'Give an integer only task id to use those artifacts and bypass the rpm build stage (example 123456)'),
+                                string(name: 'ghprbActualCommit',
+                                        defaultValue: 'master',
+                                        description: 'The GitHub pull request commit'),
+                                string(name: 'ghprbGhRepository',
+                                        defaultValue: 'openshift/contra-lib',
+                                        description: 'The repo the PR is against'),
+                                string(name: 'sha1',
+                                        defaultValue: '',
+                                        description: ''),
+                                string(name: 'ghprbPullId',
+                                        defaultValue: '',
+                                        description: 'Pull Request Number'),
+                                string(name: 'ghprbPullAuthorLogin',
+                                        defaultValue: '',
+                                        description: 'Pull Request Author username'),
+                                string(name: 'SLAVE_TAG',
+                                        defaultValue: 'stable',
+                                        description: 'Tag for slave image'),
+                                string(name: 'RPMBUILD_TAG',
+                                        defaultValue: 'stable',
+                                        description: 'Tag for rpmbuild image'),
+                                string(name: 'CLOUD_IMAGE_COMPOSE_TAG',
+                                        defaultValue: 'stable',
+                                        description: 'Tag for cloud-image-compose image'),
+                                string(name: 'SINGLEHOST_TEST_TAG',
+                                        defaultValue: 'stable',
+                                        description: 'Tag for singlehost test image'),
+                                string(name: 'DOCKER_REPO_URL',
+                                        defaultValue: '172.30.254.79:5000',
+                                        description: 'Docker repo url for Openshift instance'),
+                                string(name: 'OPENSHIFT_NAMESPACE',
+                                        defaultValue: 'continuous-infra',
+                                        description: 'Project namespace for Openshift operations'),
+                                string(name: 'OPENSHIFT_SERVICE_ACCOUNT',
+                                        defaultValue: 'jenkins',
+                                        description: 'Service Account for Openshift operations'),
+                                string(name: 'CI_MESSAGE',
+                                        defaultValue: CANNED_CI_MESSAGE,
+                                        description: 'CI_MESSAGE')
+                        ]
+                ),
+        ]
+)
+
+libraries = ['cico-pipeline'           : ['master', 'https://github.com/CentOS/cico-pipeline-library.git'],
+             'ci-pipeline'             : ['master', 'https://github.com/CentOS-PaaS-SIG/ci-pipeline.git']]
+
+libraries.each { name, repo ->
+    library identifier: "${name}@${repo[0]}",
+            retriever: modernSCM([$class: 'GitSCMSource',
+                                  remote: repo[1]])
+
+}
+
+// Check out PR's version of library
+library identifier: "upstream-fedora-pipeline@${env.ghprbActualCommit}",
+        retriever: modernSCM([$class: 'GitSCMSource',
+                              remote: "https://github.com/${env.ghprbGhRepository}",
+                              traits: [[$class: 'jenkins.plugins.git.traits.BranchDiscoveryTrait'],
+                                       [$class: 'RefSpecsSCMSourceTrait',
+                                        templates: [[value: '+refs/heads/*:refs/remotes/@{remote}/*'],
+                                                    [value: '+refs/pull/*:refs/remotes/origin/pr/*']]]]])
+
+containers = ['rpmbuild': [tag: env.RPMBUILD_TAG],
+              'cloud-image-compose': [tag: env.CLOUD_IMAGE_COMPOSE_TAG],
+              'single-host-test': [tag: SINGLEHOST_TEST_TAG]
+]
+
+deployOpenShiftTemplate(containers: containers, docker_repo_url: 'docker-registry.default.svc:5000') {
+
+    ciPipeline(buildPrefix: 'contra-build-pipeline', buildVars: [package_name: 'vim']) {
+
+        stage('koji-build') {
+            handlePipelineStep(beforeRunMsg: [:], afterRunMsg: [:], failedRunMsg: [:]) {
+                executeInContainer(containerName: 'rpmbuild', containerScript: '/tmp/koji_build_pr.sh',
+                        stageVars: [package_name: 'vim'])
+            }
+        }
+
+        stage('repoquery') {
+            handlePipelineStep {
+                executeInContainer(containerName: 'rpmbuild', containerScript: '/tmp/repoquery.sh')
+            }
+        }
+
+        stage('cloud-image-compose') {
+            stageVars = [repo: 'vim', branch: 'rawhide', fed_branch: 'f28']
+            handlePipelineStep(beforeRunMsg: [:], afterRunMsg: [:], failedRunMsg: [:]) {
+                executeInContainer(containerName: 'cloud-image-compose', containerScript: '/tmp/virt-customize.sh',
+                        stageVars: stageVars)
+            }
+        }
+
+        stage('package-tests') {
+            handlePipelineStep(beforeRunMsg: [:], afterRunMsg: [:], failedRunMsg: [:]) {
+                executeInContainer(containerName: 'single-host-test', containerScript: '/tmp/package-test.sh')
+            }
+        }
+
+    }
+
+}
