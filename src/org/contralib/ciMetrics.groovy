@@ -110,21 +110,5 @@ class ciMetrics {
 
         customDataMap[measurement] = customDataMap[measurement] + fields
     }
-
-
-    /**
-     * Write customDataMap to influxDB
-     */
-    /*
-    def writeToInflux(def script) {
-        script.step([$class: 'InfluxDbPublisher',
-            customData: [:],
-            customDataMap: customDataMap,
-            customDataMapTags: customDataMapTags,
-            customPrefix: prefix,
-            target: influxTarget])
- 
-    }
-    */
 }
 

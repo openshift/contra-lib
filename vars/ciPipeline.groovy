@@ -21,6 +21,8 @@ import org.contralib.ciMetrics
 def call(Map parameters, Closure body) {
     def buildPrefix = parameters.get('buildPrefix', 'contra-pipeline')
     def buildVars = parameters.get('buildVars', [:])
+    def failedMsg = parameters.get('failedMsg')
+    def completeMsg = parameters.get('completeMsg')
 
     def jobMeasurement = "${buildPrefix}-${env.JOB_NAME}"
     def packageMeasurement = "${buildPrefix}-${buildVars['package_name']}"
@@ -35,9 +37,18 @@ def call(Map parameters, Closure body) {
 
         echo e.getMessage()
 
+        if (failedMsg) {
+            sendMessageWithAudit(failedMsg)
+        }
+
         throw e
     } finally {
         currentBuild.result = currentBuild.result ?: 'SUCCESS'
+
+        if (completeMsg) {
+            sendMessageWithAudit(completeMsg)
+        }
+
         if (currentBuild.result == 'SUCCESS') {
             step([$class: 'ArtifactArchiver', allowEmptyArchive: true,
                   artifacts: '**/logs/**,*.txt,*.groovy,**/job.*,**/*.groovy,**/inventory.*', excludes: '**/job.props,**/job.props.groovy,**/*.example,**/*.qcow2',
@@ -56,7 +67,9 @@ def call(Map parameters, Closure body) {
         cimetrics.setMetricField(jobMeasurement, 'build_time', currentBuild.getDuration())
         cimetrics.setMetricField(packageMeasurement, 'build_time', currentBuild.getDuration())
         cimetrics.setMetricTag(packageMeasurement, 'package_name', buildVars['package_name'])
-        //this.ciMetrics.writeToInflux()
+        writeToInflux(customDataMap: cimetrics.customDataMap,
+                customDataMapTags: cimetrics.customDataMapTags,
+                customPrefix: buildPrefix)
 
     }
 
