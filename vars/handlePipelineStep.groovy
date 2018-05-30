@@ -19,7 +19,7 @@ def call(Map parameters = [:], Closure body) {
     def measurementName = parameters.get('measurement', env.JOB_NAME)
     def name = parameters.get('stageName', env.STAGE_NAME ?: env.JOB_NAME)
 
-    def cimetrics = ciMetrics.instance
+    def cimetrics = ciMetrics.metricsInstance
 
     try {
         print "running pipeline step: ${name}"
