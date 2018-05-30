@@ -37,14 +37,13 @@ class ciMetrics {
     def prefix = "ci_pipeline"
     // The influx target configured in jenkins
     def influxTarget = "localInflux"
-    
+
 
     /**
      * Call this method to record the step run time
      * @param name - the step name
      * @param body - the enclosing step body
      */
-    @NonCPS
     def timed(String measurement, String name, Closure body) {
 		def start = System.currentTimeMillis()
 
@@ -62,7 +61,6 @@ class ciMetrics {
      * @param value
      * @return
      */
-    @NonCPS
     def setMetricField(String measurement, String key, def value) {
         if (!customDataMap[measurement]) {
             customDataMap[measurement] = [:]
@@ -78,7 +76,6 @@ class ciMetrics {
      * @param value
      * @return
      */
-    @NonCPS
     def setMetricTag(String measurement, String key, String value) {
         if (!customDataMapTags[measurement]) {
             customDataMapTags[measurement] = [:]
@@ -93,7 +90,6 @@ class ciMetrics {
      * @param tags
      * @return
      */
-    @NonCPS
     def setMetricTags(String measurement, Map tags) {
         if (!customDataMapTags[measurement]) {
             customDataMapTags[measurement] = [:]
@@ -108,7 +104,6 @@ class ciMetrics {
      * @param fields
      * @return
      */
-    @NonCPS
     def setMetricFields(String measurement, Map fields) {
         if (!customDataMap[measurement]) {
             customDataMap[measurement] = [:]
