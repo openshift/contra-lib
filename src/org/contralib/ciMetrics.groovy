@@ -2,7 +2,6 @@
 package org.contralib
 
 import com.cloudbees.groovy.cps.NonCPS
-import groovy.lang.Singleton
 
 /*
 A class to store build metrics over the lifetime of the build.
