@@ -13,7 +13,7 @@ def call(Map parameters) {
     def containerName = parameters.get('containerName')
     def containerScript = parameters.get('containerScript')
     def stageVars = parameters.get('stageVars', [:])
-    def stageName = paramerters.get('stageName', env.STAGE_NAME)
+    def stageName = parameters.get('stageName', env.STAGE_NAME)
 
     def containerEnv = stageVars.collect { key, value -> return key+'='+value }
     sh "mkdir -p ${stageName}"
