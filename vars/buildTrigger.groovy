@@ -16,23 +16,24 @@ def call(Map parameters = [:], Closure body) {
 
     handlePipelineStep {
         result = body()
-    }
 
-    if (result) {
 
-        if (queuedMsg) {
-            sendMessageWithAudit(queuedMsg)
+        if (result) {
+
+            if (queuedMsg) {
+                sendMessageWithAudit(queuedMsg)
+            }
+
+        } else {
+
+            echo "CI_MESSAGE was invalid. Skipping..."
+            currentBuild.description = "*Build Skipped*"
+
+            if (skippedMsg) {
+                sendMessageWithAudit(skippedMsg)
+            }
+
         }
-
-    } else {
-
-        echo "CI_MESSAGE was invalid. Skipping..."
-        currentBuild.description = "*Build Skipped*"
-
-        if (skippedMsg) {
-            sendMessageWithAudit(skippedMsg)
-        }
-
     }
 
     return result
