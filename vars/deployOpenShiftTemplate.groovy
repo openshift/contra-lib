@@ -34,12 +34,13 @@ def call(Map parameters, Closure body) {
 
         ocContainers.each { containerName, containerProps ->
             def tag = containerProps.get('tag', 'stable')
+            def cmd = containerProps.get('command', 'cat')
             def imageUrl = "${docker_repo_url}/${openshift_namespace}/${containerName}:${tag}"
             containerTemplates << containerTemplate(name: containerName,
                     alwaysPullImage: true,
                     image: imageUrl,
                     ttyEnabled: true,
-                    command: 'cat',
+                    command: cmd,
                     privileged: true,
                     workingDir: '/workDir')
         }
