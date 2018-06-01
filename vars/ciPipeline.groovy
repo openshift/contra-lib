@@ -44,7 +44,7 @@ def call(Map parameters, Closure body) {
         echo e.getMessage()
 
         if (failedMsg) {
-            sendMessageWithAudit(failedMsg)
+            sendMessageWithAudit(failedMsg())
         }
 
         throw e
@@ -52,7 +52,7 @@ def call(Map parameters, Closure body) {
         currentBuild.result = currentBuild.result ?: 'SUCCESS'
 
         if (completeMsg) {
-            sendMessageWithAudit(completeMsg)
+            sendMessageWithAudit(completeMsg())
         }
 
         if (currentBuild.result == 'SUCCESS') {

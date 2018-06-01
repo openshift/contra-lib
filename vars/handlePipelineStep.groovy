@@ -28,20 +28,20 @@ def call(Map parameters = [:], Closure body) {
         print "running pipeline step: ${name}"
         cimetrics.timed measurementName, name, {
             if (beforeRunMsg) {
-                sendMessageWithAudit(beforeRunMsg)
+                sendMessageWithAudit(beforeRunMsg())
             }
 
             body()
 
             if (afterRunMsg) {
-                sendMessageWithAudit(afterRunMsg)
+                sendMessageWithAudit(afterRunMsg())
             }
 
         }
     } catch(e) {
 
         if (failedRunMsg) {
-            sendMessageWithAudit(failedRunMsg)
+            sendMessageWithAudit(failedRunMsg())
         }
 
         throw e
