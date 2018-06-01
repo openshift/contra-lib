@@ -24,10 +24,11 @@ def call(Map parameters, Closure body) {
     def failedMsg = parameters.get('failedMsg')
     def completeMsg = parameters.get('completeMsg')
 
-    def jobMeasurement = "${buildPrefix}-${env.JOB_NAME}"
-    def packageMeasurement = "${buildPrefix}-${buildVars['package_name']}"
+    def jobMeasurement = env.JOB_NAME
+    def packageMeasurement = buildVars['package_name']
 
     def cimetrics = ciMetrics.metricsInstance
+    cimetrics.prefix = buildPrefix
 
     try {
         body()
@@ -67,6 +68,7 @@ def call(Map parameters, Closure body) {
         cimetrics.setMetricField(jobMeasurement, 'build_time', currentBuild.getDuration())
         cimetrics.setMetricField(packageMeasurement, 'build_time', currentBuild.getDuration())
         cimetrics.setMetricTag(packageMeasurement, 'package_name', buildVars['package_name'])
+
         writeToInflux(customDataMap: cimetrics.customDataMap,
                       customDataMapTags: cimetrics.customDataMapTags,
                       customPrefix: buildPrefix)
