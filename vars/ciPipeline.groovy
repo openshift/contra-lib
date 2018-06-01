@@ -27,10 +27,6 @@ def call(Map parameters, Closure body) {
     def jobMeasurement = env.JOB_NAME
     def packageMeasurement = null
 
-    // only send repo stats in if package_name var is set
-    if (buildVars['package_name']) {
-        packageMeasurement = buildVars['package_name']
-    }
 
     def cimetrics = ciMetrics.metricsInstance
     cimetrics.prefix = buildPrefix
@@ -68,14 +64,16 @@ def call(Map parameters, Closure body) {
         currentBuild.displayName = buildVars['displayName'] ?: "Build #${env.BUILD_NUMBER}"
         currentBuild.description = buildVars['buildDescription'] ?: currentBuild.result
 
-        cimetrics.setMetricTag(jobMeasurement, 'package_name', buildVars['package_name'])
-        cimetrics.setMetricTag(jobMeasurement, 'build_result', currentBuild.result)
-        cimetrics.setMetricField(jobMeasurement, 'build_time', currentBuild.getDuration())
-
-        if (packageMeasurement) {
+        // only send repo stats in if package_name var is set
+        if (buildVars['package_name']) {
+            packageMeasurement = buildVars['package_name']
+            cimetrics.setMetricTag(jobMeasurement, 'package_name', buildVars['package_name'])
             cimetrics.setMetricField(packageMeasurement, 'build_time', currentBuild.getDuration())
             cimetrics.setMetricTag(packageMeasurement, 'package_name', buildVars['package_name'])
         }
+
+        cimetrics.setMetricTag(jobMeasurement, 'build_result', currentBuild.result)
+        cimetrics.setMetricField(jobMeasurement, 'build_time', currentBuild.getDuration())
 
         writeToInflux(customDataMap: cimetrics.customDataMap,
                       customDataMapTags: cimetrics.customDataMapTags,
