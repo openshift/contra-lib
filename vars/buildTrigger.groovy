@@ -9,16 +9,30 @@
  * @param body
  * @return
  */
-def call(Closure body = {}) {
+def call(Map parameters = [:], Closure body) {
+    def skippedMsg = parameters.get('skippedMsg')
+    def queuedMsg = parameters.get('queuedMsg')
     def result = false
 
     handlePipelineStep {
         result = body()
     }
 
-    if (!result) {
+    if (result) {
+
+        if (queuedMsg) {
+            sendMessageWithAudit(queuedMsg)
+        }
+
+    } else {
+
         echo "CI_MESSAGE was invalid. Skipping..."
         currentBuild.description = "*Build Skipped*"
+
+        if (skippedMsg) {
+            sendMessageWithAudit(skippedMsg)
+        }
+
     }
 
     return result
