@@ -2,7 +2,8 @@
  * Define containers to deploy to openshift
  * Example Usage in Jenkinsfile:
  *
- * ocContainers = ['rpmbuild': [tag: 'latest']]
+ * ocContainers = ['rpmbuild': [tag: 'latest',
+ *                              command: 'cat']]
  * deployOpenShiftTemplate(containers: ocContainers, podName: "fedora-${UUID.randomUUID().toString()}") {
  *     deployCode()
  * }
