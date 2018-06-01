@@ -68,8 +68,8 @@ def call(Map parameters, Closure body) {
         cimetrics.setMetricField(packageMeasurement, 'build_time', currentBuild.getDuration())
         cimetrics.setMetricTag(packageMeasurement, 'package_name', buildVars['package_name'])
         writeToInflux(customDataMap: cimetrics.customDataMap,
-                customDataMapTags: cimetrics.customDataMapTags,
-                customPrefix: buildPrefix)
+                      customDataMapTags: cimetrics.customDataMapTags,
+                      customPrefix: buildPrefix)
 
     }
 

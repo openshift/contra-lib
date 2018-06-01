@@ -16,6 +16,13 @@ def call(Map parameters = [:]) {
     def customPrefix = parameters.get('customPrefix', 'ci_pipeline')
     def target = parameters.get('target', 'localInflux')
 
+    print "influxdb data"
+    print customData
+    print customDataMap
+    print customDataMapTags
+    print customPrefix
+    print target
+
     step([$class: 'InfluxDbPublisher',
             customData: customData,
             customDataMap: customDataMap,
