@@ -14,7 +14,7 @@ def call(Map parameters) {
 
     def buildParams = []
     params.each { name, value ->
-        buildParams << string(name: name, value: value)
+        buildParams << string(name: name, value: value.toString())
     }
 
     try {
