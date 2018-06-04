@@ -23,7 +23,7 @@ def call(Map parameters, Closure body) {
     def buildVars = parameters.get('buildVars', [:])
     def failedMsg = parameters.get('failedMsg')
     def completeMsg = parameters.get('completeMsg')
-    def timeout = parameters.get('timeout', 30)
+    def timeoutValue = parameters.get('timeout', 30)
 
     def jobMeasurement = env.JOB_NAME
     def packageMeasurement = null
@@ -33,8 +33,8 @@ def call(Map parameters, Closure body) {
     cimetrics.prefix = buildPrefix
 
 
-    timeout(time: timeout, unit: 'MINUTES') {
-        
+    timeout(time: timeoutValue, unit: 'MINUTES') {
+
         try {
             body()
         } catch (e) {
