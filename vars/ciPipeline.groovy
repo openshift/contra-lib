@@ -61,8 +61,8 @@ def call(Map parameters, Closure body) {
                   fingerprint: true])
         }
 
-        currentBuild.displayName = buildVars['displayName'] ?: "Build #${env.BUILD_NUMBER}"
-        currentBuild.description = buildVars['buildDescription'] ?: currentBuild.result
+        currentBuild.displayName = currentBuild.displayName ?: "Build #${env.BUILD_NUMBER}"
+        currentBuild.description = currentBuild.description ?: currentBuild.result
 
         // only send repo stats in if package_name var is set
         if (buildVars['package_name']) {
