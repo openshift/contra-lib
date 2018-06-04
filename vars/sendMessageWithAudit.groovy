@@ -1,3 +1,5 @@
+import org.contralib.Utils
+
 /**
  * Example Usage:
  * msgProperties = ['msgTopic': 'stageName', 'msgProps': 'stage=stage1', 'msgContent': 'pipelineResult=success']

@@ -21,7 +21,7 @@ def call(Map parameters = [:], Closure body) {
         if (result) {
 
             if (queuedMsg) {
-                sendMessageWithAudit(queuedMsg)
+                //sendMessageWithAudit(queuedMsg())
             }
 
         } else {
@@ -30,7 +30,7 @@ def call(Map parameters = [:], Closure body) {
             currentBuild.description = "*Build Skipped*"
 
             if (skippedMsg) {
-                sendMessageWithAudit(skippedMsg)
+                //sendMessageWithAudit(skippedMsg())
             }
 
         }
