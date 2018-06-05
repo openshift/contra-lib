@@ -35,7 +35,7 @@ properties(
                                         defaultValue: 'stable',
                                         description: 'Tag for singlehost test image'),
                                 string(name: 'DOCKER_REPO_URL',
-                                        defaultValue: '172.30.254.79:5000',
+                                        defaultValue: 'docker-registry.default.svc:5000',
                                         description: 'Docker repo url for Openshift instance'),
                                 string(name: 'OPENSHIFT_NAMESPACE',
                                         defaultValue: 'continuous-infra',
@@ -75,9 +75,9 @@ containers = ['rpmbuild': [tag: env.RPMBUILD_TAG],
               'single-host-test': [tag: SINGLEHOST_TEST_TAG]
 ]
 
-deployOpenShiftTemplate(containers: containers, docker_repo_url: 'docker-registry.default.svc:5000') {
+deployOpenShiftTemplate(containers: containers, docker_repo_url: env.DOCKER_REPO_URL {
 
-    ciPipeline(buildPrefix: 'contra-build-pipeline', buildVars: [package_name: 'vim']) {
+    ciPipeline(buildPrefix: 'contra-build-pipeline', package_name: 'vim') {
 
         stage('koji-build') {
             handlePipelineStep(beforeRunMsg: [:], afterRunMsg: [:], failedRunMsg: [:]) {

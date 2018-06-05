@@ -20,7 +20,7 @@ import org.contralib.ciMetrics
 
 def call(Map parameters, Closure body) {
     def buildPrefix = parameters.get('buildPrefix', 'contra-pipeline')
-    def buildVars = parameters.get('buildVars', [:])
+    def packageName = parameters.get('package_name')
     def failedMsg = parameters.get('failedMsg')
     def completeMsg = parameters.get('completeMsg')
     def timeoutValue = parameters.get('timeout', 30)
@@ -68,20 +68,8 @@ def call(Map parameters, Closure body) {
             currentBuild.displayName = currentBuild.displayName ?: "Build #${env.BUILD_NUMBER}"
             currentBuild.description = currentBuild.description ?: currentBuild.result
 
-            // only send repo stats in if package_name var is set
-            if (buildVars['package_name']) {
-                packageMeasurement = buildVars['package_name']
-                cimetrics.setMetricTag(jobMeasurement, 'package_name', buildVars['package_name'])
-                cimetrics.setMetricField(packageMeasurement, 'build_time', currentBuild.getDuration())
-                cimetrics.setMetricTag(packageMeasurement, 'package_name', buildVars['package_name'])
-            }
+            pipelineMetrics(buildPrefix: buildPrefix, 'package_name', packageName)
 
-            cimetrics.setMetricTag(jobMeasurement, 'build_result', currentBuild.result)
-            cimetrics.setMetricField(jobMeasurement, 'build_time', currentBuild.getDuration())
-
-            writeToInflux(customDataMap: cimetrics.customDataMap,
-                    customDataMapTags: cimetrics.customDataMapTags,
-                    customPrefix: buildPrefix)
 
         }
     }
