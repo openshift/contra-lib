@@ -9,7 +9,7 @@ import org.contralib.Utils
  * @return
  */
 
-def call(Map parameters) {
+def call(Map parameters = [:]) {
     def msgTopic = parameters.get('msgTopic')
     def msgProps = parameters.get('msgProps')
     def msgContent = parameters.get('msgContent')

@@ -24,6 +24,7 @@ def call(Map parameters, Closure body) {
     def failedMsg = parameters.get('failedMsg')
     def completeMsg = parameters.get('completeMsg')
     def timeoutValue = parameters.get('timeout', 30)
+    def sendMetrics = parameters.get('sendMetrics', true)
 
     def jobMeasurement = env.JOB_NAME
     def packageMeasurement = null
@@ -68,7 +69,9 @@ def call(Map parameters, Closure body) {
             currentBuild.displayName = currentBuild.displayName ?: "Build #${env.BUILD_NUMBER}"
             currentBuild.description = currentBuild.description ?: currentBuild.result
 
-            pipelineMetrics(buildPrefix: buildPrefix, package_name: packageName)
+            if (sendMetrics) {
+                pipelineMetrics(buildPrefix: buildPrefix, package_name: packageName)
+            }
 
 
         }
