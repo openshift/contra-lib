@@ -2,7 +2,8 @@
  * Define containers to deploy to openshift
  * Example Usage in Jenkinsfile:
  *
- * ocContainers = ['rpmbuild': [tag: 'latest']]
+ * ocContainers = ['rpmbuild': [tag: 'latest',
+ *                              command: 'cat']]
  * deployOpenShiftTemplate(containers: ocContainers, podName: "fedora-${UUID.randomUUID().toString()}") {
  *     deployCode()
  * }
@@ -34,12 +35,14 @@ def call(Map parameters, Closure body) {
 
         ocContainers.each { containerName, containerProps ->
             def tag = containerProps.get('tag', 'stable')
+            def cmd = containerProps.get('command', 'cat')
             def imageUrl = "${docker_repo_url}/${openshift_namespace}/${containerName}:${tag}"
+
             containerTemplates << containerTemplate(name: containerName,
                     alwaysPullImage: true,
                     image: imageUrl,
                     ttyEnabled: true,
-                    command: 'cat',
+                    command: cmd,
                     privileged: true,
                     workingDir: '/workDir')
         }

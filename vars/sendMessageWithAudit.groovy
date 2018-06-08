@@ -1,3 +1,5 @@
+import org.contralib.Utils
+
 /**
  * Example Usage:
  * msgProperties = ['msgTopic': 'stageName', 'msgProps': 'stage=stage1', 'msgContent': 'pipelineResult=success']
@@ -7,7 +9,7 @@
  * @return
  */
 
-def call(Map parameters) {
+def call(Map parameters = [:]) {
     def msgTopic = parameters.get('msgTopic')
     def msgProps = parameters.get('msgProps')
     def msgContent = parameters.get('msgContent')

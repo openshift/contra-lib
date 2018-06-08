@@ -20,44 +20,61 @@ import org.contralib.ciMetrics
 
 def call(Map parameters, Closure body) {
     def buildPrefix = parameters.get('buildPrefix', 'contra-pipeline')
-    def buildVars = parameters.get('buildVars', [:])
+    def packageName = parameters.get('package_name')
+    def failedMsg = parameters.get('failedMsg')
+    def completeMsg = parameters.get('completeMsg')
+    def timeoutValue = parameters.get('timeout', 30)
+    def sendMetrics = parameters.get('sendMetrics', true)
 
-    def jobMeasurement = "${buildPrefix}-${env.JOB_NAME}"
-    def packageMeasurement = "${buildPrefix}-${buildVars['package_name']}"
+    def jobMeasurement = env.JOB_NAME
+    def packageMeasurement = null
+
 
     def cimetrics = ciMetrics.metricsInstance
+    cimetrics.prefix = buildPrefix
 
-    try {
-        body()
-    } catch(e) {
-        // Set build result
-        currentBuild.result = "FAILURE"
 
-        echo e.getMessage()
+    timeout(time: timeoutValue, unit: 'MINUTES') {
 
-        throw e
-    } finally {
-        currentBuild.result = currentBuild.result ?: 'SUCCESS'
-        if (currentBuild.result == 'SUCCESS') {
-            step([$class: 'ArtifactArchiver', allowEmptyArchive: true,
-                  artifacts: '**/logs/**,*.txt,*.groovy,**/job.*,**/*.groovy,**/inventory.*', excludes: '**/job.props,**/job.props.groovy,**/*.example,**/*.qcow2',
-                  fingerprint: true])
-        } else {
-            step([$class: 'ArtifactArchiver', allowEmptyArchive: true,
-                  artifacts: '**/logs/**,*.txt,*.groovy,**/job.*,**/*.groovy,**/inventory.*,**/*.qcow2', excludes: '**/job.props,**/job.props.groovy,**/*.example',
-                  fingerprint: true])
+        try {
+            body()
+        } catch (e) {
+            // Set build result
+            currentBuild.result = "FAILURE"
+
+            echo e.getMessage()
+
+            if (failedMsg) {
+                sendMessageWithAudit(failedMsg())
+            }
+
+            throw e
+        } finally {
+            currentBuild.result = currentBuild.result ?: 'SUCCESS'
+
+            if (completeMsg) {
+                sendMessageWithAudit(completeMsg())
+            }
+
+            if (currentBuild.result == 'SUCCESS') {
+                step([$class     : 'ArtifactArchiver', allowEmptyArchive: true,
+                      artifacts  : '**/logs/**,*.txt,*.groovy,**/job.*,**/*.groovy,**/inventory.*', excludes: '**/job.props,**/job.props.groovy,**/*.example,**/*.qcow2',
+                      fingerprint: true])
+            } else {
+                step([$class     : 'ArtifactArchiver', allowEmptyArchive: true,
+                      artifacts  : '**/logs/**,*.txt,*.groovy,**/job.*,**/*.groovy,**/inventory.*,**/*.qcow2', excludes: '**/job.props,**/job.props.groovy,**/*.example',
+                      fingerprint: true])
+            }
+
+            currentBuild.displayName = currentBuild.displayName ?: "Build #${env.BUILD_NUMBER}"
+            currentBuild.description = currentBuild.description ?: currentBuild.result
+
+            if (sendMetrics) {
+                pipelineMetrics(buildPrefix: buildPrefix, package_name: packageName)
+            }
+
+
         }
-
-        currentBuild.displayName = buildVars['displayName'] ?: "Build #${env.BUILD_NUMBER}"
-        currentBuild.description = buildVars['buildDescription'] ?: currentBuild.result
-
-        cimetrics.setMetricTag(jobMeasurement, 'package_name', buildVars['package_name'])
-        cimetrics.setMetricTag(jobMeasurement, 'build_result', currentBuild.result)
-        cimetrics.setMetricField(jobMeasurement, 'build_time', currentBuild.getDuration())
-        cimetrics.setMetricField(packageMeasurement, 'build_time', currentBuild.getDuration())
-        cimetrics.setMetricTag(packageMeasurement, 'package_name', buildVars['package_name'])
-        //this.ciMetrics.writeToInflux()
-
     }
 
 }
