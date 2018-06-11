@@ -21,13 +21,10 @@ import org.contralib.ciMetrics
 def call(Map parameters, Closure body) {
     def buildPrefix = parameters.get('buildPrefix', 'contra-pipeline')
     def packageName = parameters.get('package_name')
-    def failedMsg = parameters.get('failedMsg')
+    def errorMsg = parameters.get('errorMsg')
     def completeMsg = parameters.get('completeMsg')
     def timeoutValue = parameters.get('timeout', 30)
     def sendMetrics = parameters.get('sendMetrics', true)
-
-    def jobMeasurement = env.JOB_NAME
-    def packageMeasurement = null
 
 
     def cimetrics = ciMetrics.metricsInstance
@@ -44,8 +41,8 @@ def call(Map parameters, Closure body) {
 
             echo e.getMessage()
 
-            if (failedMsg) {
-                sendMessageWithAudit(failedMsg())
+            if (errorMsg) {
+                sendMessageWithAudit(errorMsg())
             }
 
             throw e
