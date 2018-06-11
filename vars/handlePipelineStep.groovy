@@ -18,33 +18,30 @@ import org.contralib.ciMetrics
 def call(Map parameters = [:], Closure body) {
     def measurementName = parameters.get('measurement', env.JOB_NAME)
     def name = parameters.get('stageName', env.STAGE_NAME ?: env.JOB_NAME)
-    def beforeRunMsg = parameters.get('beforeRunMsg')
-    def afterRunMsg = parameters.get('afterRunMsg')
-    def failedRunMsg = parameters.get('failedRunMsg')
+    def queuedMsg = parameters.get('queuedMsg')
+    def runningMsg = parameters.get('runningMsg')
 
     def cimetrics = ciMetrics.metricsInstance
 
     try {
+
+        if (queuedMsg) {
+            sendMessageWithAudit(queuedMsg())
+        }
+
         print "running pipeline step: ${name}"
         cimetrics.timed measurementName, name, {
-            if (beforeRunMsg) {
-                sendMessageWithAudit(beforeRunMsg())
+
+            if (runningMsg) {
+                sendMessageWithAudit(runningMsg())
             }
 
             body()
 
-            if (afterRunMsg) {
-                sendMessageWithAudit(afterRunMsg())
-            }
-
         }
     } catch(e) {
 
-        if (failedRunMsg) {
-            sendMessageWithAudit(failedRunMsg())
-        }
-
-        throw e
+        throw "${env.JOB_NAME} failed in stage: ${name} with error: ${e}"
     } finally {
         print "end of pipeline step: ${name}"
     }
