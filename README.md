@@ -11,13 +11,21 @@ containers = ['rpmbuild', 'singlehost-test']
 
 deployOpenShiftTemplate(containers: containers) {
     ciPipeline(buildPrefix: 'package-builds', completeMsg: msgComplete, errorMsg: msgError, package_name: package_name) {
+    
         stage('koji-build') {
-            handlePipelineStep(queuedMsg: queuedMsg, runningMsg: runningMsg) {
-                executeInContainer(containerName: 'koji-build-container, containerScript: 'verify-build.sh',
-                        stageVars: stageVars)
-                }
+            handlePipelineStep() {
+                executeInContainer(containerName: 'koji-build-container, containerScript: 'verify-build.sh')
+            
             }
         }
+        
+        stage('package-tests') {
+            handlePipelineStep() {
+                executeInContainer(containerName: 'singlehost-test, containerScript: 'package-tests.sh')
+           
+            }
+         }
+         
     }
 }
 ```
