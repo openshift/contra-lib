@@ -31,7 +31,7 @@ deployOpenShiftTemplate(containers: containers) {
         }
         
         stage('package-tests') {
-            // define variables that will be used by the container: singlehost-test
+            // define variables that will be used by the container singlehost-test
             stageVars = [repo: 'myrepo', test-all: true]
             handlePipelineStep() {
                 executeInContainer(containerName: 'singlehost-test, containerScript: 'package-tests.sh',
