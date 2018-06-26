@@ -1,3 +1,5 @@
+import org.contralib.Utils
+
 /**
  * Define containers to deploy to openshift
  * Example Usage in Jenkinsfile:
@@ -13,6 +15,8 @@
  * @return
  */
 def call(Map parameters, Closure body) {
+
+    def utils = new Utils()
 
     timestamps {
 
@@ -72,6 +76,9 @@ def call(Map parameters, Closure body) {
                 volumes: [emptyDirVolume(memory: false, mountPath: '/sys/class/net')]
         ) {
             node(podName) {
+
+                utils.verifyPod(openshift_namespace)
+                
                 body()
             }
         }
