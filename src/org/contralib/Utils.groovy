@@ -120,3 +120,48 @@ def checkUpdatedPR(def ci_data, String keyword) {
     }
     return true
 }
+
+/**
+ *
+ * @param openshiftProject name of openshift namespace/project.
+ * @param nodeName podName we are going to verify.
+ * @return
+ */
+def verifyPod(String openshiftProject, String nodeName=env.NODE_NAME) {
+    openshift.withCluster() {
+        openshift.withProject(openshiftProject) {
+            def describeStr = openshift.selector("pods", nodeName).describe()
+            out = describeStr.out.trim()
+
+            sh 'mkdir -p podInfo'
+
+            writeFile file: 'podInfo/node-pod-description-' + nodeName + '.txt',
+                    text: out
+            archiveArtifacts 'podInfo/node-pod-description-' + nodeName + '.txt'
+
+            timeout(60) {
+                echo "Ensuring all containers are running in pod: ${nodeName}"
+                echo "Container names in pod ${nodeName}: "
+                names       = openshift.raw("get", "pod",  "${nodeName}", '-o=jsonpath="{.status.containerStatuses[*].name}"')
+                containerNames = names.out.trim()
+                echo containerNames
+
+                waitUntil {
+                    def readyStates = openshift.raw("get", "pod",  "${nodeName}", '-o=jsonpath="{.status.containerStatuses[*].ready}"')
+
+                    echo "Container statuses: "
+                    echo containerNames
+                    echo readyStates.out.trim().toUpperCase()
+                    def anyNotReady = readyStates.out.trim().contains("false")
+                    if (anyNotReady) {
+                        echo "One or more containers not ready...see above message ^^"
+                        return false
+                    } else {
+                        echo "All containers ready!"
+                        return true
+                    }
+                }
+            }
+        }
+    }
+}
