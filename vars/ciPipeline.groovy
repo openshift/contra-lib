@@ -49,9 +49,6 @@ def call(Map parameters, Closure body) {
         } finally {
             currentBuild.result = currentBuild.result ?: 'SUCCESS'
 
-            if (completeMsg) {
-                sendMessageWithAudit(completeMsg())
-            }
 
             if (currentBuild.result == 'SUCCESS') {
                 step([$class     : 'ArtifactArchiver', allowEmptyArchive: true,
@@ -68,6 +65,10 @@ def call(Map parameters, Closure body) {
 
             if (sendMetrics) {
                 pipelineMetrics(buildPrefix: buildPrefix, package_name: packageName)
+            }
+
+            if (completeMsg) {
+                sendMessageWithAudit(completeMsg())
             }
 
 

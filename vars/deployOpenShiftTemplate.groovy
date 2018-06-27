@@ -78,7 +78,7 @@ def call(Map parameters, Closure body) {
             node(podName) {
 
                 utils.verifyPod(openshift_namespace)
-                
+
                 body()
             }
         }
