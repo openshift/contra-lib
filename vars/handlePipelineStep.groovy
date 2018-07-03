@@ -41,7 +41,8 @@ def call(Map parameters = [:], Closure body) {
         }
     } catch(e) {
 
-        throw "${env.JOB_NAME} failed in stage: ${name} with error: ${e}"
+        echo "${env.JOB_NAME} failed in stage: ${name} with error: ${e.getMessage()}"
+        throw e
     } finally {
         print "end of pipeline step: ${name}"
     }
