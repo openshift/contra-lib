@@ -17,7 +17,7 @@ def call(Map parameters = [:]) {
             parsedMsg."${key.toString().replaceAll('-', '_')}" =
                     value.toString().split('\n')[0].replaceAll('"', '\'')
         }
-        if (parsedMsg['branch'] == 'master'){
+        if (parsedMsg['branch'] == 'master') {
             parsedMsg['branch'] = 'rawhide'
         }
 
