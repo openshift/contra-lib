@@ -31,6 +31,40 @@ def repoFromRequest(String request) {
 }
 
 /**
+ * Wrapper to parse json before injecting env variables
+ * @param prefix
+ * @param message
+ * @return
+ */
+def flattenJSON(String prefix, String message) {
+    def ciMessage = readJSON text: message.replace("\n", "\\n")
+    injectCIMessage(prefix, ciMessage)
+}
+
+/**
+ * Traverse a CI_MESSAGE with nested keys.
+ * @param prefix
+ * @param message
+ * @return env map with all keys at top level
+ */
+def injectCIMessage(String prefix, def ciMessage) {
+
+    ciMessage.each { key, value ->
+        def new_key = key.replaceAll('-', '_')
+        // readJSON uses JSON* and slurper uses LazyMap and ArrayList
+        if (value instanceof groovy.json.internal.LazyMap || value instanceof net.sf.json.JSONObject) {
+            injectCIMessage("${prefix}_${new_key}", value)
+        } else if (value instanceof java.util.ArrayList || value instanceof net.sf.json.JSONArray) {
+            // value was an array itself
+            injectArray("${prefix}_${new_key}", value)
+        } else {
+            env."${prefix}_${new_key}" =
+                    value.toString().split('\n')[0].replaceAll('"', '\'')
+        }
+    }
+}
+
+/**
  * Set branch and repo_branch based on the candidate branch
  * This is meant to be run with a CI_MESSAGE from a build task
  * @param tag - The tag from the request field e.g. f27-candidate
