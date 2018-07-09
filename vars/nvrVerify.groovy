@@ -1,7 +1,6 @@
 /**
  * Required variables:
  * - branch: branch name in the message
- * - rpm_repo: the repo directory
  * - package: the package name being tested
  * @param parameters
  * @return
@@ -13,8 +12,8 @@ def call(Map parameters = [:]) {
 
     def stageVars = [:]
     stageVars['branch'] = parameters.get('branch')
-    stageVars['rpm_repo'] = parameters.get('rpm_repo')
     stageVars['package'] = parameters.get('package')
+    stageVars['rpm_repo'] = parameters.get('rpm_repo', "${stageVars['package']}_repo")
     stageVars['python3'] = parameters.get('python3', true)
     stageVars['TAG'] = parameters.get('tag', 'classic')
     stageVars['build_pr_id'] = parameters.get('build_pr_id', '')

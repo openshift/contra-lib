@@ -1,7 +1,8 @@
 /**
  * Required variables:
+ * - package: package name
  * - branch: the branch of the repo
- * - repo: the package name
+ * - release: fedora release, eg: f28, rawhide
  * @param parameters
  * @return
  */
@@ -12,9 +13,10 @@ def call(Map parameters = [:]) {
     def command = parameters.get('command', '/tmp/virt-customize.sh')
 
     def stageVars = [:]
-    stageVars['branch'] = parameters.get('branch')
-    stageVars['rpm_repo'] = parameters.get('rpm_repo')
     stageVars['package'] = parameters.get('package')
+    stageVars['branch'] = parameters.get('branch')
+    stageVars['fed_branch'] = parameters.get('release')
+    stageVars['rpm_repo'] = parameters.get('rpm_repo', "${stageVars['package']}_repo")
 
     handlePipelineStep() {
         executeInContainer(containerName: container, containerScript: command, stageVars: stageVars)
