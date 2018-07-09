@@ -1,8 +1,9 @@
 /**
  * Requires a message with variables:
  * - branch: the branch of the repo
- * - repo: the package name
- * - test_subjects: 
+ * - package: the package name
+ * - rpm_repo: the location of the rpm repo
+ * - test_subjects: the location of the qcow2 image
  * @param parameters
  * @return
  */
