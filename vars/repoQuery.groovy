@@ -8,9 +8,11 @@
 def call(Map parameters = [:]) {
     def container = parameters.get('container', 'rpmbuild')
     def command = parameters.get('command', '/tmp/repoquery.sh')
-    def ciMessage = parameters.get('ciMessage', [:])
+
+    def stageVars = [:]
+    stageVars['fed_repo'] = parameters.get('repo')
 
     handlePipelineStep() {
-        executeInContainer(containerName: container, containerScript: command, stageVars: ['fed_repo': ciMessage['repo']])
+        executeInContainer(containerName: container, containerScript: command, stageVars: stageVars)
     }
 }
