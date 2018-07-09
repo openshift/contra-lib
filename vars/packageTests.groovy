@@ -15,8 +15,8 @@ def call(Map parameters = [:]) {
 
     def stageVars = [:]
     stageVars['branch'] = parameters.get('branch')
-    stageVars['rpm_repo'] = parameters.get('rpm_repo')
     stageVars['package'] = parameters.get('package')
+    stageVars['rpm_repo'] = parameters.get('rpm_repo', "${env.WORKSPACE}/${stageVars['package']}_repo")
     stageVars['TEST_SUBJECTS'] = parameters.get('test_subjects')
 
     handlePipelineStep() {

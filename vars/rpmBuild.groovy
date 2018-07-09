@@ -9,10 +9,11 @@
 def call(Map parameters = [:]) {
     def container = parameters.get('container', 'rpmbuild')
     def command = parameters.get('command', '/tmp/koji_build_pr.sh')
-    def ciMessage = parameters.get('ciMessage', [:])
+
+    def stageVars = [:]
+    stageVars['PROVIDED_KOJI_TASKID'] = parameters.get('task_id')
 
     handlePipelineStep() {
-        executeInContainer(containerName: container, containerScript: command,
-        stageVars: ['PROVIDED_KOJI_TASKID': ciMessage['task_id']])
+        executeInContainer(containerName: container, containerScript: command, stageVars: stageVars)
     }
 }

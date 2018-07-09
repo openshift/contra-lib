@@ -16,7 +16,7 @@ def call(Map parameters = [:]) {
     stageVars['package'] = parameters.get('package')
     stageVars['branch'] = parameters.get('branch')
     stageVars['fed_branch'] = parameters.get('release')
-    stageVars['rpm_repo'] = parameters.get('rpm_repo', "${stageVars['package']}_repo")
+    stageVars['rpm_repo'] = parameters.get('rpm_repo', "${env.WORKSPACE}/${stageVars['package']}_repo")
 
     handlePipelineStep() {
         executeInContainer(containerName: container, containerScript: command, stageVars: stageVars)
