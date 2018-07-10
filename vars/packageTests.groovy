@@ -2,8 +2,6 @@
  * Requires a message with variables:
  * - branch: the branch of the repo
  * - package: the package name
- * - rpm_repo: the location of the rpm repo
- * - test_subjects: the location of the qcow2 image
  * @param parameters
  * @return
  */
@@ -17,7 +15,7 @@ def call(Map parameters = [:]) {
     stageVars['branch'] = parameters.get('branch')
     stageVars['package'] = parameters.get('package')
     stageVars['rpm_repo'] = parameters.get('rpm_repo', "${env.WORKSPACE}/${stageVars['package']}_repo")
-    stageVars['TEST_SUBJECTS'] = parameters.get('test_subjects')
+    stageVars['TEST_SUBJECTS'] = parameters.get('test_subjects', 'test_subject.qcow2')
 
     handlePipelineStep() {
         executeInContainer(containerName: container, containerScript: command, stageVars: stageVars)
