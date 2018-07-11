@@ -9,8 +9,8 @@ def call(Map parameters = [:]) {
 
     def parsedMsg = readJSON text: message.replace("\n", "\\n")
 
-    parsedMsg['repo'] = utils.repoFromRequest(ci_data['request'][0])
-    def branch = utils.setBuildBranch(ci_data['request'][1])
+    parsedMsg['repo'] = utils.repoFromRequest(parsedMsg['request'][0])
+    def branch = utils.setBuildBranch(parsedMsg['request'][1])
     parsedMsg['branch'] = branch[0]
     parsedMsg['repo_branch'] = branch[1]
 
