@@ -36,9 +36,10 @@ def repoFromRequest(String request) {
  * @param message
  * @return
  */
-def flattenJSON(String prefix, String message) {
+def flattenJSON(String message) {
     def ciMessage = readJSON text: message.replace("\n", "\\n")
-    injectCIMessage(prefix, ciMessage)
+    def ci_data = [:]
+    return injectCIMessage(ci_data, ciMessage)
 }
 
 /**
@@ -47,21 +48,23 @@ def flattenJSON(String prefix, String message) {
  * @param message
  * @return env map with all keys at top level
  */
-def injectCIMessage(String prefix, def ciMessage) {
+def injectCIMessage(def ci_data, def ciMessage) {
 
     ciMessage.each { key, value ->
         def new_key = key.replaceAll('-', '_')
         // readJSON uses JSON* and slurper uses LazyMap and ArrayList
         if (value instanceof groovy.json.internal.LazyMap || value instanceof net.sf.json.JSONObject) {
-            injectCIMessage("${prefix}_${new_key}", value)
+            injectCIMessage(ci_data, value)
         } else if (value instanceof java.util.ArrayList || value instanceof net.sf.json.JSONArray) {
             // value was an array itself
-            injectArray("${prefix}_${new_key}", value)
+            injectArray(ci_data, value)
         } else {
-            env."${prefix}_${new_key}" =
+            ci_data[new_key] =
                     value.toString().split('\n')[0].replaceAll('"', '\'')
         }
     }
+
+    return ci_data
 }
 
 /**
