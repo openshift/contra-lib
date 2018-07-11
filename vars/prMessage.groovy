@@ -1,6 +1,11 @@
+import org.contralib.Utils
+
+
 def call(Map parameters = [:]) {
 
     def message = parameters.get('message', '{}')
+
+    def utils = new Utils()
 
     // Parse the message into a Map
     def ci_data = readJSON text: message.replace("\n", "\\n")
@@ -50,6 +55,7 @@ def call(Map parameters = [:]) {
         if (ci_data['pullrequest']['comments']) {
             parsedMsg['lastcid'] = ci_data['pullrequest']['comments'].last()['id']
         }
+
     }
 
     return parsedMsg
