@@ -16,6 +16,8 @@ def call(Map parameters = [:]) {
     stageVars['fed_repo'] = parameters.get('repo')
     stageVars['fed_id'] = parameters.get('id')
     stageVars['fed_uid'] = parameters.get('uid')
+    stageVars['FEDORA_PRINCIPAL'] = parameters.get('fedora_principal',
+                                                   'bpeck/jenkins-continuous-infra.apps.ci.centos.org@FEDORAPROJECT.ORG')
 
     handlePipelineStep() {
         executeInContainer(containerName: container, containerScript: command, stageVars: stageVars)
