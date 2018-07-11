@@ -1,6 +1,7 @@
 /**
  * Requires a message with variables:
  * - repo: package name to build
+ * - branch: the fed branch to build
  * - id: id in the message
  * - uid: uid in the message
  * @param parameters
@@ -14,6 +15,7 @@ def call(Map parameters = [:]) {
 
     def stageVars = [:]
     stageVars['fed_repo'] = parameters.get('repo')
+    stageVars['fed_branch'] = parameters.get('branch')
     stageVars['fed_id'] = parameters.get('id')
     stageVars['fed_uid'] = parameters.get('uid')
     stageVars['FEDORA_PRINCIPAL'] = parameters.get('fedora_principal',
