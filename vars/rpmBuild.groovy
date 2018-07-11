@@ -8,7 +8,7 @@
 
 def call(Map parameters = [:]) {
     def container = parameters.get('container', 'rpmbuild')
-    def command = parameters.get('command', '/tmp/koji_build_pr.sh')
+    def command = parameters.get('command', '/tmp/pull_old_task.sh')
 
     def stageVars = [:]
     stageVars['PROVIDED_KOJI_TASKID'] = parameters.get('task_id')
