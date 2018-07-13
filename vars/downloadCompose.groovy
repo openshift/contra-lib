@@ -1,6 +1,7 @@
 def call(Map parameters = [:]) {
     def ciMessage = readJSON text: parameters.get('ciMessage', env.CI_MESSAGE)
     def imagePrefix = parameters.get('imagePrefix', 'Fedora')
+    def imageType = parameters.get('imageType', 'Cloud')
 
     def compose = ciMessage['compose_id']
     def release_version = ciMessage['release_version']
@@ -21,9 +22,9 @@ def call(Map parameters = [:]) {
         def images = imageJson['payload']['images']
         def imagePath = null
 
-        if (images['Cloud']) {
-            if (images['Cloud']['x86_64']) {
-                images['Cloud']['x86_64'].each { build ->
+        if (images[imageType]) {
+            if (images[imageType]['x86_64']) {
+                images[imageType]['x86_64'].each { build ->
                     if (build['format'] == 'qcow2') {
                         imagePath = build['path']
                     }
@@ -32,7 +33,7 @@ def call(Map parameters = [:]) {
                 error("There are no x86_64 images available")
             }
         } else {
-            error("There are no cloud images available")
+            error("There are no ${imageType} images available")
         }
 
         if (!imagePath) {
