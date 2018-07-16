@@ -14,7 +14,7 @@ def call(Map parameters = [:]) {
     def msgProps = parameters.get('msgProps')
     def msgContent = parameters.get('msgContent')
     def msgAuditFile = parameters.get('msgAuditFile', 'auditfile.json')
-    def msgRetryCount = parameters.get(msgRetryCount, 3)
+    def msgRetryCount = parameters.get('msgRetryCount', 3)
 
     // Get contents of auditFile
     def auditContent = readJSON file: msgAuditFile
