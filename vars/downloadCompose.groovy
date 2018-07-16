@@ -42,7 +42,8 @@ def call(Map parameters = [:]) {
 
         sh("curl -Lo ${imageName} ${location}/${imagePath}")
 
-        return imageName
     }
+
+    return imageName
 
 }
