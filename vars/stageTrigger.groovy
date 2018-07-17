@@ -2,7 +2,7 @@ import org.contralib.Utils
 
 
 def call(Map parameters = [:]) {
-    def containers = parameters.get('containers', [:])
+    def containers = parameters.get('containers', [])
     def tagMaps = parameters.get('tagMaps', [:])
     def scheduledJob = parameters.get('scheduledJob')
     def openshift_namespace = parameters.get('openshift_namespace', 'continuous-infra')
@@ -46,7 +46,11 @@ def call(Map parameters = [:]) {
                 }
             }
             stage("Schedule Build") {
-                scheduleBuild(buildName: scheduleBuild, params: tagMaps)
+                steps {
+                    script {
+                        scheduleBuild(buildName: scheduleBuild, params: tagMaps)
+                    }
+                }
             }
         }
     }
