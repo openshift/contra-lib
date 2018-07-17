@@ -1,9 +1,8 @@
 /**
- * requires: buildVars['package_name']
- * optional: buildVars['displayName'], buildVars['buildDescription']
+ * requires: buildPrefix
  * Example Usage:
  *
- * ciPipeline(buildPrefix: 'fedora-pipeline', buildVars: [package_name: 'vim']) {
+ * ciPipeline(buildPrefix: 'fedora-pipeline') {
  *     stage('run-job') {
  *         handlePipelineStep {
  *             runCode()
@@ -19,7 +18,7 @@ import org.contralib.ciMetrics
 
 
 def call(Map parameters, Closure body) {
-    def buildPrefix = parameters.get('buildPrefix', 'contra-pipeline')
+    def buildPrefix = parameters.get('buildPrefix')
     def packageName = parameters.get('package_name')
     def errorMsg = parameters.get('errorMsg')
     def completeMsg = parameters.get('completeMsg')
