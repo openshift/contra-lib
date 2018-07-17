@@ -10,7 +10,7 @@ def call(Map parameters) {
 
     def triggerRetryCount = parameters.get('triggerRetryCount', 3)
     def buildName = parameters.get('buildName')
-    def params = parameters.get('params', [])
+    def params = parameters.get('params', [:])
 
     def buildParams = []
     params.each { name, value ->

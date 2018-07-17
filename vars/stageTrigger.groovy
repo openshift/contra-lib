@@ -4,6 +4,7 @@ import org.contralib.Utils
 def call(Map parameters = [:]) {
     def containers = parameters.get('containers', [:])
     def tagMaps = parameters.get('tagMaps', [:])
+    def scheduledJob = parameters.get('scheduledJob')
     def openshift_namespace = parameters.get('openshift_namespace', 'continuous-infra')
     def docker_repo_url = parameters.get('docker_repo_url', 'docker-registry.default.svc:5000')
     def jenkins_slave_image = parameters.get('jenkins_slave_image', 'jenkins-continuous-infra-slave:stable')
@@ -38,12 +39,14 @@ def call(Map parameters = [:]) {
                                     }
 
                                     tagMaps[container] = utils.buildImage(openshift_namespace, container)
-
                                 }
                             }
                         }
                     }
                 }
+            }
+            stage("Schedule Build") {
+                scheduleBuild(buildName: scheduleBuild, params: tagMaps)
             }
         }
     }
