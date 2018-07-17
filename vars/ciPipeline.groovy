@@ -23,6 +23,8 @@ def call(Map parameters, Closure body) {
     def packageName = parameters.get('package_name')
     def errorMsg = parameters.get('errorMsg')
     def completeMsg = parameters.get('completeMsg')
+    def decorateBuild = parameters.get('decorateBuild')
+    def archiveArtifacts = parameters.get('archiveArtifacts')
     def timeoutValue = parameters.get('timeout', 30)
     def sendMetrics = parameters.get('sendMetrics', true)
 
@@ -50,18 +52,9 @@ def call(Map parameters, Closure body) {
             currentBuild.result = currentBuild.result ?: 'SUCCESS'
 
 
-            if (currentBuild.result == 'SUCCESS') {
-                step([$class     : 'ArtifactArchiver', allowEmptyArchive: true,
-                      artifacts  : '**/logs/**,*.txt,*.groovy,**/job.*,**/*.groovy,**/inventory.*', excludes: '**/job.props,**/job.props.groovy,**/*.example,**/*.qcow2',
-                      fingerprint: true])
-            } else {
-                step([$class     : 'ArtifactArchiver', allowEmptyArchive: true,
-                      artifacts  : '**/logs/**,*.txt,*.groovy,**/job.*,**/*.groovy,**/inventory.*,**/*.qcow2', excludes: '**/job.props,**/job.props.groovy,**/*.example',
-                      fingerprint: true])
+            if (archiveArtifacts) {
+                archiveArtifacts()
             }
-
-            currentBuild.displayName = currentBuild.displayName ?: "Build #${env.BUILD_NUMBER}"
-            currentBuild.description = currentBuild.description ?: currentBuild.result
 
             if (sendMetrics) {
                 pipelineMetrics(buildPrefix: buildPrefix, package_name: packageName)
@@ -71,6 +64,12 @@ def call(Map parameters, Closure body) {
                 sendMessageWithAudit(completeMsg())
             }
 
+            if (decorateBuild) {
+                decorateBuild()
+            } else {
+                currentBuild.displayName = "Build #${env.BUILD_NUMBER}"
+                currentBuild.description = currentBuild.result
+            }
 
         }
     }
