@@ -16,16 +16,18 @@ def call(Map parameters) {
     def stageName = parameters.get('stageName', env.STAGE_NAME)
     def loadProps = parameters.get('loadProps', [])
 
-    loadProps.each { stage ->
-        def jobProps = readProperties file: "${stage}/job.props"
+    def localVars = [:]
 
-        // jobProps is a Map, but stageVars could be a different object
-        jobProps.each { key, value ->
-            stageVars[key] = value
-        }
+    stageVars.each { key, value ->
+        localVars[key] = value
     }
 
-    def containerEnv = stageVars.collect { key, value -> return key+'='+value }
+    loadProps.each { stage ->
+        def jobProps = readProperties file: "${stage}/job.props"
+        localVars << jobProps
+    }
+
+    def containerEnv = localVars.collect { key, value -> return key+'='+value }
     sh "mkdir -p ${stageName}"
     try {
         withEnv(containerEnv) {
