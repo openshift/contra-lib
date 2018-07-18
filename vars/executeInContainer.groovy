@@ -14,6 +14,12 @@ def call(Map parameters) {
     def containerScript = parameters.get('containerScript')
     def stageVars = parameters.get('stageVars', [:])
     def stageName = parameters.get('stageName', env.STAGE_NAME)
+    def loadProps = parameters.get('loadProps', [])
+
+    loadProps.each { stage ->
+        def jobProps = readProperties file: "${stage}/job.props"
+        stageVars << jobProps
+    }
 
     def containerEnv = stageVars.collect { key, value -> return key+'='+value }
     sh "mkdir -p ${stageName}"
