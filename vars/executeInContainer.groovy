@@ -34,6 +34,7 @@ def call(Map parameters) {
         throw err
     } finally {
         sh "mv -vf logs ${stageName}/logs || true"
+        sh "mv -vf job.props ${stageName}/job.props || true"
     }
 
 }
