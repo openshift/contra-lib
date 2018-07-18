@@ -18,11 +18,11 @@ def call(Map parameters) {
 
     loadProps.each { stage ->
         def jobProps = readProperties file: "${stage}/job.props"
-        echo "print job props"
-        echo jobProps.toString()
-        echo "listing props"
-        sh "cat ${stage}/job.props"
-        stageVars << jobProps
+
+        // jobProps is a Map, but stageVars could be a different object
+        jobProps.each { key, value ->
+            stageVars[key] = value
+        }
     }
 
     def containerEnv = stageVars.collect { key, value -> return key+'='+value }
