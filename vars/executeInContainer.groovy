@@ -18,6 +18,10 @@ def call(Map parameters) {
 
     loadProps.each { stage ->
         def jobProps = readProperties file: "${stage}/job.props"
+        echo "print job props"
+        echo jobProps
+        echo "listing props"
+        sh "cat ${stage}/job.props"
         stageVars << jobProps
     }
 
