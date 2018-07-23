@@ -26,6 +26,17 @@ Parameters:
 - timeout: Set to time the pipeline out after timeout minutes. Defaults to 30.
 - sendMetrics: Whether to send metrics to influxdb. true or false.
 
+#### executeInContainer
+This function executes a script in a container. It's wrapped by handlePipelineStep.
+Parameters:
+- containerName: The name of the container to use. This corresponds to the container name set in deployOpenShiftTemplate.
+- containerScript: The shell command to run.
+- stageVars: A Map containing the environment variables to pass to the container.
+- loadProps: Properties to load from a previously run stage. This accepts a list of stage names and will load a properties file
+from ${stageName}/job.props.
+- credentials: Credentials to pass to the container as environment variables. This accepts a list of credentials loaded
+from Jenkins
+
 #### Example Usage:
 ```
 package_name = env.CI_MESSAGE['name']
