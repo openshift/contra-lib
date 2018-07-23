@@ -1,7 +1,9 @@
-def call() {
+def call(Map parameters = [:]) {
+    def change_branch = parameters.get('change_branch', env.CHANGE_BRANCH)
+    def change_author = parameters.get('change_author', env.CHANGE_AUTHOR)
     return {
-        if ((env.CHANGE_BRANCH) && (env.CHANGE_AUTHOR)) {
-            currentBuild.displayName = "Build #${env.BUILD_ID} - Author: ${env.CHANGE_AUTHOR} - Branch: ${env.CHANGE_BRANCH}"
+        if ((change_branch) && (change_author)) {
+            currentBuild.displayName = "Build #${env.BUILD_ID} - Author: ${change_author} - Branch: ${change_branch}"
         } else {
             currentBuild.displayName = "Build #${env.BUILD_ID}"
         }
