@@ -13,6 +13,19 @@ and the command to run.
 - openshift_service_account: The openshift service account. Defaults to jenkins.
 - jenkins_slave_image: The jnlp image to use. You must specify image:tag. Defaults to jenkins-continuous-infra-slave:stable.
 
+#### ciPipeline
+This function wraps the whole pipeline in a try/catch/finally block while accepting parameters to initialize and tear down
+the pipeline.
+Parameters:
+- buildPrefix: A prefix to set that describes the build. This is mainly used for metrics.
+- package_name: If building a package like an RPM set this to its name. e.g. 'vim'
+- errorMsg: A fedMsgError to send on pipeline failure.
+- completeMsg: A fedMsgComplete to send on pipeline completion.
+- decorateBuild: A Closure that decorates the build such as the function decoratePRBuild()
+- archiveArtifacts: A Closure that contains an ArtifactArchiver step.
+- timeout: Set to time the pipeline out after timeout minutes. Defaults to 30.
+- sendMetrics: Whether to send metrics to influxdb. true or false.
+
 #### Example Usage:
 ```
 package_name = env.CI_MESSAGE['name']
