@@ -12,7 +12,9 @@ and the command to run.
 - podName: The name of the pod that gets deployed. Defaults to generic-${UUID.randomUUID().toString()}.
 - openshift_service_account: The openshift service account. Defaults to jenkins.
 - jenkins_slave_image: The jnlp image to use. You must specify image:tag. Defaults to jenkins-continuous-infra-slave:stable.
-
+```groovy
+deployOpenShiftTemplate(containers: ['rpmbuild-container'], openshift_namespace: 'default')
+```
 #### ciPipeline
 This function wraps the whole pipeline in a try/catch/finally block while accepting parameters to initialize and tear down
 the pipeline.
@@ -25,7 +27,9 @@ Parameters:
 - archiveArtifacts: A Closure that contains an ArtifactArchiver step.
 - timeout: Set to time the pipeline out after timeout minutes. Defaults to 30.
 - sendMetrics: Whether to send metrics to influxdb. true or false.
-
+```groovy
+ciPipeline(buildPrefix: 'myrpmbuilder', decorateBuild: {currentBuild.displayName: 'env.BUILD_ID'})
+```
 #### executeInContainer
 This function executes a script in a container. It's wrapped by handlePipelineStep.
 Parameters:
@@ -36,6 +40,16 @@ Parameters:
 from ${stageName}/job.props.
 - credentials: Credentials to pass to the container as environment variables. This accepts a list of credentials loaded
 from Jenkins
+```groovy
+executeInContainer(containerName: 'rpmbuild-container', containerScript: 'echo success', stageVars: ['var1': 'val1'],
+                        credentials: credentials)
+```
+
+#### stageTrigger
+Jenkins job to listen for changes to a container, build the image and tag it with the PR #.
+```groovy
+stageTrigger(containers: ['rpmbuild', image-compose'], scheduledJob: 'fedora-rawhide-build')
+```
 
 #### Example Usage:
 ```
