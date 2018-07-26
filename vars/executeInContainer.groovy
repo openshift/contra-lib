@@ -34,9 +34,6 @@ def call(Map parameters) {
             sh "mkdir -p ${stageName}"
             try {
                 withEnv(containerEnv) {
-                    echo 'second printing of vars'
-                    sh 'env'
-                    echo 'done with second printing'
                     container(containerName) {
                         sh containerScript
                     }
