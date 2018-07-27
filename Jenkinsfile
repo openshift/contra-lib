@@ -9,7 +9,7 @@ if (env.TAG_NAME) {
     branch = env.BRANCH_NAME
 }
 
-libraries = ['contra-int-lib': [branch, 'https://github.com/openshift/contra-int-lib.git']]
+libraries = ['contra-lib': [branch, 'https://github.com/openshift/contra-lib.git']]
 
 libraries.each { name, repo ->
     library identifier: "${name}@${repo[0]}",
