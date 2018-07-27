@@ -1,0 +1,55 @@
+plugins {
+    id("com.mkobit.jenkins.pipelines.shared-library") version "0.2.0"
+}
+
+group 'contra-lib.ci'
+version '0.1-SNAPSHOT'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+    jcenter()
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '4.9'
+}
+
+
+task initLibraries(type: Copy){
+    from('./') {
+        include 'src/**/*'
+        include 'vars/**/*'
+    }
+    into 'build/classes/groovy/test/contra-lib@master'
+}
+
+test.dependsOn initLibraries
+
+dependencies {
+    compile 'org.codehaus.groovy:groovy-all:2.4.12'
+    testCompile 'junit:junit:4.12'
+    testImplementation(group: 'junit', name: 'junit', version: '4.12')
+}
+
+sharedLibrary {
+    pipelineTestUnitVersion = "1.1"
+    groovyVersion = "2.4.12"
+    coreVersion = "2.73"
+}
+
+sourceSets {
+    main {
+        groovy {
+            // don't add vars - it's loaded dynamic!
+            srcDirs = ['src']
+        }
+    }
+
+    test {
+        groovy {
+            srcDirs = ['test']
+        }
+    }
+}
