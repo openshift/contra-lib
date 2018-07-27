@@ -45,12 +45,14 @@ class ciMetrics {
      */
     def timed(String measurement, String name, Closure body) {
 		def start = System.currentTimeMillis()
-
-		body()
-
-		def now = System.currentTimeMillis()
-
-        setMetricField(measurement, name, now - start)
+        try {
+            body()
+        } catch(e) {
+            throw e
+        } finally {
+            def now = System.currentTimeMillis()
+            setMetricField(measurement, name, now - start)
+        }
     }
 
     /**

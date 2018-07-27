@@ -14,20 +14,37 @@ def call(Map parameters) {
     def containerScript = parameters.get('containerScript')
     def stageVars = parameters.get('stageVars', [:])
     def stageName = parameters.get('stageName', env.STAGE_NAME)
+    def loadProps = parameters.get('loadProps', [])
+    def credentials = parameters.get('credentials', [])
 
-    def containerEnv = stageVars.collect { key, value -> return key+'='+value }
-    sh "mkdir -p ${stageName}"
-    try {
-        withEnv(containerEnv) {
-            container(containerName) {
-                sh containerScript
+    handlePipelineStep {
+        withCredentials(credentials) {
+            def localVars = [:]
+
+            stageVars.each { key, value ->
+                localVars[key] = value
+            }
+
+            loadProps.each { stage ->
+                def jobProps = readProperties file: "${stage}/job.props"
+                localVars << jobProps
+            }
+
+            def containerEnv = localVars.collect { key, value -> return key+'='+value }
+            sh "mkdir -p ${stageName}"
+            try {
+                withEnv(containerEnv) {
+                    container(containerName) {
+                        sh containerScript
+                    }
+                }
+
+            } catch (err) {
+                throw err
+            } finally {
+                sh "mv -vf logs ${stageName}/logs || true"
+                sh "mv -vf job.props ${stageName}/job.props || true"
             }
         }
-
-    } catch (err) {
-        throw err
-    } finally {
-        sh "mv -vf logs ${stageName}/logs || true"
     }
-
 }

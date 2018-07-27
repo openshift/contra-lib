@@ -202,3 +202,45 @@ def verifyPod(String openshiftProject, String nodeName=env.NODE_NAME) {
         }
     }
 }
+
+/**
+ * Build image in openshift
+ * @param openshiftProject Openshift Project
+ * @param buildConfig
+ * @return
+ */
+def buildImage(String openshiftProject, String buildConfig) {
+    // - build in Openshift
+    // - startBuild with a commit
+    // - Get result Build and get imagestream manifest
+    // - Use that to create a unique tag
+    // - This tag will then be passed as an image input
+    //   to the podTemplate/containerTemplate to create
+    //   our slave pod.
+    openshift.withCluster() {
+        openshift.withProject(openshiftProject) {
+            def result = openshift.startBuild(buildConfig,
+                    "--commit",
+                    "refs/pull/" + env.ghprbPullId + "/head",
+                    "--wait")
+            def out = result.out.trim()
+            echo "Resulting Build: " + out
+
+            def describeStr = openshift.selector(out).describe()
+            out = describeStr.out.trim()
+
+            def imageHash = sh(
+                    script: "echo \"${out}\" | grep 'Image Digest:' | cut -f2- -d:",
+                    returnStdout: true
+            ).trim()
+            echo "imageHash: ${imageHash}"
+
+            echo "Creating CI tag for ${openshiftProject}/${buildConfig}: ${buildConfig}:PR-${env.ghprbPullId}"
+
+            openshift.tag("${openshiftProject}/${buildConfig}@${imageHash}",
+                    "${openshiftProject}/${buildConfig}:PR-${env.ghprbPullId}")
+
+            return "PR-" + env.ghprbPullId
+        }
+    }
+}
