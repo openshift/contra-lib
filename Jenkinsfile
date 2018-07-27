@@ -9,6 +9,7 @@ if (env.TAG_NAME) {
     branch = env.BRANCH_NAME
 }
 
+/*
 libraries = ['contra-lib': [branch, 'https://github.com/openshift/contra-lib.git']]
 
 libraries.each { name, repo ->
@@ -17,7 +18,7 @@ libraries.each { name, repo ->
                                   remote: repo[1]])
 
 }
-
+*/
 node() {
     sh 'env'
 }
