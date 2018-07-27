@@ -1,5 +1,6 @@
 package org.contralib
 
+
 /**
  * @param request - the url that refers to the package
  * @param prefix - env prefix
@@ -28,43 +29,6 @@ def repoFromRequest(String request) {
     }
 
     return repo
-}
-
-/**
- * Wrapper to parse json before injecting env variables
- * @param prefix
- * @param message
- * @return
- */
-def flattenJSON(String message) {
-    def ciMessage = readJSON text: message.replace("\n", "\\n")
-    def ci_data = [:]
-    return injectCIMessage(ci_data, ciMessage)
-}
-
-/**
- * Traverse a CI_MESSAGE with nested keys.
- * @param prefix
- * @param message
- * @return env map with all keys at top level
- */
-def injectCIMessage(def ci_data, def ciMessage) {
-
-    ciMessage.each { key, value ->
-        def new_key = key.replaceAll('-', '_')
-        // readJSON uses JSON* and slurper uses LazyMap and ArrayList
-        if (value instanceof groovy.json.internal.LazyMap || value instanceof net.sf.json.JSONObject) {
-            injectCIMessage(ci_data, value)
-        } else if (value instanceof java.util.ArrayList || value instanceof net.sf.json.JSONArray) {
-            // value was an array itself
-            injectArray(ci_data, value)
-        } else {
-            ci_data[new_key] =
-                    value.toString().split('\n')[0].replaceAll('"', '\'')
-        }
-    }
-
-    return ci_data
 }
 
 /**
