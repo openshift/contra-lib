@@ -10,11 +10,16 @@ def call(Map parameters) {
 
     def triggerRetryCount = parameters.get('triggerRetryCount', 3)
     def buildName = parameters.get('buildName')
-    def params = parameters.get('params', [:])
+    def stringParams = parameters.get('stringParams', [:])
+    def booleanParams = parameters.get('booleanParams', [:])
 
     def buildParams = []
-    params.each { name, value ->
+    stringParams.each { name, value ->
         buildParams << string(name: name, value: value.toString())
+    }
+
+    booleanParams.each { name, value ->
+        buildParams << booleanParam(name: name, value: value)
     }
 
     try {
