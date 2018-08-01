@@ -31,9 +31,8 @@ def call(Map parameters) {
             }
 
             def containerEnv = localVars.collect { key, value -> return key+'='+value }
-            echo "printing envs"
-            sh "env"
-            echo "done printing"
+            echo "does file exist"
+            sh "ls -l ${GOOGLE_APPLICATION_CREDENTIALS}"
             sh "mkdir -p ${stageName}"
             try {
                 withEnv(containerEnv) {
