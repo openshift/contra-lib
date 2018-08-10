@@ -24,10 +24,6 @@ def call(Map parameters = [:], Closure body) {
 
     try {
 
-        if (queuedMsg) {
-            sendMessageWithAudit(queuedMsg())
-        }
-
         print "running pipeline step: ${name}"
         def runtime = cimetrics.timed measurementName, name, {
 
