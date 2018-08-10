@@ -18,8 +18,7 @@ import org.contralib.ciMetrics
 def call(Map parameters = [:], Closure body) {
     def measurementName = parameters.get('measurement', env.JOB_NAME)
     def name = parameters.get('stageName', env.STAGE_NAME ?: env.JOB_NAME)
-    def queuedMsg = parameters.get('queuedMsg')
-    def runningMsg = parameters.get('runningMsg')
+    def stageMsg = parameters.get('stageMsg')
 
     def cimetrics = ciMetrics.metricsInstance
 
@@ -34,8 +33,9 @@ def call(Map parameters = [:], Closure body) {
 
             body()
 
-            if (runningMsg) {
-                sendMessageWithAudit(runningMsg(runtime: runtime))
+            if (stageMsg) {
+                def runtimeMsg = ['stage': ['runtime': runtime]]
+                sendMessageWithAudit(stageMsg(runtimeMsg))
             }
 
         }
