@@ -30,17 +30,16 @@ def call(Map parameters = [:], Closure body) {
         }
 
         print "running pipeline step: ${name}"
-        cimetrics.timed measurementName, name, {
-
-            if (runningMsg) {
-                sendMessageWithAudit(runningMsg())
-            }
+        def runtime = cimetrics.timed measurementName, name, {
 
             body()
 
+            if (runningMsg) {
+                sendMessageWithAudit(runningMsg(runtime: runtime))
+            }
+
         }
     } catch(e) {
-
         echo "${env.JOB_NAME} failed in stage: ${name} with error: ${e.toString()}"
         throw e
     } finally {
