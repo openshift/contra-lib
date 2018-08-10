@@ -42,8 +42,8 @@ def call(Map parameters) {
             } catch (err) {
                 throw err
             } finally {
-                sh "mv -vf logs ${stageName}/logs || true"
-                sh "mv -vf job.props ${stageName}/job.props || true"
+                sh "[ -e ${stageName}/logs ] && mv -vf logs ${stageName}/logs || true"
+                sh "[ -e ${stageName}/job.props ] && mv -vf job.props ${stageName}/job.props || true"
             }
         }
     }

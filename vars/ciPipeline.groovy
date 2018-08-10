@@ -40,10 +40,10 @@ def call(Map parameters, Closure body) {
             // Set build result
             currentBuild.result = "FAILURE"
 
-            echo e.getMessage()
+            echo e.toString()
 
             if (errorMsg) {
-                sendMessageWithAudit(errorMsg())
+                sendMessageWithAudit(errorMsg(runtime: currentBuild.getDuration()))
             }
 
             throw e
@@ -60,7 +60,8 @@ def call(Map parameters, Closure body) {
             }
 
             if (completeMsg) {
-                sendMessageWithAudit(completeMsg())
+                runtime = ['pipeline': ['runtime': currentBuild.getDuration()]]
+                sendMessageWithAudit(completeMsg(['pipeline': ['runtime': currentBuild.getDuration()]))
             }
 
             if (decorateBuild) {
