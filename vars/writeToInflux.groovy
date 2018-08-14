@@ -18,8 +18,8 @@ def call(Map parameters = [:]) {
     def target = parameters.get('target', 'localInflux')
 
     step([$class: 'InfluxDbPublisher',
-            customData: customData,
-            customDataTags: customDataTags,
+           // customData: customData,
+           // customDataTags: customDataTags,
             customDataMap: customDataMap,
             customDataMapTags: customDataMapTags,
             customPrefix: customPrefix,
