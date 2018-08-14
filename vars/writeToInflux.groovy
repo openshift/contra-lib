@@ -17,9 +17,12 @@ def call(Map parameters = [:]) {
     def customPrefix = parameters.get('customPrefix', 'ci_pipeline')
     def target = parameters.get('target', 'localInflux')
 
+    print customDataMapTags
+    print customDataMap
+    
     step([$class: 'InfluxDbPublisher',
-           // customData: customData,
-           // customDataTags: customDataTags,
+            customData: customData,
+            customDataTags: customDataTags,
             customDataMap: customDataMap,
             customDataMapTags: customDataMapTags,
             customPrefix: customPrefix,
