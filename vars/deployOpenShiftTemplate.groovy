@@ -33,7 +33,7 @@ def call(Map parameters = [:], Closure body) {
         // add default jenkins slave container
         containerTemplates << containerTemplate(name: 'jnlp',
                // image: "${docker_repo_url}/${openshift_namespace}/${jenkins_slave_image}",
-                image: "${openshift_namespace}/${jenkins_slave_image}",
+                image: jenkins_slave_image,
                 ttyEnabled: false,
                 args: '${computer.jnlpmac} ${computer.name}',
                 command: '',
@@ -43,7 +43,7 @@ def call(Map parameters = [:], Closure body) {
             def tag = 'stable'
             def cmd = 'cat'
             //def imageUrl = "${docker_repo_url}/${openshift_namespace}/${containerName}:${tag}"
-            def imageUrl = "${openshift_namespace}/${containerName}:${tag}"
+            def imageUrl = "${containerName}:${tag}"
 
 
             containerTemplates << containerTemplate(name: containerName,
