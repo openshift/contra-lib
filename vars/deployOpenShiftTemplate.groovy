@@ -22,7 +22,7 @@ def call(Map parameters, Closure body) {
 
         def ocContainers = parameters.get('containers', [])
         def ocContainersWithProps = parameters.get('containersWithProps', [:])
-        def openshift_namespace = parameters.get('openshift_namespace', 'continuous-infra')
+        def openshift_namespace = parameters.get('openshift_namespace', (env.OPENSHIFT_BUILD_NAMESPACE ?: 'continuous-infra'))
         def docker_repo_url = parameters.get('docker_repo_url', 'docker-registry.default.svc:5000')
         def podName = parameters.get('podName', "generic-${UUID.randomUUID().toString()}")
         def openshift_service_account = parameters.get('openshift_service_account', 'jenkins')
