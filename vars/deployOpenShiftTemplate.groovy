@@ -24,15 +24,16 @@ def call(Map parameters = [:], Closure body) {
         def ocContainersWithProps = parameters.get('containersWithProps', [:])
         def openshift_namespace = parameters.get('openshift_namespace', (env.OPENSHIFT_BUILD_NAMESPACE ?: 'continuous-infra'))
         def docker_repo_url = parameters.get('docker_repo_url', 'docker-registry.default.svc:5000')
-        def podName = parameters.get('podName', "generic-${UUID.randomUUID().toString()}")
-        def openshift_service_account = parameters.get('openshift_service_account', 'jenkins')
+        def podName = parameters.get('podName', "${env.BUILD_TAG}-${UUID.randomUUID().toString()}")
+        def openshift_service_account = parameters.get('openshift_service_account', (env.oc_serviceaccount_name ?: 'jenkins'))
         def jenkins_slave_image = parameters.get('jenkins_slave_image', 'jenkins-continuous-infra-slave:stable')
 
         def containerTemplates = []
 
         // add default jenkins slave container
         containerTemplates << containerTemplate(name: 'jnlp',
-                image: "${docker_repo_url}/${openshift_namespace}/${jenkins_slave_image}",
+               // image: "${docker_repo_url}/${openshift_namespace}/${jenkins_slave_image}",
+                image: "${openshift_namespace}/${jenkins_slave_image}",
                 ttyEnabled: false,
                 args: '${computer.jnlpmac} ${computer.name}',
                 command: '',
@@ -41,7 +42,9 @@ def call(Map parameters = [:], Closure body) {
         ocContainers.each { containerName ->
             def tag = 'stable'
             def cmd = 'cat'
-            def imageUrl = "${docker_repo_url}/${openshift_namespace}/${containerName}:${tag}"
+            //def imageUrl = "${docker_repo_url}/${openshift_namespace}/${containerName}:${tag}"
+            def imageUrl = "${openshift_namespace}/${containerName}:${tag}"
+
 
             containerTemplates << containerTemplate(name: containerName,
                     alwaysPullImage: true,
