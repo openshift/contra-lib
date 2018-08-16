@@ -11,6 +11,13 @@ import org.contralib.Utils
  * }
  * 
  * @param parameters
+ * containers: List - A list of containers to deploy
+ * containersWithProps: Map - A map with the container name as the key and container tag and command as values
+ * openshift_namespace: String - The namespace the containers are running in
+ * docker_repo_url: String - The address:port of the docker registry
+ * podName: String - The name of the pod to run the containers in
+ * openshift_service_account: String - The openshift service account
+ * jenkins_slave_image: String - Container:tag of the jenkins slave container
  * @param body
  * @return
  */
