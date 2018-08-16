@@ -11,13 +11,22 @@
  * }
  *
  * @param parameters
+ * buildPrefix: String - A unique name to your Jenkins instance. It's mainly used to prefix influx data
+ * packageName: String - If set, metrics will be recorded about the package.
+ * errorMsg: fedErrorMsg - a fedErrorMsg to send on job failure
+ * completeMsg: fedCompleteMsg - a fedCompleteMsg to send on job completion
+ * decorateBuild: Closure - A closure that will be called to decorate the build. Defaults to build_number and build result
+ * postBuild: Closure -  A closure that will run any post build actions. This can be used to archive artifacts or cleanup
+ *             after the build has run
+ * timeoutValue: Integer - How long before the job should timeout. Defaults to 30 minutes.
+ * sendMetrics: Boolean - send metrics to influx or not
  * @param body
  * @return
  */
 import org.contralib.ciMetrics
 
 
-def call(Map parameters, Closure body) {
+def call(Map parameters = [:], Closure body) {
     def buildPrefix = parameters.get('buildPrefix', env.OPENSHIFT_BUILD_NAMESPACE)
     def packageName = parameters.get('package_name')
     def errorMsg = parameters.get('errorMsg')
