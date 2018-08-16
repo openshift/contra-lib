@@ -14,7 +14,7 @@ import org.contralib.Utils
  * @param body
  * @return
  */
-def call(Map parameters, Closure body) {
+def call(Map parameters = [:], Closure body) {
 
     def utils = new Utils()
 
