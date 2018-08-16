@@ -30,7 +30,6 @@ def call(Map parameters = [:], Closure body) {
 
         def containerTemplates = []
 
-        sh 'env'
         // add default jenkins slave container
         containerTemplates << containerTemplate(name: 'jnlp',
                 image: "${docker_repo_url}/${openshift_namespace}/${jenkins_slave_image}",
