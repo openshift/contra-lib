@@ -18,15 +18,18 @@ import org.contralib.ciMetrics
 
 
 def call(Map parameters, Closure body) {
-    def buildPrefix = parameters.get('buildPrefix')
+    def buildPrefix = parameters.get('buildPrefix', env.OPENSHIFT_BUILD_NAMESPACE)
     def packageName = parameters.get('package_name')
     def errorMsg = parameters.get('errorMsg')
     def completeMsg = parameters.get('completeMsg')
     def decorateBuild = parameters.get('decorateBuild')
-    def archiveArtifacts = parameters.get('archiveArtifacts')
+    def postBuild = parameters.get('postBuild')
     def timeoutValue = parameters.get('timeout', 30)
     def sendMetrics = parameters.get('sendMetrics', true)
 
+    if (!buildPrefix) {
+        throw new RuntimeException('Must supply buildPrefix')
+    }
 
     def cimetrics = ciMetrics.metricsInstance
     cimetrics.prefix = buildPrefix
@@ -48,12 +51,17 @@ def call(Map parameters, Closure body) {
 
             throw e
         } finally {
-            currentBuild.result = currentBuild.result ?: 'SUCCESS'
 
-
-            if (archiveArtifacts) {
-                archiveArtifacts()
+            try {
+                if (postBuild) {
+                    postBuild()
+                }
+            } catch(e) {
+                echo "Exception in post build: ${e.toString()}"
+                currentBuild.result = 'FAILED'
             }
+
+            currentBuild.result = currentBuild.result ?: 'SUCCESS'
 
             if (sendMetrics) {
                 pipelineMetrics(buildPrefix: buildPrefix, package_name: packageName)
