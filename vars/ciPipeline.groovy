@@ -16,6 +16,7 @@
  * errorMsg: fedErrorMsg - a fedErrorMsg to send on job failure
  * completeMsg: fedCompleteMsg - a fedCompleteMsg to send on job completion
  * decorateBuild: Closure - A closure that will be called to decorate the build. Defaults to build_number and build result
+ * preBuild: Closure - A closure that runs any pre build actions.
  * postBuild: Closure -  A closure that will run any post build actions. This can be used to archive artifacts or cleanup
  *             after the build has run
  * timeoutValue: Integer - How long before the job should timeout. Defaults to 30 minutes.
@@ -50,7 +51,7 @@ def call(Map parameters = [:], Closure body) {
             if (preBuild) {
                 preBuild()
             }
-            
+
             body()
         } catch (e) {
             // Set build result
