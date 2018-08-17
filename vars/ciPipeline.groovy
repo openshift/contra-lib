@@ -32,6 +32,7 @@ def call(Map parameters = [:], Closure body) {
     def errorMsg = parameters.get('errorMsg')
     def completeMsg = parameters.get('completeMsg')
     def decorateBuild = parameters.get('decorateBuild')
+    def preBuild = parameters.get('preBuild')
     def postBuild = parameters.get('postBuild')
     def timeoutValue = parameters.get('timeout', 30)
     def sendMetrics = parameters.get('sendMetrics', true)
@@ -46,6 +47,10 @@ def call(Map parameters = [:], Closure body) {
     timeout(time: timeoutValue, unit: 'MINUTES') {
 
         try {
+            if (preBuild) {
+                preBuild()
+            }
+            
             body()
         } catch (e) {
             // Set build result
