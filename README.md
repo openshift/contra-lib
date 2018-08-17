@@ -1,4 +1,4 @@
-# A general library for upstream ci
+# Jenkins shared library
 
 ### Function reference
 #### deployOpenShiftTemplate
