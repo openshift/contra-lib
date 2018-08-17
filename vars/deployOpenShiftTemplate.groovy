@@ -4,15 +4,16 @@ import org.contralib.Utils
  * Define containers to deploy to openshift
  * Example Usage in Jenkinsfile:
  *
- * ocContainers = ['rpmbuild': [tag: 'latest',
- *                              command: 'cat']]
+ * ocContainersWithProps = ['rpmbuild':  [tag: 'latest',
+ *                                        command: 'cat',
+ *                                        privileged: false]]
  * deployOpenShiftTemplate(containers: ocContainers, podName: "fedora-${UUID.randomUUID().toString()}") {
  *     deployCode()
  * }
  * 
  * @param parameters
  * containers: List - A list of containers to deploy
- * containersWithProps: Map - A map with the container name as the key and container tag and command as values
+ * containersWithProps: Map - A map with the container name as the key and values tag, command and privileged
  * openshift_namespace: String - The namespace the containers are running in
  * docker_repo_url: String - The address:port of the docker registry
  * podName: String - The name of the pod to run the containers in
