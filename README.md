@@ -1,4 +1,4 @@
-# A general library for upstream ci
+# Jenkins shared library
 
 ### Function reference
 #### deployOpenShiftTemplate
@@ -24,7 +24,8 @@ Parameters:
 - errorMsg: A fedMsgError to send on pipeline failure.
 - completeMsg: A fedMsgComplete to send on pipeline completion.
 - decorateBuild: A Closure that decorates the build such as the function decoratePRBuild()
-- archiveArtifacts: A Closure that contains an ArtifactArchiver step.
+- preBuild: A closure that contains pre build steps.
+- postBuild: A Closure that contains any post build steps. e.g. ArtifactArchiver step.
 - timeout: Set to time the pipeline out after timeout minutes. Defaults to 30.
 - sendMetrics: Whether to send metrics to influxdb. true or false.
 ```groovy
