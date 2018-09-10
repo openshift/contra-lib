@@ -61,11 +61,10 @@ These two libraries will collect basic metrics that include:
 - Project name
 - Time spent in build queue
 
-In addition to the default collected metrics, you can send custom metrics to Influxdb by calling the setCustomMetrics library.
+In addition to the default collected metrics, you can send custom metrics to Influxdb by calling the writeToInflux library.
 
 ```groovy
-setCustomMetrics(fields: ['custom-field': 10], tags: ['custom-tag': 'my-build-tag'])
-```
+writeToInflux(customData: [build_time: 100], customDataMap['mybuild': ['build_time': 100]])```
 
 After the pipeline finishes, the ciPipeline library will send all collected metrics to Influxdb.
 
