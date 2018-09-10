@@ -52,6 +52,23 @@ Jenkins job to listen for changes to a container, build the image and tag it wit
 stageTrigger(containers: ['rpmbuild', image-compose'], scheduledJob: 'fedora-rawhide-build')
 ```
 
+#### Metrics
+Pipeline metrics are collected throughout the run of a pipeline when using the handlePipelineStep and ciPipeline libraries.
+These two libraries will collect basic metrics that include:
+- Total build time
+- Stage run time
+- Build number
+- Project name
+- Time spent in build queue
+
+In addition to the default collected metrics, you can send custom metrics to Influxdb by calling the pipelineMetrics library.
+
+```groovy
+setCustomMetrics(fields: ['custom-field': 10], tags: ['custom-tag': 'my-build-tag'])
+```
+
+After the pipeline finishes, the ciPipeline library will send all collected metrics to Influxdb.
+
 #### Example Usage:
 ```
 package_name = env.CI_MESSAGE['name']
