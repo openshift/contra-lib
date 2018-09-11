@@ -12,7 +12,7 @@
  * @param body
  * @return
  */
-import org.contralib.ciMetrics
+import org.centos.pipeline.ciMetrics
 
 
 def call(Map parameters = [:], Closure body) {

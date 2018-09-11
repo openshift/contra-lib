@@ -1,4 +1,4 @@
-import org.contralib.Utils
+import org.centos.pipeline.Utils
 
 
 def call(Map parameters = [:]) {

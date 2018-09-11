@@ -1,4 +1,4 @@
-import org.contralib.Utils
+import org.centos.pipeline.Utils
 
 /**
  * Example Usage:
