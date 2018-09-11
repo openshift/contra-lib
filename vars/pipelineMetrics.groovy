@@ -1,4 +1,4 @@
-import org.centos.pipeline.ciMetrics
+import org.centos.contra.pipeline.ciMetrics
 
 
 def call(Map parameters = [:]) {

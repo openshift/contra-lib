@@ -1,5 +1,5 @@
 #!groovy
-package org.centos.pipeline
+package org.centos.contra.pipeline
 
 
 /*

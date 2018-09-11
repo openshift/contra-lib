@@ -1,4 +1,4 @@
-package org.centos.pipeline
+package org.centos.contra.pipeline
 
 /**
  * @param request - the url that refers to the package
