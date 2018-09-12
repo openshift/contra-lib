@@ -2,7 +2,7 @@ package org.centos.contra.jobdsl
 
 
 
-class multiBranchJob {
+class MultiBranchJob {
 
     static def commentTrigger(String comment) {
         return {
