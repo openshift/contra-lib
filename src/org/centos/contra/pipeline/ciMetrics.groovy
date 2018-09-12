@@ -1,5 +1,5 @@
 #!groovy
-package org.contralib
+package org.centos.contra.pipeline
 
 
 /*

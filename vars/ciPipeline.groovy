@@ -24,7 +24,7 @@
  * @param body
  * @return
  */
-import org.contralib.ciMetrics
+import org.centos.contra.pipeline.ciMetrics
 
 
 def call(Map parameters = [:], Closure body) {
@@ -35,7 +35,7 @@ def call(Map parameters = [:], Closure body) {
     def decorateBuild = parameters.get('decorateBuild')
     def preBuild = parameters.get('preBuild')
     def postBuild = parameters.get('postBuild')
-    def timeoutValue = parameters.get('timeout', 30)
+    def timeoutValue = parameters.get('timeout', 120)
     def sendMetrics = parameters.get('sendMetrics', true)
 
     if (!buildPrefix) {
