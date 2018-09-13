@@ -63,11 +63,12 @@ class MultiBranchJob {
     }
 
     static def scriptPath(String pipelineScript) {
-        return {
-            it / factory(class: "org.jenkinsci.plugins.workflow.multibranch.WorkflowBranchProjectFactory") << {
-                scriptPath(pipelineScript)
+        job.with {
+            configure {
+                it / factory(class: "org.jenkinsci.plugins.workflow.multibranch.WorkflowBranchProjectFactory") << {
+                    scriptPath(pipelineScript)
+                }
             }
         }
     }
 }
-
