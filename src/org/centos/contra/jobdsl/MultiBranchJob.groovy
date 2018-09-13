@@ -48,6 +48,10 @@ class MultiBranchJob {
                 strategy(class: 'jenkins.branch.DefaultBranchPropertyStrategy') {
                     properties(class: 'java.util.Arrays$ArrayList') {
                         a(class: 'jenkins.branch.BranchProperty-array') {
+                            if (comment == "\\[merge\\]") {
+                                'jenkins.branch.NoTriggerBranchProperty'()
+                                
+                            }
                             'com.adobe.jenkins.github__pr__comment__build.TriggerPRCommentBranchProperty' {
                                 commentBody(comment)
                             }
