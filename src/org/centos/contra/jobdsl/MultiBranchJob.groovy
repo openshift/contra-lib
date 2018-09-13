@@ -7,7 +7,7 @@ class MultiBranchJob {
     def job
 
     MultiBranchJob(def job, String name) {
-        this.job = job.multiBranchPipelineJob(name)
+        this.job = job.multibranchPipelineJob(name)
     }
 
     void addGitHub(String repoName, String owner, String credentials = null) {
