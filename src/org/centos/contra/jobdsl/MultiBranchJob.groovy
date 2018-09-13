@@ -1,7 +1,6 @@
 package org.centos.contra.jobdsl
 
 
-
 class MultiBranchJob {
 
     def job
@@ -29,6 +28,16 @@ class MultiBranchJob {
     void addComment(String comment) {
         job.with {
             configure commentTrigger(comment)
+        }
+    }
+
+    void discardOldBranches(def days = 7) {
+        job.with {
+            orphanedItemStrategy {
+                discardOldItems {
+                    numToKeep(days)
+                }
+            }
         }
     }
 
