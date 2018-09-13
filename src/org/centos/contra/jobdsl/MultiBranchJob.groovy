@@ -25,12 +25,6 @@ class MultiBranchJob {
 
     }
 
-    void addComment(String comment) {
-        job.with {
-            configure commentTrigger(comment)
-        }
-    }
-
     void discardOldBranches(def days = 7) {
         job.with {
             orphanedItemStrategy {
@@ -41,28 +35,30 @@ class MultiBranchJob {
         }
     }
 
-    static def commentTrigger(String comment) {
+    def addComment(String comment) {
+        job.with {
+            configure {
+                it / sources / 'data' / 'jenkins.branch.BranchSource' << {
+                    strategy(class: 'jenkins.branch.DefaultBranchPropertyStrategy') {
+                        properties(class: 'java.util.Arrays$ArrayList') {
+                            a(class: 'jenkins.branch.BranchProperty-array') {
+                                if (comment == "\\[merge\\]") {
+                                    'jenkins.branch.NoTriggerBranchProperty'()
 
-        return {
-            it / sources / 'data' / 'jenkins.branch.BranchSource' << {
-                strategy(class: 'jenkins.branch.DefaultBranchPropertyStrategy') {
-                    properties(class: 'java.util.Arrays$ArrayList') {
-                        a(class: 'jenkins.branch.BranchProperty-array') {
-                            if (comment == "\\[merge\\]") {
-                                'jenkins.branch.NoTriggerBranchProperty'()
-
-                            }
-                            'com.adobe.jenkins.github__pr__comment__build.TriggerPRCommentBranchProperty' {
-                                commentBody(comment)
+                                }
+                                'com.adobe.jenkins.github__pr__comment__build.TriggerPRCommentBranchProperty' {
+                                    commentBody(comment)
+                                }
                             }
                         }
                     }
                 }
+
             }
         }
     }
 
-    static def scriptPath(String pipelineScript) {
+    void addScriptPath(String pipelineScript) {
         job.with {
             configure {
                 it / factory(class: "org.jenkinsci.plugins.workflow.multibranch.WorkflowBranchProjectFactory") << {
