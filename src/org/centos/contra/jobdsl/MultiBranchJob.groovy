@@ -50,7 +50,7 @@ class MultiBranchJob {
                         a(class: 'jenkins.branch.BranchProperty-array') {
                             if (comment == "\\[merge\\]") {
                                 'jenkins.branch.NoTriggerBranchProperty'()
-                                
+
                             }
                             'com.adobe.jenkins.github__pr__comment__build.TriggerPRCommentBranchProperty' {
                                 commentBody(comment)
@@ -58,6 +58,14 @@ class MultiBranchJob {
                         }
                     }
                 }
+            }
+        }
+    }
+
+    static def scriptPath(String pipelineScript) {
+        return {
+            it / factory(class: "org.jenkinsci.plugins.workflow.multibranch.WorkflowBranchProjectFactory") << {
+                scriptPath(pipelineScript)
             }
         }
     }
