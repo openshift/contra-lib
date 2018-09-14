@@ -11,22 +11,34 @@ class PipelineJob {
         this.job = job.pipelineJob(name)
     }
 
-    void logRotator(def days = 14) {
+    /**
+     * Build rotation
+     * @param numKeep
+     * @param artifactToKeep
+     */
+    void logRotator(def numKeep = 5, def artifactToKeep = 5) {
         job.with {
-            definition {
-                logRotator {
-                    numToKeep(days)
-                }
+            logRotator {
+                numToKeep(numKeep)
+                artifactNumToKeep(artifactToKeep)
             }
         }
     }
 
+    /**
+     * Trigger on a ciEvent
+     * @param checks
+     */
     void ciEvent(Map checks) {
         job.with {
             configure Utils.ciEvent(checks)
         }
     }
 
+    /**
+     * Add git repository
+     * @param repo
+     */
     void addGit(Map repo) {
         job.with {
             definition {
@@ -45,6 +57,9 @@ class PipelineJob {
         }
     }
 
+    /**
+     * Trigger on github push
+     */
     void gitHubTrigger() {
         job.with {
             triggers {
