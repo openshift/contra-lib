@@ -27,7 +27,7 @@ class PipelineJob {
 
     /**
      * Trigger on a ciEvent
-     * @param checks
+     * @param msgChecks
      */
     void ciEvent(Map msgChecks) {
         job.with {
