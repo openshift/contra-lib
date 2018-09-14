@@ -11,19 +11,35 @@ class PipelineJob {
         this.job = job.pipelineJob(name)
     }
 
-    void ciEvent(Map fields) {
+    void logRotator(def days = 14) {
         job.with {
-            configure Utils.ciEvent(fields)
+            definition {
+                logRotator {
+                    numToKeep(days)
+                }
+            }
         }
     }
 
-    void addGit(String repoUrl) {
+    void ciEvent(Map checks) {
+        job.with {
+            configure Utils.ciEvent(checks)
+        }
+    }
+
+    void addGit(Map repo) {
         job.with {
             definition {
                 cpsScm {
                     scm {
-                        git(repoUrl)
+                        git {
+                            remote {
+                                url(repo['repoUrl'])
+                            }
+                            branch(repo['branch'])
+                        }
                     }
+                    lightweight(true)
                 }
             }
         }
