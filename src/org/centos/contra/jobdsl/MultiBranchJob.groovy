@@ -15,9 +15,9 @@ class MultiBranchJob {
      * Add ciEvent trigger
      * @param fields - key maps to fields and value maps to expectedValue
      */
-    void ciEvent(Map checks) {
+    void ciEvent(Map msgChecks) {
         job.with {
-            configure Utils.ciEvent(checks)
+            configure Utils.ciEvent(msgChecks)
         }
     }
 

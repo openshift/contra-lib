@@ -8,7 +8,7 @@ class Utils {
      * @param checks
      * @return
      */
-    static def ciEvent(Map checks) {
+    static def ciEvent(Map msgChecks) {
         return {
             it / 'properties' / 'org.jenkinsci.plugins.workflow.job.properties.PipelineTriggersJobProperty' / 'triggers' << {
                 'com.redhat.jenkins.plugins.ci.CIBuildTrigger' {
@@ -21,7 +21,7 @@ class Utils {
                         }
                         'checks' {
                             'com.redhat.jenkins.plugins.ci.messaging.checks.MsgCheck' {
-                                checks.each { key, value ->
+                                msgChecks.each { key, value ->
                                     field(key)
                                     expectedValue(value)
                                 }
