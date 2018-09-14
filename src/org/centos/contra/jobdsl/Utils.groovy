@@ -1,7 +1,7 @@
 package org.centos.contra.jobdsl
 
 
-class Triggers {
+class Utils {
 
     /**
      * ciEvent trigger

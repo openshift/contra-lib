@@ -1,6 +1,6 @@
 package org.centos.contra.jobdsl
 
-import org.centos.contra.jobdsl.Triggers
+import org.centos.contra.jobdsl.Utils
 
 
 class MultiBranchJob {
@@ -17,7 +17,7 @@ class MultiBranchJob {
      */
     void ciEvent(Map fields) {
         job.with {
-            configure Triggers.ciEvent(fields)
+            configure Utils.ciEvent(fields)
         }
     }
 
