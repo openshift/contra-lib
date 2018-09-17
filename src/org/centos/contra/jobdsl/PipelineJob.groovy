@@ -14,7 +14,7 @@ class PipelineJob {
      * @param numKeep
      * @param artifactToKeep
      */
-    void logRotator(def numKeep = 5, def artifactToKeep = 5) {
+    void logRotate(def numKeep = 5, def artifactToKeep = 5) {
         job.with {
             logRotator {
                 numToKeep(numKeep)
