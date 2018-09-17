@@ -12,24 +12,26 @@ class Triggers {
      */
     static def fedMsgTrigger(String msgTopic, String msgName, Map msgChecks) {
         return {
-            ciBuildTrigger {
-                providerData {
-                    FedMsgSubscriberProviderData {
-                        name(msgName)
-                        overrides {
-                            topic(msgTopic)
-                        }
-                        checks {
-                            msgCheck {
-                                msgChecks.each { key, value ->
-                                    field(key)
-                                    expectedValue(value)
+            triggers {
+                ciBuildTrigger {
+                    providerData {
+                        FedMsgSubscriberProviderData {
+                            name(msgName)
+                            overrides {
+                                topic(msgTopic)
+                            }
+                            checks {
+                                msgCheck {
+                                    msgChecks.each { key, value ->
+                                        field(key)
+                                        expectedValue(value)
+                                    }
                                 }
                             }
                         }
                     }
+                    noSquash(true)
                 }
-                noSquash(true)
             }
         }
     }
