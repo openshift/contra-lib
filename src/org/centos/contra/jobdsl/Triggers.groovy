@@ -9,6 +9,32 @@ class Triggers {
         }
     }
 
+    static def fedMsgTrigger(String msgTopic, String msgName, Map msgChecks) {
+        return  {
+            triggers {
+                ciBuildTrigger {
+                    providerData {
+                        fedMsgSubscriberProviderData {
+                            name(msgName)
+                            overrides {
+                                topic(msgTopic)
+                            }
+                            checks {
+                                msgCheck {
+                                    msgChecks.each { key, value ->
+                                        field(key)
+                                        expectedValue(value)
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    noSquash(true)
+                }
+            }
+        }
+    }
+
     static def gitHubPullRequestTrigger(List jobAdmins, String triggerComment) {
         return {
             admins(jobAdmins)
