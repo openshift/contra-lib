@@ -24,6 +24,35 @@ class PipelineJob {
     }
 
     /**
+     * trigger from github webhook
+     */
+    void gitHubTrigger() {
+        job.with {
+            githubPush()
+        }
+    }
+
+    /**
+     * ghprBuilder trigger on comment
+     * @param jobAdmins
+     * @param triggerComment
+     */
+    void gitHubPullRequestTrigger(List jobAdmins, String triggerComment) {
+        job.with {
+            admins(jobAdmins)
+            useGitHubHooks()
+            triggerPhrase(triggerComment)
+            extensions {
+                buildStatus {
+                    completedStatus('SUCCESS', 'There were no errors...')
+                    completedStatus('FAILURE', 'There were errors, please check the build...')
+                    completedStatus('ERROR', 'There was an error in the infrastructure...')
+                }
+            }
+        }
+    }
+
+    /**
      * ci event - fedMsgSubscriber
      * @param msgTopic
      * @param msgName
