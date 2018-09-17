@@ -35,7 +35,7 @@ class PipelineJob {
             triggers {
                 ciBuildTrigger {
                     providerData {
-                        FedMsgSubscriberProviderData {
+                        fedMsgSubscriberProviderData {
                             name(msgName)
                             overrides {
                                 topic(msgTopic)
