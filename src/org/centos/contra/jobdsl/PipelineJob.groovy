@@ -24,12 +24,35 @@ class PipelineJob {
     }
 
     /**
-     * Pass in a job trigger from the Triggers class
-     * @param jobTrigger
+     * ci event - fedMsgSubscriber
+     * @param msgTopic
+     * @param msgName
+     * @param msgChecks
+     * @return
      */
-    void trigger(def jobTrigger) {
+    void fedMsgTrigger(String msgTopic, String msgName, Map msgChecks) {
         job.with {
-            jobTrigger()
+            triggers {
+                ciBuildTrigger {
+                    providerData {
+                        FedMsgSubscriberProviderData {
+                            name(msgName)
+                            overrides {
+                                topic(msgTopic)
+                            }
+                            checks {
+                                msgCheck {
+                                    msgChecks.each { key, value ->
+                                        field(key)
+                                        expectedValue(value)
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    noSquash(true)
+                }
+            }
         }
     }
 
