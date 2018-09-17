@@ -11,11 +11,11 @@ class Triggers {
      * @return
      */
     static def fedMsgTrigger(String msgTopic, String msgName, Map msgChecks) {
-        println 'printing in fedMsgTrigger'
-        println msgTopic
-        println msgName
-        println msgChecks
-        println 'done printing in fedMsgTrigger'
+        print 'printing in fedMsgTrigger'
+        print msgTopic
+        print msgName
+        print msgChecks
+        print 'done printing in fedMsgTrigger'
 
         return {
             ciBuildTrigger {

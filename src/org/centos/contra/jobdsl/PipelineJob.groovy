@@ -27,7 +27,9 @@ class PipelineJob {
      * Pass in a job trigger from the Triggers class
      * @param jobTrigger
      */
-    void trigger(Closure jobTrigger) {
+    void trigger(def jobTrigger) {
+        print 'in pipelineJob.trigger'
+        print jobTrigger
         job.with {
             triggers {
                 jobTrigger()
