@@ -8,16 +8,16 @@ class Utils {
      * @param checks
      * @return
      */
-    static def ciEvent(Map msgChecks) {
+    static def ciEvent(Map msgChecks, String msgTopic, String fedMsgName = 'fedora-fedmsg') {
         return {
             it / 'properties' / 'org.jenkinsci.plugins.workflow.job.properties.PipelineTriggersJobProperty' / 'triggers' << {
                 'com.redhat.jenkins.plugins.ci.CIBuildTrigger' {
                     'spec'()
                     noSquash(false)
                     providerData(class: 'com.redhat.jenkins.plugins.ci.provider.data.FedMsgSubscriberProviderData') {
-                        name('fedora-fedmsg')
+                        name(fedMsgName)
                         'overrides' {
-                            topic('org.fedoraproject.prod.buildsys.build.state.change')
+                            topic(msgTopic)
                         }
                         'checks' {
                             'com.redhat.jenkins.plugins.ci.messaging.checks.MsgCheck' {
