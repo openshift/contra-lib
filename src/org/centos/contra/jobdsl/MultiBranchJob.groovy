@@ -1,7 +1,5 @@
 package org.centos.contra.jobdsl
 
-import org.centos.contra.jobdsl.Utils
-
 
 class MultiBranchJob {
 
@@ -9,16 +7,6 @@ class MultiBranchJob {
 
     MultiBranchJob(def job, String name) {
         this.job = job.multibranchPipelineJob(name)
-    }
-
-    /**
-     * Add ciEvent trigger
-     * @param fields - key maps to fields and value maps to expectedValue
-     */
-    void ciEvent(Map msgChecks) {
-        job.with {
-            configure Utils.ciEvent(msgChecks)
-        }
     }
 
     /**
