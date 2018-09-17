@@ -30,7 +30,7 @@ class PipelineJob {
     void trigger(def jobTrigger) {
         job.with {
             triggers {
-                jobTrigger
+                jobTrigger()
             }
         }
     }
