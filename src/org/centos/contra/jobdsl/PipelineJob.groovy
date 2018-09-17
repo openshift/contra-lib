@@ -23,12 +23,6 @@ class PipelineJob {
         }
     }
 
-    void trigger(def jobTrigger) {
-        job.with {
-            jobTrigger()
-        }
-    }
-
     /**
      * ci event - fedMsgSubscriber
      * @param msgTopic
