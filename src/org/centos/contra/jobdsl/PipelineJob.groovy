@@ -1,7 +1,5 @@
 package org.centos.contra.jobdsl
 
-import org.centos.contra.jobdsl.Utils
-
 
 class PipelineJob {
 
@@ -26,12 +24,14 @@ class PipelineJob {
     }
 
     /**
-     * Trigger on a ciEvent
-     * @param msgChecks
+     * Pass in a job trigger from the Triggers class
+     * @param jobTrigger
      */
-    void ciEvent(Map msgChecks) {
+    void trigger(Closure jobTrigger) {
         job.with {
-            configure Utils.ciEvent(msgChecks)
+            triggers {
+                jobTrigger()
+            }
         }
     }
 
@@ -56,16 +56,4 @@ class PipelineJob {
             }
         }
     }
-
-    /**
-     * Trigger on github push
-     */
-    void gitHubTrigger() {
-        job.with {
-            triggers {
-                githubPush()
-            }
-        }
-    }
-
 }
