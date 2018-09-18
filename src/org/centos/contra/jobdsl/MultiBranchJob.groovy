@@ -9,6 +9,12 @@ class MultiBranchJob {
         this.job = job.multibranchPipelineJob(name)
     }
 
+    /**
+     * Add a gitHub branch source
+     * @param repoName
+     * @param owner
+     * @param credentials - optional
+     */
     void addGitHub(String repoName, String owner, String credentials = null) {
 
         job.with {
@@ -25,6 +31,10 @@ class MultiBranchJob {
 
     }
 
+    /**
+     * How long to keep orphaned branches around
+     * @param days
+     */
     void discardOldBranches(def days = 7) {
         job.with {
             orphanedItemStrategy {
@@ -35,6 +45,11 @@ class MultiBranchJob {
         }
     }
 
+    /**
+     * Add property to trigger job on a specific comment
+     * @param comment
+     * @return
+     */
     def addComment(String comment) {
         job.with {
             configure {
@@ -58,6 +73,10 @@ class MultiBranchJob {
         }
     }
 
+    /**
+     * Change default Jenkinsfile path/name
+     * @param pipelineScript
+     */
     void addScriptPath(String pipelineScript) {
         job.with {
             configure {
