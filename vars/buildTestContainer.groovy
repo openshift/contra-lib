@@ -40,8 +40,7 @@ def call(parameters = [:]) {
 
             stage('Build-Docker-Image') {
                 def cmd = """
-            buildah bud -t ${image_name} ${build_root}
-            buildah from --name ${container_name} ${image_name}
+            buildah bud -t ${image_name} ${build_root} && buildah from --name ${container_name} ${image_name}
                 
             """
                 containerWrapper(cmd)
@@ -62,8 +61,7 @@ def call(parameters = [:]) {
                     pushCmd = "buildah push localhost/${image_name}:latest ${docker_registry}/${docker_namespace}/${image_name}:latest"
                 }
                 def cmd = """
-                buildah tag ${image_name} ${image_name}:latest ${image_name}:${version}
-                ${pushCmd}
+                buildah tag ${image_name} ${image_name}:latest ${image_name}:${version} && ${pushCmd}
                 """
                 containerWrapper(cmd)
             }
