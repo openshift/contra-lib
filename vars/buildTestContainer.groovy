@@ -27,7 +27,7 @@ def call(parameters = [:]) {
                 executeInContainer(containerName: buildContainer, containerScript: cmd, stageVars: [], credentials: credentials)
             }
 
-            stage('prepare build') {
+            stage('prepare-build') {
                 handlePipelineStep {
                     deleteDir()
 
@@ -38,7 +38,7 @@ def call(parameters = [:]) {
                 }
             }
 
-            stage('Build Docker Image') {
+            stage('Build-Docker-Image') {
                 def cmd = """
             buildah bud -t ${image_name} ${build_root}
             buildah from --name ${container_name} ${image_name}
@@ -54,7 +54,7 @@ def call(parameters = [:]) {
                 containerWrapper(cmd)
             }
 
-            stage('Tag/Push docker image') {
+            stage('Tag-Push-docker-image') {
                 def pushCmd = null
                 if (credentials) {
                     pushCmd = "buildah push --creds ${DOCKER_USERNAME}:${DOCKER_PASSWORD} localhost/${image_name}:latest ${docker_registry}/${docker_namespace}/${image_name}:latest"
