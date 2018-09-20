@@ -1,17 +1,28 @@
+
+
+
+
 def call(parameters = [:]) {
     def version = parameters.get('version')
     def test_cmd = parameters.get('test_cmd')
     def image_name = parameters.get('image_name')
-    def containers = parameters.get('containers', [])
+    def docker_registry = parameters.get('docker_registry')
+    def docker_namespace = parameters.get('docker_namespace')
+    def podTemplateProps = parameters.get('podTemplateProps', [:])
     def credentials = parameters.get('credentials', [])
     def build_root = parameters.get('build_root', '.')
     def container_name = parameters.get('container_name', UUID.randomUUID().toString())
 
-    deployOpenShiftTemplate(containers: containers) {
+    def buildContainer = podTemplateProps.get('containers')
+    if (buildContainer) {
+        buildContainer = buildContainer[0]
+    }
+
+    deployOpenShiftTemplate(podTemplateProps) {
         ciPipeline {
 
             def containerWrapper = { cmd ->
-                executeInContainer(containerName: 'buildah', containerScript: cmd, stageVars: [], credentials: credentials)
+                executeInContainer(containerName: buildContainer, containerScript: cmd, stageVars: [], credentials: credentials)
             }
 
             stage('prepare build') {
@@ -35,13 +46,16 @@ def call(parameters = [:]) {
             }
 
             stage('test docker image') {
-                containerWrapper(test_cmd)
+                def cmd = """
+                buildah run ${container_name} -- ${test_cmd}
+                """
+                containerWrapper(cmd)
             }
 
             stage('Tag/Push docker image') {
                 def cmd = """
             buildah tag ${image_name} ${image_name}:latest ${image_name}:${version}
-            buildah push --creds ${DOCKER_USERNAME}:${DOCKER_PASSWORD} localhost/${image_name}:latest ${DOCKER_REGISTRY}/${DOCKER_NAMESPACE}/${image_name}:latest
+            buildah push --creds ${DOCKER_USERNAME}:${DOCKER_PASSWORD} localhost/${image_name}:latest ${docker_registry}/${docker_namespace}/${image_name}:latest
             """
                 containerWrapper(cmd)
             }
