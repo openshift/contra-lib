@@ -24,6 +24,8 @@ import org.centos.contra.pipeline.Utils
  */
 def call(Map parameters = [:], Closure body) {
 
+    sh 'env'
+
     def utils = new Utils()
 
     timestamps {
