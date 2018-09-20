@@ -21,6 +21,8 @@ def call(parameters = [:]) {
     deployOpenShiftTemplate(podTemplateProps) {
         ciPipeline {
 
+            print buildContainer
+
             def containerWrapper = { cmd ->
                 executeInContainer(containerName: buildContainer, containerScript: cmd, stageVars: [], credentials: credentials)
             }
