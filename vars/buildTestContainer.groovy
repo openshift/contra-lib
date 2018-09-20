@@ -43,6 +43,8 @@ def call(parameters = [:]) {
             buildah bud -t ${image_name} ${build_root} && buildah from --name ${container_name} ${image_name}
                 
             """
+                sh 'ls -l'
+                print cmd
                 containerWrapper(cmd)
             }
 
