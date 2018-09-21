@@ -8,6 +8,7 @@ def call(parameters = [:]) {
     def image_name = parameters.get('image_name')
     def docker_registry = parameters.get('docker_registry')
     def docker_namespace = parameters.get('docker_namespace')
+    def send_metrics = parameters.get('send_metrics', true)
     def podTemplateProps = parameters.get('podTemplateProps', [:])
     def credentials = parameters.get('credentials', [])
     def build_root = parameters.get('build_root', '.')
@@ -19,7 +20,7 @@ def call(parameters = [:]) {
     }
 
     deployOpenShiftTemplate(podTemplateProps) {
-        ciPipeline {
+        ciPipeline(sendMetrics: send_metrics) {
 
             print buildContainer
 
