@@ -89,7 +89,7 @@ def call(Map parameters = [:], Closure body) {
                 decorateBuild()
             } else {
                 currentBuild.displayName = currentBuild.displayName ?: "Build #${env.BUILD_NUMBER}"
-                currentBuild.description = curentBuild.description ?: currentBuild.result
+                currentBuild.description = currentBuild.description ?: currentBuild.result
             }
 
         }
