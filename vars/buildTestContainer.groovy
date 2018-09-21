@@ -24,6 +24,7 @@ def call(parameters = [:]) {
             print buildContainer
 
             def containerWrapper = { cmd ->
+                print "running ${cmd}"
                 executeInContainer(containerName: buildContainer, containerScript: cmd, stageVars: [], credentials: credentials)
             }
 
