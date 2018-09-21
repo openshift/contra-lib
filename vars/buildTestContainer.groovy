@@ -49,7 +49,7 @@ def call(parameters = [:]) {
                 containerWrapper(cmd)
             }
 
-            stage('test docker image') {
+            stage('test-docker-image') {
                 def cmd = """
                 set -x
                 buildah run ${container_name} -- ${test_cmd}
@@ -60,7 +60,7 @@ def call(parameters = [:]) {
             stage('Tag-Push-docker-image') {
                 def pushCmd = null
                 if (credentials) {
-                    pushCmd = "buildah push --creds ${DOCKER_USERNAME}:${DOCKER_PASSWORD} localhost/${image_name}:latest ${docker_registry}/${docker_namespace}/${image_name}:latest"
+                    pushCmd = "buildah push --creds \${DOCKER_USERNAME}:\${DOCKER_PASSWORD} localhost/${image_name}:latest ${docker_registry}/${docker_namespace}/${image_name}:latest"
                 } else {
                     pushCmd = "buildah push localhost/${image_name}:latest ${docker_registry}/${docker_namespace}/${image_name}:latest"
                 }
