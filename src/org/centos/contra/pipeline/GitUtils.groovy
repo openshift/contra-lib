@@ -3,8 +3,8 @@ package org.centos.contra.pipeline
 import org.centos.contra.pipeline.Utils
 
 import org.kohsuke.github.GitHub
-import org.kohuske.github.GHRepository
-import org.kohuske.github.GHPullRequest
+import org.kohsuke.github.GHRepository
+import org.kohsuke.github.GHPullRequest
 
 
 class GitUtils {
