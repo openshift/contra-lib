@@ -28,14 +28,14 @@ class GitUtils {
             // throw a generic exception to mask credentials
             throw new Exception("unable to connect to github")
         }
+
     }
 
     def mergePR(def repo, def prNumber, def mergeMsg) {
-        print "printing gitHub"
-        print gitHub
-        def github = gitHub ?: connect()
-        print "printing github"
-        print github
+        if (!gitHub) {
+            connect()
+        }
+        
         GHRepository ghRepository = github.getRepository(repo)
         GHPullRequest ghPullRequest = ghRepository.getPullRequest(prNumber)
         ghPullRequest.merge(mergeMsg)
