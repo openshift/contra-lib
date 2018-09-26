@@ -1,11 +1,11 @@
 import org.centos.contra.pipeline.Utils
-import org.centos.contra.pipeline.GitHub
+import org.centos.contra.pipeline.GitUtils
 
 
 def call() {
 
-    def gitHub = new GitHub()
+    def gitutils = new GitUtils()
 
-    gitHub.connect()
+    gitutils.connect()
 
 }

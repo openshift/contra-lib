@@ -5,7 +5,7 @@ import org.centos.contra.pipeline.Utils
 import org.kohsuke.github.GitHub
 
 
-class GitHub {
+class GitUtils {
 
     def connect() {
         def utils = new Utils()
