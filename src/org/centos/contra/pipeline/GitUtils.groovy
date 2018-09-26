@@ -31,7 +31,7 @@ class GitUtils {
     }
 
     def mergePR(def repo, def prNumber, def mergeMsg) {
-        def github = gitHub ?: connect()
+        def github = gitHub ?: this.connect()
         GHRepository ghRepository = github.getRepository(repo)
         GHPullRequest ghPullRequest = ghRepository.getPullRequest(prNumber)
         ghPullRequest.merge(mergeMsg)
