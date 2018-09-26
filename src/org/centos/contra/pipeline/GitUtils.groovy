@@ -7,10 +7,10 @@ import org.kohsuke.github.GitHub
 
 class GitUtils {
 
-    def connect() {
+    def connect(String credentialsId) {
         def utils = new Utils()
 
-        def credentials = utils.getCredentialsById('contra-sample-project-docker-credentials', 'password')
+        def credentials = utils.getCredentialsById(credentialsId, 'password')
 
         GitHub gitHub = null
 
