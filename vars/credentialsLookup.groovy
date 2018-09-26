@@ -5,5 +5,5 @@ def call() {
 
     def utils = new Utils()
 
-    println utils.getCredentialsById('contra-sample-project-docker-credentials', 'password')
+    return utils.getCredentialsById('contra-sample-project-docker-credentials', 'password')
 }
