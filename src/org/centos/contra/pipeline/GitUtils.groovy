@@ -23,7 +23,7 @@ class GitUtils {
         def credentials = utils.getCredentialsById(this.credentialsId, 'password')
 
         try {
-            this.gitHub = GitHub.connectUsingPassword(credentials.getUsername(), credentials.getPassword().getPlainText())
+            gitHub = GitHub.connectUsingPassword(credentials.getUsername(), credentials.getPassword().getPlainText())
         } catch(e) {
             // throw a generic exception to mask credentials
             throw new Exception("unable to connect to github")
@@ -31,7 +31,11 @@ class GitUtils {
     }
 
     def mergePR(def repo, def prNumber, def mergeMsg) {
-        def github = this.gitHub ?: this.connect()
+        print "printing gitHub"
+        print gitHub
+        def github = gitHub ?: connect()
+        print "printing github"
+        print github
         GHRepository ghRepository = github.getRepository(repo)
         GHPullRequest ghPullRequest = ghRepository.getPullRequest(prNumber)
         ghPullRequest.merge(mergeMsg)
