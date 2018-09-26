@@ -244,3 +244,19 @@ def buildImage(String openshiftProject, String buildConfig) {
         }
     }
 }
+
+def getCredentialsById(String credsId, String credsType = 'any') {
+    def credClasses = [ // ordered by class name
+                        sshKey    : com.cloudbees.jenkins.plugins.sshcredentials.impl.BasicSSHUserPrivateKey.class,
+                        cert      : com.cloudbees.plugins.credentials.common.CertificateCredentials.class,
+                        password  : com.cloudbees.plugins.credentials.common.StandardUsernamePasswordCredentials.class,
+                        any       : com.cloudbees.plugins.credentials.impl.BaseStandardCredentials.class,
+                        dockerCert: org.jenkinsci.plugins.docker.commons.credentials.DockerServerCredentials.class,
+                        file      : org.jenkinsci.plugins.plaincredentials.FileCredentials.class,
+                        string    : org.jenkinsci.plugins.plaincredentials.StringCredentials.class,
+    ]
+    return com.cloudbees.plugins.credentials.CredentialsProvider.lookupCredentials(
+            credClasses[credsType],
+            jenkins.model.Jenkins.instance
+    ).findAll { cred -> cred.id == credsId }[0]
+}
