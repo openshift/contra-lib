@@ -3,7 +3,8 @@ import org.centos.contra.pipeline.Utils
 
 def call() {
 
-    def utils = new Utils()
+    def gitHub = new GitHub()
 
-    return utils.getCredentialsById('contra-sample-project-docker-credentials', 'password')
+    gitHub.connect()
+
 }
