@@ -35,8 +35,8 @@ class GitUtils {
         if (!gitHub) {
             connect()
         }
-        
-        GHRepository ghRepository = github.getRepository(repo)
+
+        GHRepository ghRepository = gitHub.getRepository(repo)
         GHPullRequest ghPullRequest = ghRepository.getPullRequest(prNumber)
         ghPullRequest.merge(mergeMsg)
     }
