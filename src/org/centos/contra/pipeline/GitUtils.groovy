@@ -12,7 +12,15 @@ class GitUtils {
 
         def credentials = utils.getCredentialsById('contra-sample-project-docker-credentials', 'password')
 
-        GitHub gitHub = GitHub.connectUsingPassword(credentials.getUsername(), credentials.getPassword().getPlainText())
+        GitHub gitHub = null
+
+        try {
+            gitHub = GitHub.connectUsingPassword(credentials.getUsername(), credentials.getPassword().getPlainText())
+        } catch(e) {
+            throw new Exception("unable to connect to github")
+        }
+
+        return gitHub
 
     }
 }
