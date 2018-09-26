@@ -3,24 +3,37 @@ package org.centos.contra.pipeline
 import org.centos.contra.pipeline.Utils
 
 import org.kohsuke.github.GitHub
+import org.kohuske.github.GHRepository
+import org.kohuske.github.GHPullRequest
 
 
 class GitUtils {
 
-    def connect(String credentialsId) {
+    String credentialsId
+    GitHub gitHub
+
+    GitUtils(String credentialsId) {
+        this.credentialsId = credentialsId
+        this.gitHub = null
+    }
+
+    def connect() {
         def utils = new Utils()
 
         def credentials = utils.getCredentialsById(credentialsId, 'password')
 
-        GitHub gitHub = null
-
         try {
             gitHub = GitHub.connectUsingPassword(credentials.getUsername(), credentials.getPassword().getPlainText())
         } catch(e) {
+            // throw a generic exception to mask credentials
             throw new Exception("unable to connect to github")
         }
+    }
 
-        return gitHub
-
+    def mergePR(def repo, def prNumber, def mergeMsg) {
+        def github = gitHub ?: connect()
+        GHRepository ghRepository = github.getRepository(repo)
+        GHPullRequest ghPullRequest = ghRepository.getPullRequest(prNumber)
+        ghPullRequest.merge(mergeMsg)
     }
 }
