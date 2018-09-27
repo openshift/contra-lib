@@ -72,7 +72,7 @@ def call(parameters = [:]) {
                     set -x
                     ${copyCmds}
                     buildah commit ${container_name} ${image_name}-test
-                    buildah from ${test_container} ${image_name}-test
+                    buildah from --name ${test_container} ${image_name}-test
                     buildah run -v ${test_container} -- ${test_cmd}
                     """
                 } else {
