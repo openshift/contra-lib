@@ -1,6 +1,16 @@
-
-
-
+/**
+ * Build/Test/Push container to a DockerHub
+ * @param parameters
+ * version: The version to tag the container with
+ * test_cmd: The test command provided as a shell command
+ * image_name: The name of the image to build
+ * build_args: Any arguments to provide to the docker build process
+ * modify_args: Arguments to modify the image with before testing. The format is follows
+ *              [owner: 'uid:gid', items: [['srcfile1', 'destfile1'], ['srcfile2', 'destfile2']]
+ * podTemplateProps: Refer to deployOpenshiftTemplate
+ * credentials: Credentials for docker push. Must contain DOCKER_USERNAME, DOCKER_PASSWORD as variables
+ * @return
+ */
 
 def call(parameters = [:]) {
     def version = parameters.get('version')
