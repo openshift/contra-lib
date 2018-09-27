@@ -6,6 +6,8 @@ def call(parameters = [:]) {
     def version = parameters.get('version')
     def test_cmd = parameters.get('test_cmd')
     def image_name = parameters.get('image_name')
+    def build_args = parameters.get('build_args', [:])
+    def modify_args = parameters.get('modify_args', [:])
     def docker_registry = parameters.get('docker_registry', 'docker://docker.io')
     def docker_namespace = parameters.get('docker_namespace')
     def send_metrics = parameters.get('send_metrics', true)
@@ -39,20 +41,47 @@ def call(parameters = [:]) {
             }
 
             stage('Build-Docker-Image') {
+                def buildCmd = null
+
+                if (build_args) {
+                    def joinedArgs = build_args.collect { key, value -> "${key}=${value}"}.join(" --build-args ")
+                    buildCmd = "buildah bud -t ${image_name} ${build_root} --build-args ${joinedArgs}"
+
+                } else {
+                    buildCmd = "buildah bud -t ${image_name} ${build_root}"
+                }
+
                 def cmd = """
-            set -x
-            buildah bud -t ${image_name} ${build_root}
-            buildah from --name ${container_name} ${image_name}
-                
-            """
+                set -x
+                ${buildCmd}
+                buildah from --name ${container_name} ${image_name}
+                """
                 containerWrapper(cmd)
             }
 
-            stage('test-docker-image') {
-                def cmd = """
-                set -x
-                buildah run ${container_name} -- ${test_cmd}
-                """
+            stage('test-docker-container') {
+                def test_container = "${container_name}-test"
+                def cmd = ""
+                if (modify_args) {
+                    def owner = modify_args['owner']
+                    def copyCmds = modify_args['items'].collect { item ->
+                        "buildah copy --chown ${owner} ${container_name} ${item[0]} ${item[1]}"
+                    }.join('\n')
+
+                    cmd = """
+                    set -x
+                    ${copyCmds}
+                    buildah commit ${container_name} ${image_name}-test
+                    buildah from ${test_container} ${image_name}-test
+                    buildah run -v ${test_container} -- ${test_cmd}
+                    """
+                } else {
+                    cmd = """
+                    set -x
+                    buildah run ${test_container} -- ${test_cmd}
+                    """
+                }
+
                 containerWrapper(cmd)
             }
 
