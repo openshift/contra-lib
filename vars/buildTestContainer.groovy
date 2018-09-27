@@ -62,6 +62,8 @@ def call(parameters = [:]) {
             stage('test-docker-container') {
                 def test_container = "${container_name}-test"
                 def cmd = ""
+                print "printing modify args"
+                print modify_args
                 if (modify_args) {
                     def owner = modify_args['owner']
                     def copyCmds = modify_args['items'].collect { item ->
@@ -78,7 +80,7 @@ def call(parameters = [:]) {
                 } else {
                     cmd = """
                     set -x
-                    buildah run ${test_container} -- ${test_cmd}
+                    buildah run -v ${test_container} -- ${test_cmd}
                     """
                 }
 
