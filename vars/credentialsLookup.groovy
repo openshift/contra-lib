@@ -3,7 +3,11 @@ import org.centos.contra.pipeline.GitUtils
 
 def call(String credentialsId) {
 
-    def gitutils = new GitUtils(credentialsId)
+    withCredentials([usernamePassword(credentialsId: 'amazon', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
 
-    gitutils.mergePR('joejstuart/dockerImages', 1, "merging with api")
+        def gitutils = new GitUtils(env.USERNAME, env.PASSWORD)
+
+        gitutils.mergePR('joejstuart/dockerImages', 1, "merging with api")
+    }
+
 }
