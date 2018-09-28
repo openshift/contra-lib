@@ -22,8 +22,7 @@ class GitUtils {
         try {
             gitHub = GitHub.connectUsingPassword(username, password)
         } catch(e) {
-            // throw a generic exception to mask credentials
-            throw new Exception("unable to connect to github")
+            throw new Exception("unable to connect to github: ${e.toString()}")
         }
 
     }
