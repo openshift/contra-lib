@@ -55,7 +55,7 @@ def call(parameters = [:]) {
 
                 if (build_args) {
                     def joinedArgs = build_args.collect { key, value -> "${key}=${value}"}.join(" --build-arg ")
-                    buildCmd = "buildah bud -t ${image_name} ${build_root} --build-arg ${joinedArgs}"
+                    buildCmd = "buildah bud --build-arg ${joinedArgs} -t ${image_name} ${build_root}"
 
                 } else {
                     buildCmd = "buildah bud -t ${image_name} ${build_root}"
