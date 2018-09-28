@@ -26,6 +26,11 @@ def call(parameters = [:]) {
     def build_root = parameters.get('build_root', '.')
     def container_name = parameters.get('container_name', UUID.randomUUID().toString())
 
+    print "checking docker_registry"
+    print docker_registry
+    print docker_registry.getClass()
+    print "end checking docker_registry"
+
     def buildContainer = podTemplateProps.get('containers')
     if (buildContainer) {
         buildContainer = buildContainer[0]
