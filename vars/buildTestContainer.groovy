@@ -70,7 +70,6 @@ def call(parameters = [:]) {
             }
 
             stage('test-docker-container') {
-                def test_container = container_name
                 def cmd = ""
 
                 if (modify_args) {
