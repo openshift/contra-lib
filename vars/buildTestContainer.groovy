@@ -95,19 +95,22 @@ def call(parameters = [:]) {
                 containerWrapper(cmd)
             }
 
-            stage('Tag-Push-docker-image') {
-                def pushCmd = null
-                if (credentials) {
-                    pushCmd = "buildah push --creds \${DOCKER_USERNAME}:\${DOCKER_PASSWORD} localhost/${image_name}:latest ${docker_registry}/${docker_namespace}/${image_name}:latest"
-                } else {
-                    pushCmd = "buildah push localhost/${image_name}:latest ${docker_registry}/${docker_namespace}/${image_name}:latest"
+            if (version) {
+                stage('Tag-Push-docker-image') {
+                    def pushCmd = null
+                    if (credentials) {
+                        pushCmd = "buildah push --creds \${DOCKER_USERNAME}:\${DOCKER_PASSWORD} localhost/${image_name}:latest ${docker_registry}/${docker_namespace}/${image_name}:latest"
+                    } else {
+                        pushCmd = "buildah push localhost/${image_name}:latest ${docker_registry}/${docker_namespace}/${image_name}:latest"
+                    }
+                    def cmd = """
+                    set -x
+                    buildah tag ${image_name} ${image_name}:latest ${image_name}:${version}
+                    ${pushCmd}
+                    """
+
+                    containerWrapper(cmd)
                 }
-                def cmd = """
-                set -x
-                buildah tag ${image_name} ${image_name}:latest ${image_name}:${version}
-                ${pushCmd}
-                """
-                containerWrapper(cmd)
             }
         }
     }
