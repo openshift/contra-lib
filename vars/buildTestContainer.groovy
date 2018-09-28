@@ -70,7 +70,7 @@ def call(parameters = [:]) {
             }
 
             stage('test-docker-container') {
-                def test_container = "${container_name}-test"
+                def test_container = container_name
                 def cmd = ""
 
                 if (modify_args) {
@@ -83,13 +83,13 @@ def call(parameters = [:]) {
                     set -x
                     ${copyCmds}
                     buildah commit ${container_name} ${image_name}-test
-                    buildah from --name ${test_container} ${image_name}-test
-                    buildah run ${test_container} -- ${test_cmd}
+                    buildah from --name ${container_name}-test ${image_name}-test
+                    buildah run ${container_name}-test -- ${test_cmd}
                     """
                 } else {
                     cmd = """
                     set -x
-                    buildah run ${test_container} -- ${test_cmd}
+                    buildah run ${container_name} -- ${test_cmd}
                     """
                 }
 
