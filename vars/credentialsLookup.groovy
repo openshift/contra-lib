@@ -7,7 +7,7 @@ def call(String credentialsId) {
 
         def gitutils = new GitUtils(env.USERNAME, env.PASSWORD)
 
-        gitutils.mergePR('joejstuart/dockerImages', 1, "merging with api")
+        gitutils.mergePR('joejstuart/dockerImages', 2, "merging with api")
     }
 
 }
