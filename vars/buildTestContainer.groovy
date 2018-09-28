@@ -13,18 +13,18 @@
  */
 
 def call(parameters = [:]) {
-    def version = parameters.get('version')
-    def test_cmd = parameters.get('test_cmd')
-    def image_name = parameters.get('image_name')
-    def build_args = parameters.get('build_args', [:])
-    def modify_args = parameters.get('modify_args', [:])
-    def docker_registry = parameters.get('docker_registry', 'docker://docker.io')
-    def docker_namespace = parameters.get('docker_namespace')
-    def send_metrics = parameters.get('send_metrics', true)
-    def podTemplateProps = parameters.get('podTemplateProps', [:])
-    def credentials = parameters.get('credentials', [])
-    def build_root = parameters.get('build_root', '.')
-    def container_name = parameters.get('container_name', UUID.randomUUID().toString())
+    def version = parameters.version
+    def test_cmd = parameters.test_cmd
+    def image_name = parameters.image_name
+    def build_args = parameters.build_args ?: [:]
+    def modify_args = parameters.modify_args ?: [:]
+    def docker_registry = parameters.docker_registry ?: 'docker://docker.io'
+    def docker_namespace = parameters.docker_namespace
+    def send_metrics = parameters.send_metrics ?: true
+    def podTemplateProps = parameters.podTemplateProps ?: [:]
+    def credentials = parameters.credentials ?: []
+    def build_root = parameters.build_root ?: '.'
+    def container_name = parameters.container_name ?: UUID.randomUUID().toString()
 
     print "checking docker_registry"
     print docker_registry
