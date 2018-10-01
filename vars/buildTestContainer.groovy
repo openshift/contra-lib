@@ -1,7 +1,7 @@
 /**
  * Build/Test/Push container to a DockerHub
  * @param parameters
- * version: The version to tag the container with
+ * versions: A list of versions to tag the image with. If supplied, the version will be pushed to DockerHub
  * test_cmd: The test command provided as a shell command
  * image_name: The name of the image to build
  * build_args: Any arguments to provide to the docker build process
@@ -13,7 +13,7 @@
  */
 
 def call(parameters = [:]) {
-    def version = parameters.version
+    def versions = parameters.versions ?: []
     def test_cmd = parameters.test_cmd
     def image_name = parameters.image_name
     def build_args = parameters.build_args ?: [:]
@@ -25,11 +25,6 @@ def call(parameters = [:]) {
     def credentials = parameters.credentials ?: []
     def build_root = parameters.build_root ?: '.'
     def container_name = parameters.container_name ?: UUID.randomUUID().toString()
-
-    print "checking docker_registry"
-    print docker_registry
-    print docker_registry.getClass()
-    print "end checking docker_registry"
 
     def buildContainer = podTemplateProps.get('containers')
     if (buildContainer) {
@@ -100,19 +95,22 @@ def call(parameters = [:]) {
                 containerWrapper(cmd)
             }
 
-            if (version) {
+            if (versions) {
                 stage('Tag-Push-docker-image') {
-                    def pushCmd = null
-                    if (credentials) {
-                        pushCmd = "buildah push --creds \${DOCKER_USERNAME}:\${DOCKER_PASSWORD} localhost/${image_name}:latest ${docker_registry}/${docker_namespace}/${image_name}:latest"
-                    } else {
-                        pushCmd = "buildah push localhost/${image_name}:latest ${docker_registry}/${docker_namespace}/${image_name}:latest"
+                    def cmd = 'set -x'<<'\n'
+                    versions.each { version ->
+                        cmd << "buildah tag ${image_name} ${image_name}:${version}"
+                        cmd << "\n"
+
+                        if (credentials) {
+                            cmd << "buildah push --creds \${DOCKER_USERNAME}:\${DOCKER_PASSWORD} localhost/${image_name}:${version} ${docker_registry}/${docker_namespace}/${image_name}:${version}"
+                            cmd << "\n"
+                        } else {
+                            cmd << "buildah push localhost/${image_name}:${version} ${docker_registry}/${docker_namespace}/${image_name}:${version}"
+                            cmd << "\n"
+                        }
+
                     }
-                    def cmd = """
-                    set -x
-                    buildah tag ${image_name} ${image_name}:latest ${image_name}:${version}
-                    ${pushCmd}
-                    """
 
                     containerWrapper(cmd)
                 }
