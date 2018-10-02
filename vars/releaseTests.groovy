@@ -4,11 +4,11 @@ import org.centos.contra.pipeline.GitUtils
 def call(String tag, String msg, String username, String password, String repo) {
     def gitutils = new GitUtils(username, password)
 
-    gitutils.createRelease(tag, msg)
+    gitutils.createRelease(tag, msg, 'joejstuart/dockerImages')
 
-    gitutils.getReleaseByTagName(tag)
+    gitutils.getReleaseByTagName(tag, 'joejstuart/dockerImages')
 
-    gitutils.getLatestRelease()
+    gitutils.getLatestRelease('joejstuart/dockerImages')
 
 
 }
