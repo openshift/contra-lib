@@ -28,7 +28,7 @@ class GitUtils {
         return connection
     }
 
-    def mergePR(def prNumber, String mergeMsg, String repo) {
+    def mergePR(def prNumber, String mergeMsg) {
         GHPullRequest ghPullRequest = gitHubRepo().getPullRequest(prNumber)
         ghPullRequest.merge(mergeMsg)
     }
@@ -59,7 +59,7 @@ class GitUtils {
         return ghRelease
     }
 
-    def getLatestRelease(String repo) {
+    def getLatestRelease() {
         GHRelease ghRelease = gitHubRepo().getLatestRelease()
 
         return ghRelease
