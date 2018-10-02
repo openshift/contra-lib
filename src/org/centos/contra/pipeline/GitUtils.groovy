@@ -13,14 +13,7 @@ class GitUtils {
 
     String username
     String password
-    GitHub gitHub
-
-    @NonCPS
-    GitUtils(String username, String password) {
-        this.username = username
-        this.password = password
-        this.gitHub = connect()
-    }
+    GitHub gitHub = connect()
 
     def connect() {
         def connection = null
