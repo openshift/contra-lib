@@ -13,7 +13,9 @@ class GitUtils {
 
     String username
     String password
-    GitHub gitHub = this.connect()
+    String repo
+    GitHub gitHub
+    GHRepository ghRepository
 
     def connect() {
         def connection = null
@@ -27,42 +29,38 @@ class GitUtils {
     }
 
     def mergePR(def prNumber, String mergeMsg, String repo) {
-        if (!gitHub) {
-            connect()
-        }
-        GHRepository ghRepository = gitHub.getRepository(repo)
-        GHPullRequest ghPullRequest = ghRepository.getPullRequest(prNumber)
+        GHPullRequest ghPullRequest = gitHubRepo().getPullRequest(prNumber)
         ghPullRequest.merge(mergeMsg)
     }
 
-    def createRelease(String tag, String releaseMsg, String repo) {
+    def gitHubRepo() {
         if (!gitHub) {
-            connect()
+            gitHub = connect()
         }
-        GHRepository ghRepository = gitHub.getRepository(repo)
-        GHRelease ghRelease = ghRepository.createRelease(tag)
+
+        if (!ghRepository) {
+            ghRepository = gitHub.getRepository(repo)
+        }
+
+        return ghRepository
+    }
+
+    def createRelease(String tag, String releaseMsg) {
+        GHRelease ghRelease = gitHubRepo().createRelease(tag)
                                 .body(releaseMsg)
                                 .create()
 
         return ghRelease
     }
 
-    def getReleaseByTagName(String tag, String repo) {
-        if (!gitHub) {
-            connect()
-        }
-        GHRepository ghRepository = gitHub.getRepository(repo)
-        GHRelease ghRelease = ghRepository.getReleaseByTagName(tag)
+    def getReleaseByTagName(String tag) {
+        GHRelease ghRelease = gitHubRepo().getReleaseByTagName(tag)
 
         return ghRelease
     }
 
     def getLatestRelease(String repo) {
-        if (!gitHub) {
-            connect()
-        }
-        GHRepository ghRepository = gitHub.getRepository(repo)
-        GHRelease ghRelease = ghRepository.getLatestRelease()
+        GHRelease ghRelease = gitHubRepo().getLatestRelease()
 
         return ghRelease
 
