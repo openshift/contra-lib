@@ -17,9 +17,6 @@ class GitUtils {
         this.username = username
         this.password = password
         this.gitHub = null
-        if (!gitHub) {
-            connect()
-        }
     }
 
     def connect() {
@@ -32,12 +29,18 @@ class GitUtils {
     }
 
     def mergePR(def prNumber, String mergeMsg, String repo) {
+        if (!gitHub) {
+            connect()
+        }
         GHRepository ghRepository = gitHub.getRepository(repo)
         GHPullRequest ghPullRequest = ghRepository.getPullRequest(prNumber)
         ghPullRequest.merge(mergeMsg)
     }
 
     def createRelease(String tag, String releaseMsg, String repo) {
+        if (!gitHub) {
+            connect()
+        }
         GHRepository ghRepository = gitHub.getRepository(repo)
         GHRelease ghRelease = ghRepository.createRelease(tag)
                                 .body(releaseMsg)
@@ -47,6 +50,9 @@ class GitUtils {
     }
 
     def getReleaseByTagName(String tag, String repo) {
+        if (!gitHub) {
+            connect()
+        }
         GHRepository ghRepository = gitHub.getRepository(repo)
         GHRelease ghRelease = ghRepository.getReleaseByTagName(tag)
 
@@ -54,6 +60,9 @@ class GitUtils {
     }
 
     def getLatestRelease(String repo) {
+        if (!gitHub) {
+            connect()
+        }
         GHRepository ghRepository = gitHub.getRepository(repo)
         GHRelease ghRelease = ghRepository.getLatestRelease()
 
