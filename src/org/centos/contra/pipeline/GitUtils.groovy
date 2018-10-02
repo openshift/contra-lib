@@ -6,6 +6,8 @@ import org.kohsuke.github.GHRepository
 import org.kohsuke.github.GHPullRequest
 import org.kohsuke.github.GHRelease
 
+import com.cloudbees.groovy.cps.NonCPS
+
 
 class GitUtils {
 
@@ -13,19 +15,22 @@ class GitUtils {
     String password
     GitHub gitHub
 
+    @NonCPS
     GitUtils(String username, String password) {
         this.username = username
         this.password = password
-        this.gitHub = null
+        this.gitHub = connect()
     }
 
     def connect() {
         def connection = null
         try {
-            gitHub = GitHub.connectUsingPassword(username, password)
+            connection = GitHub.connectUsingPassword(username, password)
         } catch(e) {
             throw new Exception("unable to connect to github: ${e.toString()}")
         }
+
+        return connection
     }
 
     def mergePR(def prNumber, String mergeMsg, String repo) {
