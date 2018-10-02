@@ -13,7 +13,7 @@ class GitUtils {
 
     String username
     String password
-    GitHub gitHub = connect()
+    GitHub gitHub = this.connect()
 
     def connect() {
         def connection = null
