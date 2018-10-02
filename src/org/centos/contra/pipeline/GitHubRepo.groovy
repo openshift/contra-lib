@@ -6,10 +6,8 @@ import org.kohsuke.github.GHRepository
 import org.kohsuke.github.GHPullRequest
 import org.kohsuke.github.GHRelease
 
-import com.cloudbees.groovy.cps.NonCPS
 
-
-class GitUtils {
+class GitHubRepo {
 
     String username
     String password
