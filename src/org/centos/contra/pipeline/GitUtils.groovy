@@ -19,8 +19,8 @@ class GitUtils implements Serializable {
         this.username = username
         this.password = password
         this.repoName = repo
-        this.gitHub = this.connect()
-        this.ghRepository = this.gitHub.getRepository(this.repoName)
+        this.gitHub = connect()
+       // this.ghRepository = gitHub.getRepository(repoName)
     }
 
     def connect() {
