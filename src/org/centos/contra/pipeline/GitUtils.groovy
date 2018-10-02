@@ -6,6 +6,7 @@ import org.kohsuke.github.GHRepository
 import org.kohsuke.github.GHPullRequest
 import org.kohsuke.github.GHRelease
 
+import com.cloudbees.groovy.cps.NonCPS
 
 class GitUtils implements Serializable {
 
@@ -15,6 +16,7 @@ class GitUtils implements Serializable {
     GitHub gitHub
     GHRepository ghRepository
 
+    @NonCps
     GitUtils(String username, String password, String repo) {
         this.username = username
         this.password = password
