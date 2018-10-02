@@ -7,7 +7,7 @@ import org.kohsuke.github.GHPullRequest
 import org.kohsuke.github.GHRelease
 
 
-class GitUtils {
+class GitUtils implements Serializable {
 
     String username
     String password
@@ -19,8 +19,8 @@ class GitUtils {
         this.username = username
         this.password = password
         this.repoName = repo
-       // this.gitHub = this.connect()
-        //this.ghRepository = this.gitHub.getRepository(this.repoName)
+        this.gitHub = this.connect()
+        this.ghRepository = this.gitHub.getRepository(this.repoName)
     }
 
     def connect() {
