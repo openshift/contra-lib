@@ -6,9 +6,10 @@ def call(String tag, String msg, String username, String password, String repo) 
 
     gitutils.createRelease(tag, msg, repo)
 
-    gitutils.getReleaseByTagName(tag, repo)
-
     gitutils.getLatestRelease(repo)
+
+   // gitutils.getReleaseByTagName(tag, repo)
+
 
 
 }
