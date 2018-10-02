@@ -19,7 +19,7 @@ class GitUtils {
         this.username = username
         this.password = password
         this.repoName = repo
-        this.gitHub = connect()
+        this.gitHub = this.connect()
         this.ghRepository = this.gitHub.getRepository(this.repoName)
     }
 
