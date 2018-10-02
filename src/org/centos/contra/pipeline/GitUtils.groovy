@@ -6,42 +6,39 @@ import org.kohsuke.github.GHRepository
 import org.kohsuke.github.GHPullRequest
 import org.kohsuke.github.GHRelease
 
-import com.cloudbees.groovy.cps.NonCPS
 
-class GitUtils implements Serializable {
+class GitUtils {
 
     String username
     String password
-    String repoName
     GitHub gitHub
-    GHRepository ghRepository
 
-    @NonCps
-    GitUtils(String username, String password, String repo) {
+    GitUtils(String username, String password) {
         this.username = username
         this.password = password
-        this.repoName = repo
-        this.gitHub = connect()
-       // this.ghRepository = gitHub.getRepository(repoName)
+        this.gitHub = null
+        if (!gitHub) {
+            connect()
+        }
     }
 
     def connect() {
         def connection = null
         try {
-            connection = GitHub.connectUsingPassword(username, password)
+            gitHub = GitHub.connectUsingPassword(username, password)
         } catch(e) {
             throw new Exception("unable to connect to github: ${e.toString()}")
         }
-
-        return connection
     }
 
-    def mergePR(def prNumber, def mergeMsg) {
+    def mergePR(def prNumber, String mergeMsg, String repo) {
+        GHRepository ghRepository = gitHub.getRepository(repo)
         GHPullRequest ghPullRequest = ghRepository.getPullRequest(prNumber)
         ghPullRequest.merge(mergeMsg)
     }
 
-    def createRelease(String tag, String releaseMsg) {
+    def createRelease(String tag, String releaseMsg, String repo) {
+        GHRepository ghRepository = gitHub.getRepository(repo)
         GHRelease ghRelease = ghRepository.createRelease(tag)
                                 .body(releaseMsg)
                                 .create()
@@ -49,13 +46,15 @@ class GitUtils implements Serializable {
         return ghRelease
     }
 
-    def getReleaseByTagName(String tag) {
+    def getReleaseByTagName(String tag, String repo) {
+        GHRepository ghRepository = gitHub.getRepository(repo)
         GHRelease ghRelease = ghRepository.getReleaseByTagName(tag)
 
         return ghRelease
     }
 
-    def getLatestRelease() {
+    def getLatestRelease(String repo) {
+        GHRepository ghRepository = gitHub.getRepository(repo)
         GHRelease ghRelease = ghRepository.getLatestRelease()
 
         return ghRelease
