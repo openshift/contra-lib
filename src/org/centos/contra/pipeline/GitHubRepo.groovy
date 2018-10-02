@@ -43,9 +43,10 @@ class GitHubRepo {
         return ghRepository
     }
 
-    def createRelease(String tag, String releaseMsg) {
+    def createRelease(String tag, String releaseMsg, String sha) {
         GHRelease ghRelease = gitHubRepo().createRelease(tag)
                                 .body(releaseMsg)
+                                .commitish(sha)
                                 .create()
 
         return ghRelease
