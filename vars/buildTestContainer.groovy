@@ -20,16 +20,11 @@ def call(parameters = [:]) {
     def modify_args = parameters.modify_args ?: [:]
     def docker_registry = parameters.docker_registry ?: 'docker://docker.io'
     def docker_namespace = parameters.docker_namespace
-    def podTemplateProps = parameters.podTemplateProps ?: [:]
+    def buildContainer = parameters.buildContainer
     def credentials = parameters.credentials ?: []
     def build_root = parameters.build_root ?: '.'
     def container_name = parameters.container_name ?: UUID.randomUUID().toString()
-
-    def buildContainer = podTemplateProps.get('containers')
-    if (buildContainer) {
-        buildContainer = buildContainer[0]
-    }
-
+    
     def containerWrapper = { cmd ->
         executeInContainer(containerName: buildContainer, containerScript: cmd, stageVars: [], credentials: credentials)
     }
