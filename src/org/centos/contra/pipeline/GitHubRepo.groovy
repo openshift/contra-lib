@@ -26,9 +26,13 @@ class GitHubRepo {
         return connection
     }
 
-    def mergePR(def prNumber, String mergeMsg) {
+    def mergePRByNumber(def prNumber, String mergeMsg) {
         GHPullRequest ghPullRequest = gitHubRepo().getPullRequest(prNumber)
         ghPullRequest.merge(mergeMsg)
+    }
+
+    def rebasePR(GHPullRequest ghPullRequest) {
+        ghPullRequest.merge(null, null, GHPullRequest.MergeMethod.REBASE)
     }
 
     def gitHubRepo() {
@@ -63,5 +67,11 @@ class GitHubRepo {
 
         return ghRelease
 
+    }
+
+    def createPullRequest(String title, String head, String base, String body) {
+        GHPullRequest ghPullRequest = gitHubRepo().createPullRequest(title, head, base, body)
+
+        return ghPullRequest
     }
 }

@@ -43,9 +43,10 @@ def call(parameters = [:]) {
                 handlePipelineStep {
                     deleteDir()
 
+                    // include option to checkout linchpin version
                     checkout scm
 
-                    currentBuild.displayName = "Build#: ${env.BUILD_NUMBER} - Container Build: ${version}"
+                    decoratePRBuild()
 
                 }
             }

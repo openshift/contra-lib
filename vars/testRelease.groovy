@@ -14,27 +14,45 @@ def call(Map parameters = [:]) {
     def installCmd = parameters.installCmd ?: ""
     def verifyCmd = parameters.verifyCmd ?: ""
     def repo = parameters.repo ?: env.REPO
-    def releaseMsg = parameters.releaseMsg ?: "Release of ${repo}"
     def username = parameters.username ?: env.USERNAME
     def password = parameters.password ?: env.PASSWORD
     def version = parameters.version
 
+    def prTitle = parameters.prTitle ?: "Merge of ${version}"
+    def prHead = parameters.prHead ?: 'develop'
+    def prBase = parameters.prBase ?: 'master'
+    def prBody = parameters.prBody ?: "Merge release ${version}"
+
+
     def gitRepo = new GitHubRepo(username: username, password: password, repo: repo)
 
     stage('upload-test-version') {
-        def cmd = "twine upload --config-file /tmp/pypirc -r " + env.TEST_PYPI_REPO + " dist/* || echo 'Version already uploaded'"
-        executeInContainer(containerName: 'buildah-builder', containerScript: cmd)
+        def cmd = """
+        python setup.py sdist bdist_wheel
+        twine upload --config-file /tmp/pypirc -r " + ${TEST_PYPI_REPO} + " dist/* || echo 'Version already uploaded'
+        """
+        //executeInContainer(containerName: 'buildah-builder', containerScript: cmd)
     }
 
     stage('install-module') {
-        executeInContainer(containerName: 'buildah-builder', containerScript: installCmd)
+        //executeInContainer(containerName: 'buildah-builder', containerScript: installCmd)
     }
 
     stage('verify-module') {
-        executeInContainer(containerName: 'buildah-builder', containerScript: verifyCmd)
+        //executeInContainer(containerName: 'buildah-builder', containerScript: verifyCmd)
     }
 
-    stage('create-release') {
-        gitRepo.createRelease(version, releaseMsg)
+    stage('release-prod') {
+        def cmd = """
+        twine upload --config-file /tmp/pypirc -r " + ${PROD_PYPI_REPO} + " dist/*
+        """
+        //executeInContainer(containerName: 'buildah-builder', containerScript: cmd)
+
+        def pullRequest = gitRepo.createPullRequest(prTitle,
+                                                    prHead,
+                                                    prBase,
+                                                    prBody)
+        gitRepo.rebasePR(pullRequest)
+
     }
 }
