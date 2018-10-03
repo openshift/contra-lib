@@ -32,7 +32,7 @@ def call(parameters = [:]) {
     }
 
     deployOpenShiftTemplate(podTemplateProps) {
-        ciPipeline(sendMetrics: send_metrics, decoratePRBuild: decoratePRBuild()) {
+        ciPipeline(sendMetrics: send_metrics, decorateBuild: decoratePRBuild()) {
 
 
             def containerWrapper = { cmd ->
@@ -45,7 +45,7 @@ def call(parameters = [:]) {
 
                     // include option to checkout linchpin version
                     checkout scm
-                    
+
                 }
             }
 
