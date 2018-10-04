@@ -92,7 +92,7 @@ def call(parameters = [:]) {
                 cmd << "\n"
 
                 if (credentials) {
-                    cmd << "buildah push --creds \${DOCKER_USERNAME}:\${DOCKER_PASSWORD} localhost/${image_name}:${version} ${docker_registry}/${docker_namespace}/${image_name}:${version}"
+                    cmd << "buildah push --creds \${USERNAME}:\${PASSWORD} localhost/${image_name}:${version} ${docker_registry}/${docker_namespace}/${image_name}:${version}"
                     cmd << "\n"
                 } else {
                     cmd << "buildah push localhost/${image_name}:${version} ${docker_registry}/${docker_namespace}/${image_name}:${version}"
