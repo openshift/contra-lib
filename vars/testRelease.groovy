@@ -55,6 +55,7 @@ def call(Map parameters = [:]) {
         def pullRequest = gitRepo.createPR(prTitle, prHead, prBase, prBody)
         print "created PR"
         print "rebasing PR"
+        print pullRequest.getClass()
         gitRepo.rebasePR(pullRequest)
         print "rebased PR"
 

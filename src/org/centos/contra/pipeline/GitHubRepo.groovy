@@ -74,7 +74,7 @@ class GitHubRepo implements Serializable {
 
     @NonCPS
     def createPR(String title, String head, String base, String body) {
-        GHPullRequest ghPullRequest = this.gitRepo().createPullRequest(title, head, base, body)
+        GHPullRequest ghPullRequest = gitRepo().createPullRequest(title, head, base, body)
 
         return ghPullRequest
     }
