@@ -35,7 +35,7 @@ class GitHubRepo implements Serializable {
         ghPullRequest.merge(null, null, GHPullRequest.MergeMethod.REBASE)
     }
 
-    def gitRepo() {
+    static def gitRepo() {
         if (!gitHub) {
             gitHub = connect()
         }
