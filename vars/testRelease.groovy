@@ -13,6 +13,7 @@ import org.centos.contra.pipeline.GitHubRepo
 def call(Map parameters = [:]) {
     def installCmd = parameters.installCmd ?: ""
     def verifyCmd = parameters.verifyCmd ?: ""
+    def container = parameters.container
     def repo = parameters.repo ?: env.REPO
     def credentials = parameters.credentials
     def version = parameters.version
@@ -36,22 +37,22 @@ def call(Map parameters = [:]) {
         python setup.py sdist bdist_wheel
         twine upload --config-file /tmp/pypirc -r " + ${TEST_PYPI_REPO} + " dist/* || echo 'Version already uploaded'
         """
-        //executeInContainer(containerName: 'buildah-builder', containerScript: cmd)
+        executeInContainer(containerName: container, containerScript: cmd)
     }
 
     stage('install-module') {
-        //executeInContainer(containerName: 'buildah-builder', containerScript: installCmd)
+        executeInContainer(containerName: container, containerScript: installCmd)
     }
 
     stage('verify-module') {
-       // executeInContainer(containerName: 'buildah-builder', containerScript: verifyCmd)
+        executeInContainer(containerName: container, containerScript: verifyCmd)
     }
 
     stage('release-prod') {
         def cmd = """
         twine upload --config-file /tmp/pypirc -r " + ${PROD_PYPI_REPO} + " dist/*
         """
-       // executeInContainer(containerName: 'buildah-builder', containerScript: cmd)
+        executeInContainer(containerName: container, containerScript: cmd)
 
         def pullRequest = gitRepo.createPR(prTitle, prHead, prBase, prBody)
         gitRepo.rebasePR(pullRequest)
