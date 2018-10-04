@@ -52,6 +52,10 @@ def call(Map parameters = [:]) {
         //executeInContainer(containerName: 'buildah-builder', containerScript: cmd)
 
         print "creating PR"
+        print prTitle
+        print prHead
+        print prBase
+        print prBody
         def pullRequest = gitRepo.createPR(prTitle, prHead, prBase, prBody)
         print "created PR"
         print "rebasing PR"
