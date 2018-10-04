@@ -14,8 +14,7 @@ def call(Map parameters = [:]) {
     def installCmd = parameters.installCmd ?: ""
     def verifyCmd = parameters.verifyCmd ?: ""
     def repo = parameters.repo ?: env.REPO
-    def username = parameters.username ?: env.USERNAME
-    def password = parameters.password ?: env.PASSWORD
+    def credentials = parameters.credentials
     def version = parameters.version
 
     def prTitle = parameters.prTitle ?: "Merge of ${version}"
@@ -27,7 +26,10 @@ def call(Map parameters = [:]) {
     def PROD_PYPI_REPO = parameters.prod_pypi_repo ?: 'prod-repo'
 
 
-    def gitRepo = new GitHubRepo(username: username, password: password, repo: repo)
+    def gitRepo = null
+    withCredentials(credentials) {
+        gitRepo = new GitHubRepo(username: env.DOCKER_USERNAME, password: env.DOCKER_PASSWORD, repo: repo)
+    }
 
     stage('upload-test-version') {
         def cmd = """
@@ -52,10 +54,6 @@ def call(Map parameters = [:]) {
         //executeInContainer(containerName: 'buildah-builder', containerScript: cmd)
 
         print "creating PR"
-        print prTitle
-        print prHead
-        print prBase
-        print prBody
         def pullRequest = gitRepo.createPR(prTitle, prHead, prBase, prBody)
         print "created PR"
         print "rebasing PR"
