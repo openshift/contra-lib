@@ -6,8 +6,6 @@ import org.kohsuke.github.GHRepository
 import org.kohsuke.github.GHPullRequest
 import org.kohsuke.github.GHRelease
 
-import com.cloudbees.groovy.cps.NonCPS
-
 
 class GitHubRepo implements Serializable {
 
@@ -15,7 +13,6 @@ class GitHubRepo implements Serializable {
     String password
     String repo
 
-    @NonCPS
     def connect() {
         def connection = null
         try {
@@ -27,7 +24,6 @@ class GitHubRepo implements Serializable {
         return connection
     }
 
-    @NonCPS
     def mergePRByNumber(def prNumber, String mergeMsg) {
         GHPullRequest ghPullRequest = gitRepo().getPullRequest(prNumber)
         ghPullRequest.merge(mergeMsg)
@@ -41,7 +37,6 @@ class GitHubRepo implements Serializable {
         return connect().getRepository(repo)
     }
 
-    @NonCPS
     def createRelease(String tag, String releaseMsg, String sha) {
         return getRepo().createRelease(tag)
                 .body(releaseMsg)
@@ -49,12 +44,10 @@ class GitHubRepo implements Serializable {
                 .create()
     }
 
-    @NonCPS
     def getReleaseByTagName(String tag) {
         return getRepo().getReleaseByTagName(tag)
     }
 
-    @NonCPS
     def getLatestRelease() {
         return getRepo().getLatestRelease()
     }
