@@ -36,22 +36,22 @@ def call(Map parameters = [:]) {
         python setup.py sdist bdist_wheel
         twine upload --config-file /tmp/pypirc -r " + ${TEST_PYPI_REPO} + " dist/* || echo 'Version already uploaded'
         """
-        executeInContainer(containerName: 'buildah-builder', containerScript: cmd)
+        //executeInContainer(containerName: 'buildah-builder', containerScript: cmd)
     }
 
     stage('install-module') {
-        executeInContainer(containerName: 'buildah-builder', containerScript: installCmd)
+        //executeInContainer(containerName: 'buildah-builder', containerScript: installCmd)
     }
 
     stage('verify-module') {
-        executeInContainer(containerName: 'buildah-builder', containerScript: verifyCmd)
+       // executeInContainer(containerName: 'buildah-builder', containerScript: verifyCmd)
     }
 
     stage('release-prod') {
         def cmd = """
         twine upload --config-file /tmp/pypirc -r " + ${PROD_PYPI_REPO} + " dist/*
         """
-        executeInContainer(containerName: 'buildah-builder', containerScript: cmd)
+       // executeInContainer(containerName: 'buildah-builder', containerScript: cmd)
 
         def pullRequest = gitRepo.createPR(prTitle, prHead, prBase, prBody)
         print pullRequest.getClass()
