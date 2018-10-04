@@ -19,8 +19,8 @@ def call(Map parameters = [:]) {
     def version = parameters.version
 
     def prTitle = parameters.prTitle ?: "Merge of ${version}"
-    def prHead = parameters.prHead ?: 'refs/head/develop'
-    def prBase = parameters.prBase ?: 'refs/head/master'
+    def prHead = parameters.prHead ?: 'develop'
+    def prBase = parameters.prBase ?: 'master'
     def prBody = parameters.prBody ?: "Merge release ${version}"
 
     def TEST_PYPI_REPO = parameters.test_pypi_repo ?: 'test-repo'
