@@ -28,7 +28,7 @@ def call(Map parameters = [:]) {
 
     def gitRepo = null
     withCredentials(credentials) {
-        gitRepo = new GitHubRepo(username: env.DOCKER_USERNAME, password: env.DOCKER_PASSWORD, repo: repo)
+        gitRepo = new GitHubRepo(username: env.USERNAME, password: env.PASSWORD, repo: repo)
     }
 
     stage('upload-test-version') {
@@ -36,30 +36,26 @@ def call(Map parameters = [:]) {
         python setup.py sdist bdist_wheel
         twine upload --config-file /tmp/pypirc -r " + ${TEST_PYPI_REPO} + " dist/* || echo 'Version already uploaded'
         """
-        //executeInContainer(containerName: 'buildah-builder', containerScript: cmd)
+        executeInContainer(containerName: 'buildah-builder', containerScript: cmd)
     }
 
     stage('install-module') {
-        //executeInContainer(containerName: 'buildah-builder', containerScript: installCmd)
+        executeInContainer(containerName: 'buildah-builder', containerScript: installCmd)
     }
 
     stage('verify-module') {
-        //executeInContainer(containerName: 'buildah-builder', containerScript: verifyCmd)
+        executeInContainer(containerName: 'buildah-builder', containerScript: verifyCmd)
     }
 
     stage('release-prod') {
         def cmd = """
         twine upload --config-file /tmp/pypirc -r " + ${PROD_PYPI_REPO} + " dist/*
         """
-        //executeInContainer(containerName: 'buildah-builder', containerScript: cmd)
+        executeInContainer(containerName: 'buildah-builder', containerScript: cmd)
 
-        print "creating PR"
         def pullRequest = gitRepo.createPR(prTitle, prHead, prBase, prBody)
-        print "created PR"
-        print "rebasing PR"
         print pullRequest.getClass()
         gitRepo.rebasePR(pullRequest)
-        print "rebased PR"
 
     }
 }
