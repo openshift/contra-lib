@@ -7,7 +7,7 @@ import org.kohsuke.github.GHPullRequest
 import org.kohsuke.github.GHRelease
 
 
-class GitHubRepo implements  Serializable {
+class GitHubRepo implements Serializable {
 
     String username
     String password
@@ -35,7 +35,7 @@ class GitHubRepo implements  Serializable {
         ghPullRequest.merge(null, null, GHPullRequest.MergeMethod.REBASE)
     }
 
-    def gitHubRepo() {
+    def gitRepo() {
         if (!gitHub) {
             gitHub = connect()
         }
@@ -48,7 +48,7 @@ class GitHubRepo implements  Serializable {
     }
 
     def createRelease(String tag, String releaseMsg, String sha) {
-        GHRelease ghRelease = gitHubRepo().createRelease(tag)
+        GHRelease ghRelease = gitRepo().createRelease(tag)
                                 .body(releaseMsg)
                                 .commitish(sha)
                                 .create()
@@ -57,20 +57,20 @@ class GitHubRepo implements  Serializable {
     }
 
     def getReleaseByTagName(String tag) {
-        GHRelease ghRelease = gitHubRepo().getReleaseByTagName(tag)
+        GHRelease ghRelease = gitRepo().getReleaseByTagName(tag)
 
         return ghRelease
     }
 
     def getLatestRelease() {
-        GHRelease ghRelease = gitHubRepo().getLatestRelease()
+        GHRelease ghRelease = gitRepo().getLatestRelease()
 
         return ghRelease
 
     }
 
-    def createPullRequest(String title, String head, String base, String body) {
-        GHPullRequest ghPullRequest = gitHubRepo().createPullRequest(title, head, base, body)
+    def createPR(String title, String head, String base, String body) {
+        GHPullRequest ghPullRequest = gitRepo().createPullRequest(title, head, base, body)
 
         return ghPullRequest
     }
