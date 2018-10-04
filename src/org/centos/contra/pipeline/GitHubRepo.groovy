@@ -19,12 +19,13 @@ class GitHubRepo implements Serializable {
 
     @NonCPS
     def connect() {
-        def connection = null
         try {
             gitHub = GitHub.connectUsingPassword(username, password)
         } catch(e) {
             throw new Exception("unable to connect to github: ${e.toString()}")
         }
+
+        return gitHub
 
     }
 
@@ -44,12 +45,13 @@ class GitHubRepo implements Serializable {
         if (!gitHub) {
             connect()
         }
-
+        /*
         if (!ghRepository) {
             ghRepository = gitHub.getRepository(repo)
         }
+        */
 
-        return ghRepository
+        return connect().getRepository(repo)
     }
 
     @NonCPS
