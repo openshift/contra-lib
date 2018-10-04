@@ -14,8 +14,6 @@ class GitHubRepo implements Serializable {
     String username
     String password
     String repo
-    GitHub gitHub
-    GHRepository ghRepository
 
     @NonCPS
     def connect() {
@@ -35,51 +33,34 @@ class GitHubRepo implements Serializable {
         ghPullRequest.merge(mergeMsg)
     }
 
-    @NonCPS
     def rebasePR(GHPullRequest ghPullRequest) {
         ghPullRequest.merge(null, null, GHPullRequest.MergeMethod.REBASE)
     }
 
-    @NonCPS
-    def gitRepo() {
-
-        /*
-        if (!ghRepository) {
-            ghRepository = gitHub.getRepository(repo)
-        }
-        */
-
+    def getRepo() {
         return connect().getRepository(repo)
     }
 
     @NonCPS
     def createRelease(String tag, String releaseMsg, String sha) {
-        GHRelease ghRelease = gitRepo().createRelease(tag)
-                                .body(releaseMsg)
-                                .commitish(sha)
-                                .create()
-
-        return ghRelease
+        return getRepo().createRelease(tag)
+                .body(releaseMsg)
+                .commitish(sha)
+                .create()
     }
 
     @NonCPS
     def getReleaseByTagName(String tag) {
-        GHRelease ghRelease = gitRepo().getReleaseByTagName(tag)
-
-        return ghRelease
+        return getRepo().getReleaseByTagName(tag)
     }
 
     @NonCPS
     def getLatestRelease() {
-        GHRelease ghRelease = gitRepo().getLatestRelease()
-
-        return ghRelease
-
+        return getRepo().getLatestRelease()
     }
 
-    @NonCPS
     def createPR(String title, String head, String base, String body) {
-        return gitRepo().createPullRequest(title, head, base, body)
+        return getRepo().createPullRequest(title, head, base, body)
 
     }
 }
