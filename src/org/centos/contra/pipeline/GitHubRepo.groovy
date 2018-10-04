@@ -21,28 +21,38 @@ class GitHubRepo implements Serializable {
     def connect() {
         def connection = null
         try {
-            connection = GitHub.connectUsingPassword(username, password)
+            gitHub = GitHub.connectUsingPassword(username, password)
         } catch(e) {
             throw new Exception("unable to connect to github: ${e.toString()}")
         }
 
-        return connection
     }
 
+    @NonCPS
     def mergePRByNumber(def prNumber, String mergeMsg) {
         GHPullRequest ghPullRequest = gitRepo().getPullRequest(prNumber)
         ghPullRequest.merge(mergeMsg)
     }
 
+    @NonCPS
     def rebasePR(GHPullRequest ghPullRequest) {
         ghPullRequest.merge(null, null, GHPullRequest.MergeMethod.REBASE)
     }
 
     @NonCPS
     def gitRepo() {
-        return connect().getRepository(repo)
+        if (!gitHub) {
+            connect()
+        }
+
+        if (!ghRepository) {
+            ghRepository = gitHub.getRepository(repo)
+        }
+
+        return ghRepository
     }
 
+    @NonCPS
     def createRelease(String tag, String releaseMsg, String sha) {
         GHRelease ghRelease = gitRepo().createRelease(tag)
                                 .body(releaseMsg)
@@ -52,12 +62,14 @@ class GitHubRepo implements Serializable {
         return ghRelease
     }
 
+    @NonCPS
     def getReleaseByTagName(String tag) {
         GHRelease ghRelease = gitRepo().getReleaseByTagName(tag)
 
         return ghRelease
     }
 
+    @NonCPS
     def getLatestRelease() {
         GHRelease ghRelease = gitRepo().getLatestRelease()
 
