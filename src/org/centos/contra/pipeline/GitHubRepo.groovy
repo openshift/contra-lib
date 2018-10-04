@@ -17,6 +17,7 @@ class GitHubRepo implements Serializable {
     GitHub gitHub
     GHRepository ghRepository
 
+    @NonCPS
     def connect() {
         def connection = null
         try {
@@ -39,11 +40,7 @@ class GitHubRepo implements Serializable {
 
     @NonCPS
     def gitRepo() {
-        if (!gitHub) {
-            gitHub = connect()
-        }
-
-        return gitHub.getRepository(repo)
+        return connect().getRepository(repo)
     }
 
     def createRelease(String tag, String releaseMsg, String sha) {
