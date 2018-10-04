@@ -6,6 +6,8 @@ import org.kohsuke.github.GHRepository
 import org.kohsuke.github.GHPullRequest
 import org.kohsuke.github.GHRelease
 
+import com.cloudbees.groovy.cps.NonCPS
+
 
 class GitHubRepo implements Serializable {
 
@@ -35,6 +37,7 @@ class GitHubRepo implements Serializable {
         ghPullRequest.merge(null, null, GHPullRequest.MergeMethod.REBASE)
     }
 
+    @NonCPS
     def gitRepo() {
         if (!gitHub) {
             gitHub = connect()
@@ -69,6 +72,7 @@ class GitHubRepo implements Serializable {
 
     }
 
+    @NonCPS
     def createPR(String title, String head, String base, String body) {
         GHPullRequest ghPullRequest = this.gitRepo().createPullRequest(title, head, base, body)
 
