@@ -7,7 +7,7 @@ import org.kohsuke.github.GHPullRequest
 import org.kohsuke.github.GHRelease
 
 
-class GitHubRepo {
+class GitHubRepo implements  Serializable {
 
     String username
     String password
