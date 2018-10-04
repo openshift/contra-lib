@@ -29,7 +29,7 @@ class GitHubRepo implements Serializable {
     }
 
     def mergePRByNumber(def prNumber, String mergeMsg) {
-        GHPullRequest ghPullRequest = gitHubRepo().getPullRequest(prNumber)
+        GHPullRequest ghPullRequest = gitRepo().getPullRequest(prNumber)
         ghPullRequest.merge(mergeMsg)
     }
 
@@ -43,11 +43,7 @@ class GitHubRepo implements Serializable {
             gitHub = connect()
         }
 
-        if (!ghRepository) {
-            ghRepository = gitHub.getRepository(repo)
-        }
-
-        return ghRepository
+        return gitHub.getRepository(repo)
     }
 
     def createRelease(String tag, String releaseMsg, String sha) {
@@ -74,8 +70,7 @@ class GitHubRepo implements Serializable {
 
     @NonCPS
     def createPR(String title, String head, String base, String body) {
-        GHPullRequest ghPullRequest = gitRepo().createPullRequest(title, head, base, body)
+        return gitRepo().createPullRequest(title, head, base, body)
 
-        return ghPullRequest
     }
 }
