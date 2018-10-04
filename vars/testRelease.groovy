@@ -23,6 +23,9 @@ def call(Map parameters = [:]) {
     def prBase = parameters.prBase ?: 'master'
     def prBody = parameters.prBody ?: "Merge release ${version}"
 
+    def TEST_PYPI_REPO = parameters.test_pypi_repo ?: 'test-repo'
+    def PROD_PYPI_REPO = parameters.prod_pypi_repo ?: 'prod-repo'
+
 
     def gitRepo = new GitHubRepo(username: username, password: password, repo: repo)
 

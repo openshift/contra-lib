@@ -24,7 +24,7 @@ def call(parameters = [:]) {
     def credentials = parameters.credentials ?: []
     def build_root = parameters.build_root ?: '.'
     def container_name = parameters.container_name ?: UUID.randomUUID().toString()
-    
+
     def containerWrapper = { cmd ->
         executeInContainer(containerName: buildContainer, containerScript: cmd, stageVars: [], credentials: credentials)
     }
