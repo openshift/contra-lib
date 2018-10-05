@@ -63,8 +63,8 @@ def call(parameters = [:]) {
 
         if (modify_args) {
             def owner = modify_args['owner']
-            def copyCmds = modify_args['items'].collect { item ->
-                "buildah copy --chown ${owner} ${container_name} ${item[0]} ${item[1]}"
+            def copyCmds = modify_args['items'].collect { source, dest ->
+                "buildah copy --chown ${owner} ${container_name} ${source} ${dest}"
             }.join('\n')
 
             cmd = """
