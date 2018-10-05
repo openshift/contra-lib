@@ -77,7 +77,7 @@ def call(Map parameters = [:], Closure body) {
                 if (!buildPrefix) {
                     throw new RuntimeException('Must supply buildPrefix')
                 }
-                
+
                 pipelineMetrics(buildPrefix: buildPrefix, package_name: packageName)
             }
 
