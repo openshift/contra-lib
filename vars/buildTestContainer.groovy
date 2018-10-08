@@ -12,18 +12,16 @@
  * @return
  */
 
-def call(parameters = [:]) {
+def call(Map parameters = [:]) {
     def versions = parameters.versions ?: []
-    def test_cmd = parameters.test_cmd
+    def build_cmd = parameters.build_cmd ?: 'buildcontainer'
+    def test_cmd = parameters.test_cmd ?: 'testcontainer'
     def image_name = parameters.image_name
-    def build_args = parameters.build_args ?: [:]
-    def modify_args = parameters.modify_args ?: [:]
     def docker_registry = parameters.docker_registry ?: 'docker://docker.io'
     def docker_namespace = parameters.docker_namespace
     def buildContainer = parameters.buildContainer ?: 'buildah'
     def credentials = parameters.credentials ?: []
     def build_root = parameters.build_root ?: '.'
-    def container_name = parameters.container_name ?: UUID.randomUUID().toString()
 
     def containerWrapper = { cmd ->
         executeInContainer(containerName: buildContainer, containerScript: cmd, stageVars: [], credentials: credentials)
@@ -39,69 +37,41 @@ def call(parameters = [:]) {
         }
     }
 
-    stage('Build-Docker-Image') {
-        def buildCmd = null
-
-        if (build_args) {
-            def joinedArgs = build_args.collect { key, value -> "${key}=${value}"}.join(" --build-arg ")
-            buildCmd = "buildah bud --build-arg ${joinedArgs} -t ${image_name} ${build_root}"
-
-        } else {
-            buildCmd = "buildah bud -t ${image_name} ${build_root}"
-        }
-
-        def cmd = """
+    dir(build_root) {
+        stage('Build-Docker-Image') {
+            def cmd = """
         set -x
-        ${buildCmd}
-        buildah from --name ${container_name} ${image_name}
+        make ${build_cmd}
         """
-        containerWrapper(cmd)
-    }
-
-    stage('test-docker-container') {
-        def cmd = ""
-
-        if (modify_args) {
-            def owner = modify_args['owner']
-            def copyCmds = modify_args['items'].collect { source, dest ->
-                "buildah copy --chown ${owner} ${container_name} ${source} ${dest}"
-            }.join('\n')
-
-            cmd = """
-            set -x
-            ${copyCmds}
-            buildah commit ${container_name} ${image_name}-test
-            buildah from --name ${container_name}-test ${image_name}-test
-            buildah run ${container_name}-test -- ${test_cmd}
-            """
-        } else {
-            cmd = """
-            set -x
-            buildah run ${container_name} -- ${test_cmd}
-            """
+            containerWrapper(cmd)
         }
 
-        containerWrapper(cmd)
-    }
+        stage('test-docker-container') {
+            def cmd = """
+        make ${test_cmd}
+        """
+            containerWrapper(cmd)
+        }
 
-    if (versions) {
-        stage('Tag-Push-docker-image') {
-            def cmd = 'set -x'<<'\n'
-            versions.each { version ->
-                cmd << "buildah tag ${image_name} ${image_name}:${version}"
-                cmd << "\n"
+        if (versions) {
+            stage('Tag-Push-docker-image') {
+                def cmd = 'set -x'<<'\n'
+                versions.each { version ->
+                    cmd << "buildah tag ${image_name} ${image_name}:${version}"
+                    cmd << "\n"
 
-                if (credentials) {
-                    cmd << "buildah push --creds \${USERNAME}:\${PASSWORD} localhost/${image_name}:${version} ${docker_registry}/${docker_namespace}/${image_name}:${version}"
-                    cmd << "\n"
-                } else {
-                    cmd << "buildah push localhost/${image_name}:${version} ${docker_registry}/${docker_namespace}/${image_name}:${version}"
-                    cmd << "\n"
+                    if (credentials) {
+                        cmd << "buildah push --creds \${USERNAME}:\${PASSWORD} localhost/${image_name}:${version} ${docker_registry}/${docker_namespace}/${image_name}:${version}"
+                        cmd << "\n"
+                    } else {
+                        cmd << "buildah push localhost/${image_name}:${version} ${docker_registry}/${docker_namespace}/${image_name}:${version}"
+                        cmd << "\n"
+                    }
+
                 }
 
+                containerWrapper(cmd)
             }
-
-            containerWrapper(cmd)
         }
     }
 }
