@@ -1,14 +1,9 @@
 /**
  * Build/Test/Push container to a DockerHub
  * @param parameters
- * versions: A list of versions to tag the image with. If supplied, the version will be pushed to DockerHub
- * test_cmd: The test command provided as a shell command
- * image_name: The name of the image to build
- * build_args: Any arguments to provide to the docker build process
- * modify_args: Arguments to modify the image with before testing. The format is follows
- *              [owner: 'uid:gid', items: [['srcfile1', 'destfile1'], ['srcfile2', 'destfile2']]
- * podTemplateProps: Refer to deployOpenshiftTemplate
- * credentials: Credentials for docker push. Must contain DOCKER_USERNAME, DOCKER_PASSWORD as variables
+ * versions: A list of versions to tag the image with. If supplied, the version will be pushed to docker hub
+ * image_name: The name of the image that should be pushed to docker hub
+ * credentials: Credentials for docker push. Must contain USERNAME, PASSWORD as variables
  * @return
  */
 
