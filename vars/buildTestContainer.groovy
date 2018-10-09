@@ -66,7 +66,7 @@ def call(Map parameters = [:]) {
 
                 }
 
-                containerWrapper(cmd)
+                containerWrapper(cmd.toString())
             }
         }
     }
