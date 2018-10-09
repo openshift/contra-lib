@@ -43,6 +43,7 @@ def call(Map parameters = [:]) {
 
         stage('test-docker-container') {
             def cmd = """
+        set -x
         make ${test_cmd}
         """
             containerWrapper(cmd)
