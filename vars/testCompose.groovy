@@ -1,8 +1,9 @@
 def call(Map parameters = [:]) {
+    def container = parameters.get('container', 'singlehost-test')
     def imageName = parameters.get('imageName')
 
     def cmd = """
-              curl -O https://pagure.io/upstream-fedora-ci/raw/master/f/fedora-ci-monitor/validate-test-subject.py && \
+              curl -O https://pagure.io/upstream-fedora-ci/raw/master/f/validate-test-subject.py && \
               rm -rf /tmp/artifacts && \
               yum install -y python-pip && \
               pip install requests && \
@@ -11,6 +12,6 @@ def call(Map parameters = [:]) {
               """
 
     handlePipelineStep() {
-        executeInContainer(containerName: 'singlehost-test', containerScript: cmd)
+        executeInContainer(containerName: container, containerScript: cmd)
     }
 }
