@@ -70,12 +70,12 @@ library identifier: "upstream-fedora-pipeline@${env.ghprbActualCommit}",
                                         templates: [[value: '+refs/heads/*:refs/remotes/@{remote}/*'],
                                                     [value: '+refs/pull/*:refs/remotes/origin/pr/*']]]]])
 
-containers = ['rpmbuild': [tag: env.RPMBUILD_TAG],
-              'cloud-image-compose': [tag: env.CLOUD_IMAGE_COMPOSE_TAG],
-              'single-host-test': [tag: SINGLEHOST_TEST_TAG]
+containersWithProps = ['rpmbuild': [tag: env.RPMBUILD_TAG],
+                       'cloud-image-compose': [tag: env.CLOUD_IMAGE_COMPOSE_TAG],
+                       'single-host-test': [tag: SINGLEHOST_TEST_TAG]
 ]
 
-deployOpenShiftTemplate(containers: containers, docker_repo_url: env.DOCKER_REPO_URL {
+deployOpenShiftTemplate(containersWithProps: containersWithProps, docker_repo_url: env.DOCKER_REPO_URL) {
 
     ciPipeline(buildPrefix: 'contra-build-pipeline', package_name: 'vim') {
 
