@@ -75,7 +75,7 @@ containersWithProps = ['rpmbuild': [tag: env.RPMBUILD_TAG],
                        'single-host-test': [tag: SINGLEHOST_TEST_TAG]
 ]
 
-deployOpenShiftTemplate(containersWithProps: containersWithProps, docker_repo_url: env.DOCKER_REPO_URL {
+deployOpenShiftTemplate(containersWithProps: containersWithProps, docker_repo_url: env.DOCKER_REPO_URL) {
 
     ciPipeline(buildPrefix: 'contra-build-pipeline', package_name: 'vim') {
 
