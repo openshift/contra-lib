@@ -63,7 +63,8 @@ def call(Map parameters = [:], Closure body) {
             def tag = containerProps.get('tag', 'stable')
             def cmd = containerProps.get('command', 'cat')
             def privileged = containerProps.get('privileged', true)
-            def imageUrl = "${docker_repo_url}/${openshift_namespace}/${containerName}:${tag}"
+            def containerImageName = containerProps.get('image', containerName)
+            def imageUrl = "${docker_repo_url}/${openshift_namespace}/${containerImageName}:${tag}"
 
             containerTemplates << containerTemplate(name: containerName,
                     alwaysPullImage: true,
