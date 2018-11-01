@@ -37,7 +37,6 @@ def call(Map parameters = [:]) {
     }
 
     cimetrics.setMetricTag(env.JOB_NAME, 'build_result', currentBuild.currentResult)
-    cimetrics.setMetricTag(env.JOB_NAME, 'build_number', currentBuild.id)
     cimetrics.setMetricField(env.JOB_NAME, 'build_time', currentBuild.getDuration())
 
     writeToInflux(customDataMap: cimetrics.customDataMap,
