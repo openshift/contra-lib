@@ -66,7 +66,6 @@ class ciMetrics {
      * @return
      */
     def setMetricField(String measurement, String key, def value) {
-        measurement = "${prefix}-${measurement}"
         if (!customDataMap[measurement]) {
             customDataMap[measurement] = [:]
         }
@@ -82,7 +81,6 @@ class ciMetrics {
      * @return
      */
     def setMetricTag(String measurement, String key, String value) {
-        measurement = "${prefix}-${measurement}"
         if (!customDataMapTags[measurement]) {
             customDataMapTags[measurement] = [:]
         }
@@ -97,7 +95,6 @@ class ciMetrics {
      * @return
      */
     def setMetricTags(String measurement, Map tags) {
-        measurement = "${prefix}-${measurement}"
         if (!customDataMapTags[measurement]) {
             customDataMapTags[measurement] = [:]
         }
@@ -112,7 +109,6 @@ class ciMetrics {
      * @return
      */
     def setMetricFields(String measurement, Map fields) {
-        measurement = "${prefix}-${measurement}"
         if (!customDataMap[measurement]) {
             customDataMap[measurement] = [:]
         }
