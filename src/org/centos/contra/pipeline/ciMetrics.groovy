@@ -37,6 +37,9 @@ class ciMetrics {
     // The influx target configured in jenkins
     def influxTarget = "localInflux"
 
+    // populate the jenkins_data measurement
+    def customData = [:]
+    def customDataTags = [:]
 
     /**
      * Call this method to record the step run time
