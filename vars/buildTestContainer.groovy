@@ -9,8 +9,8 @@
 
 def call(Map parameters = [:]) {
     def versions = parameters.versions ?: []
-    def build_cmd = parameters.build_cmd ?: 'buildcontainer'
-    def test_cmd = parameters.test_cmd ?: 'testcontainer'
+    def build_cmd = parameters.build_cmd ?: 'build'
+    def test_cmd = parameters.test_cmd ?: 'test'
     def image_name = parameters.image_name
     def container_registry = parameters.container_registry ?: 'docker://docker.io'
     def container_namespace = parameters.container_namespace
