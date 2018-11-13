@@ -84,6 +84,7 @@ def call(Map parameters = [:], Closure body) {
                 containers: containerTemplates,
                 volumes: [
                         emptyDirVolume(memory: false, mountPath: '/sys/class/net'),
+                        emptyDirVolume(memory: false, mountPath: '/sys/fs/cgroup/systemd '),
                         emptyDirVolume(mountPath: '/var/run/containers', memory: false),
                         emptyDirVolume(mountPath: '/var/lib/containers', memory: false)
 
