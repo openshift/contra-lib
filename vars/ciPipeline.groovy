@@ -38,10 +38,6 @@ def call(Map parameters = [:], Closure body) {
     def timeoutValue = parameters.get('timeout', 120)
     def sendMetrics = parameters.get('sendMetrics', true)
 
-    if (!buildPrefix) {
-        throw new RuntimeException('Must supply buildPrefix')
-    }
-
     def cimetrics = ciMetrics.metricsInstance
     cimetrics.prefix = buildPrefix
 
@@ -78,6 +74,10 @@ def call(Map parameters = [:], Closure body) {
             currentBuild.result = currentBuild.result ?: 'SUCCESS'
 
             if (sendMetrics) {
+                if (!buildPrefix) {
+                    throw new RuntimeException('Must supply buildPrefix')
+                }
+
                 pipelineMetrics(buildPrefix: buildPrefix, package_name: packageName)
             }
 
@@ -88,8 +88,8 @@ def call(Map parameters = [:], Closure body) {
             if (decorateBuild) {
                 decorateBuild()
             } else {
-                currentBuild.displayName = "Build #${env.BUILD_NUMBER}"
-                currentBuild.description = currentBuild.result
+                currentBuild.displayName = currentBuild.displayName ?: "Build #${env.BUILD_NUMBER}"
+                currentBuild.description = currentBuild.description ?: currentBuild.result
             }
 
         }

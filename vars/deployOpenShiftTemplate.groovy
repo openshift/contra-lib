@@ -24,6 +24,7 @@ import org.centos.contra.pipeline.Utils
  */
 def call(Map parameters = [:], Closure body) {
 
+
     def utils = new Utils()
 
     timestamps {
@@ -82,7 +83,14 @@ def call(Map parameters = [:], Closure body) {
                 idleMinutes: 0,
                 namespace: openshift_namespace,
                 containers: containerTemplates,
-                volumes: [emptyDirVolume(memory: false, mountPath: '/sys/class/net')]
+                volumes: [
+                        emptyDirVolume(memory: false, mountPath: '/sys/class/net'),
+                        emptyDirVolume(mountPath: '/var/run/containers', memory: false),
+                        emptyDirVolume(mountPath: '/var/lib/containers', memory: false)
+
+                ]
+
+
         ) {
             node(podName) {
 
