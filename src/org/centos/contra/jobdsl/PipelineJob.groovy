@@ -133,13 +133,16 @@ class PipelineJob {
                                 url(repo_url)
                             }
                             branch(repo_branch)
-                            extensions {
-                                changelogToBranch {
-                                    options {
-                                        compareRemote(compare_remote)
-                                        compareTarget(compare_target)
+                            if (!lightweight_co) {
+                                extensions {
+                                    changelogToBranch {
+                                        options {
+                                            compareRemote(compare_remote)
+                                            compareTarget(compare_target)
+                                        }
                                     }
                                 }
+
                             }
                         }
                     }
