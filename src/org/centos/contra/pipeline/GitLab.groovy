@@ -5,34 +5,34 @@ class GitLab implements Serializable {
     Map envVars
 
     String targetBranch() {
-        envVars['gitlabTargetBranch']
+        envVars.gitlabTargetBranch
     }
 
     String sourceBranch() {
-        envVars['gitlabSourceBranch']
+        envVars.gitlabSourceBranch
     }
 
     String repoUrl() {
-        envVars['gitlabSourceRepoURL']
+        envVars.gitlabSourceRepoURL
     }
 
     String branch() {
-        envVars['gitlabBranch']
+        envVars.gitlabBranch
     }
 
     String targetRepo() {
-        envVars['gitlabTargetRepoName']
+        envVars.gitlabTargetRepoName
     }
 
     String targetNamespace() {
-        envVars['gitlabTargetNamespace']
+        envVars.gitlabTargetNamespace
     }
 
     String sourceNamespace() {
-        envVars['gitlabSourceNamespace']
+        envVars.gitlabSourceNamespace
     }
 
-    Boolean isMR() {
+    boolean isMR() {
         // request is from a fork
         if (sourceNamespace() != targetNamespace()) {
             return true
@@ -47,11 +47,11 @@ class GitLab implements Serializable {
         return false
     }
 
-    Boolean isPR() {
+    boolean isPR() {
         isMR()
     }
 
     String sourceRepoUrl() {
-        envVars['gitlabSourceRepoHttpUrl']
+        envVars.gitlabSourceRepoHttpUrl
     }
 }
