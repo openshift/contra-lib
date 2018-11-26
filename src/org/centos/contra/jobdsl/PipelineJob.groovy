@@ -117,19 +117,33 @@ class PipelineJob {
      * Add git repository
      * @param repo
      */
-    void addGit(Map repo) {
+    void addGit(Map parameters = [:]) {
+        String repo_url = parameters.repo_url
+        String repo_branch = parameters.repo_branch ?: 'master'
+        String lightweight_co = parameters.lightweight_co ?: false
+        String compare_remote = parameters.compare_remote ?: 'origin'
+        String compare_target = parameters.compare_target ?: 'master'
+
         job.with {
             definition {
                 cpsScm {
                     scm {
                         git {
                             remote {
-                                url(repo['repoUrl'])
+                                url(repo_url)
                             }
-                            branch(repo['branch'])
+                            branch(repo_branch)
+                            extensions {
+                                changelogToBranch {
+                                    options {
+                                        compareRemote(compare_remote)
+                                        compareTarget(compare_target)
+                                    }
+                                }
+                            }
                         }
                     }
-                    lightweight(true)
+                    lightweight(lightweight_co)
                 }
             }
         }
