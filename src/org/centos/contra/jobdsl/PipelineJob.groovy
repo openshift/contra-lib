@@ -134,10 +134,4 @@ class PipelineJob {
             }
         }
     }
-
-    void gitlabConnection(String url, String version='1.5.9') {
-        job.with {
-            gitLab(url, version)
-        }
-    }
 }
