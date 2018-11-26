@@ -52,6 +52,34 @@ class PipelineJob {
         }
     }
 
+    void gitlabTrigger(Map parameters = [:]) {
+        boolean build_on_merge_request_events = parameters.build_on_merge_request_events ?: false
+        boolean build_on_push_events = parameters.build_on_push_events ?: false
+        boolean enable_ci_skip = parameters.enableCiSkip ?: false
+        boolean set_build_description = parameters.set_build_description ?: false
+        String rebuild_open_merge_requests = parameters.rebuild_open_merge_requests ?: 'never'
+        String include_branches = parameters.include_branches
+        String exclude_branches = parameters.exclude_branches
+
+        job.with {
+            triggers {
+                gitlabPush {
+                    buildOnMergeRequestEvents(build_on_merge_request_events)
+                    buildOnPushEvents(build_on_push_events)
+                    enableCiSkip(enable_ci_skip)
+                    setBuildDescription(set_build_description)
+                    rebuildOpenMergeRequest(rebuild_open_merge_requests)
+                    if (include_branches) {
+                        includeBranches(include_branches)
+                    }
+                    if (exclude_branches) {
+                        excludeBranches(exclude_branches)
+                    }
+                }
+            }
+        }
+    }
+
     /**
      * ci event - fedMsgSubscriber
      * @param msgTopic
@@ -104,6 +132,12 @@ class PipelineJob {
                     lightweight(true)
                 }
             }
+        }
+    }
+
+    void gitlabConnection(String url, String version='1.5.9') {
+        job.with {
+            gitLab(url, version)
         }
     }
 }

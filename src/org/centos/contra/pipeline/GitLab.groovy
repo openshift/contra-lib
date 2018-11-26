@@ -1,4 +1,57 @@
 package org.centos.contra.pipeline
 
-class GitLab {
+
+class GitLab implements Serializable {
+    Map envVars
+
+    String targetBranch() {
+        envVars['gitlabTargetBranch']
+    }
+
+    String sourceBranch() {
+        envVars['gitlabSourceBranch']
+    }
+
+    String repoUrl() {
+        envVars['gitlabSourceRepoURL']
+    }
+
+    String branch() {
+        envVars['gitlabBranch']
+    }
+
+    String targetRepo() {
+        envVars['gitlabTargetRepoName']
+    }
+
+    String targetNamespace() {
+        envVars['gitlabTargetNamespace']
+    }
+
+    String sourceNamespace() {
+        envVars['gitlabSourceNamespace']
+    }
+
+    Boolean isMR() {
+        // request is from a fork
+        if (sourceNamespace() != targetNamespace()) {
+            return true
+        }
+
+        // request is from different local branch
+        if (sourceBranch() != targetBranch()) {
+            return true
+        }
+
+        // request is not a MR
+        return false
+    }
+
+    Boolean isPR() {
+        isMR()
+    }
+
+    String sourceRepoUrl() {
+        envVars['gitlabSourceRepoHttpUrl']
+    }
 }
