@@ -1,6 +1,8 @@
 package org.centos.contra.pipeline
 
-
+/**
+ * A class to parse GitLab environment variables
+ */
 class GitLab implements Serializable {
     Map envVars
 
