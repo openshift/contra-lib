@@ -7,7 +7,7 @@ import org.kohsuke.github.GHPullRequest
 import org.kohsuke.github.GHRelease
 
 
-class GitHubRepo implements Serializable {
+class GitHubAPI implements Serializable {
 
     String username
     String password
@@ -25,8 +25,17 @@ class GitHubRepo implements Serializable {
     }
 
     def mergePRByNumber(def prNumber, String mergeMsg) {
-        GHPullRequest ghPullRequest = gitRepo().getPullRequest(prNumber)
+        GHPullRequest ghPullRequest = getRepo().getPullRequest(prNumber)
         ghPullRequest.merge(mergeMsg)
+
+        return ghPullRequest
+    }
+
+    def rebasePRByNumber(def prNumber) {
+        GHPullRequest ghPullRequest = getRepo().getPullRequest(prNumber)
+        ghPullRequest.merge(null, null, GHPullRequest.MergeMethod.REBASE)
+
+        return ghPullRequest
     }
 
     def rebasePR(GHPullRequest ghPullRequest) {
