@@ -31,7 +31,7 @@ class GitHubAPI implements Serializable {
         int finish = 10
         int start = 0
         while(start <= finish) {
-            print "waiting for merge"
+            println "waiting for merge"
 
             if (ghPullRequest.isMerged()) {
                 return 10
@@ -44,7 +44,7 @@ class GitHubAPI implements Serializable {
 
         }
 
-        return null
+        return 1
     }
 
     def rebasePRByNumber(def prNumber) {
