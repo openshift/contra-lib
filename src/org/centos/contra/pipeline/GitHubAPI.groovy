@@ -33,6 +33,7 @@ class GitHubAPI implements Serializable {
         while(start <= finish) {
             println "waiting for merge"
 
+            return 5
             if (ghPullRequest.isMerged()) {
                 return 10
                 //return ghPullRequest.getMergeCommitSha()
