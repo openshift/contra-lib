@@ -36,7 +36,7 @@ class GitHubAPI implements Serializable {
                 return ghPullRequest.getMergeCommitSha()
             }
 
-            sleep 10
+            Thread.sleep(1000)
 
             start = start + 1
 
