@@ -31,13 +31,14 @@ class GitHubAPI implements Serializable {
         int finish = 5
         int start = 0
         while(start <= finish) {
+            print "waiting for merge"
 
             if (ghPullRequest.isMerged()) {
                 return ghPullRequest.getMergeCommitSha()
             }
 
             sleep(1000)
-            
+
             start = start + 1
 
         }
