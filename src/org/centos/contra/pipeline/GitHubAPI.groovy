@@ -42,7 +42,7 @@ class GitHubAPI implements Serializable {
 
         }
 
-        return 1
+        return null
     }
 
     def rebasePRByNumber(def prNumber) {
