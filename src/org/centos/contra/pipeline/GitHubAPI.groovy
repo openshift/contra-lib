@@ -28,13 +28,14 @@ class GitHubAPI implements Serializable {
         GHPullRequest ghPullRequest = getRepo().getPullRequest(prNumber)
         ghPullRequest.merge(mergeMsg)
 
-        int finish = 5
+        int finish = 10
         int start = 0
         while(start <= finish) {
             print "waiting for merge"
 
             if (ghPullRequest.isMerged()) {
-                return ghPullRequest.getMergeCommitSha()
+                return 10
+                //return ghPullRequest.getMergeCommitSha()
             }
 
             sleep(1000)
