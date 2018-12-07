@@ -28,18 +28,20 @@ class GitHubAPI implements Serializable {
         GHPullRequest ghPullRequest = getRepo().getPullRequest(prNumber)
         ghPullRequest.merge(mergeMsg)
 
-        return ghPullRequest
+        return ghPullRequest.getMergeCommitSha()
     }
 
     def rebasePRByNumber(def prNumber) {
         GHPullRequest ghPullRequest = getRepo().getPullRequest(prNumber)
         ghPullRequest.merge(null, null, GHPullRequest.MergeMethod.REBASE)
 
-        return ghPullRequest
+        return ghPullRequest.getMergeCommitSha()
     }
 
     def rebasePR(GHPullRequest ghPullRequest) {
         ghPullRequest.merge(null, null, GHPullRequest.MergeMethod.REBASE)
+
+        return ghPullRequest.getMergeCommitSha()
     }
 
     def getRepo() {
