@@ -1,0 +1,51 @@
+{
+  "type":
+    {
+      "value": null,
+      "type": "java.lang.String",
+      "description": "Artifact type",
+      "required": true
+    },
+  "component":
+    {
+      "value": null,
+      "type": "java.lang.String",
+      "description": "Name of the component tested",
+      "required": true
+    },
+  "issuer":
+    {
+      "value": null,
+      "type": "java.lang.String",
+      "description": "Build issuer of the artifact",
+      "required": true
+    },
+  "scratch":
+    {
+      "value": true,
+      "type": "java.lang.Boolean",
+      "description": "Indication if the build is a scratch build",
+      "required": true
+    },
+  "topic":
+    {
+      "value": null,
+      "type": "java.lang.String",
+      "description": "The topic name sent on",
+      "required": true
+    },
+  "id":
+    {
+      "value": null,
+      "type": "java.lang.String",
+      "description": "Task ID of the brew/koji build",
+      "required": true
+    },
+  "nvr":
+    {
+      "value": null,
+      "type": "java.lang.String",
+      "description": "Name-version-release of the artifact",
+      "required": true
+    }
+}

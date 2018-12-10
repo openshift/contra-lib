@@ -1,0 +1,74 @@
+{
+  "generated_at": {
+    "value": null,
+    "type": "java.lang.String",
+    "description": "Timestamp of message creation (ISO-8601)",
+    "required": true
+  },
+  "type": {
+    "value": null,
+    "type": "java.lang.String",
+    "description": "A string identifying the tests being run in this execution. Examples: tier1, tier2, pipeline",
+    "required": true
+  },
+  "category": {
+    "value": null,
+    "type": "java.lang.String",
+    "description": "Values: static-analysis, functional, integration, validation",
+    "required": true
+  },
+  "label": {
+    "value": null,
+    "type": "java.lang.String",
+    "description": "Additional test label",
+    "required": false
+  },
+  "thread_id": {
+    "value": null,
+    "type": "java.lang.String",
+    "description": "Unique identification string",
+    "required": false
+  },
+  "note": {
+    "value": null,
+    "type": "java.lang.String",
+    "description": "Arbitrary note",
+    "required": false
+  },
+  "namespace": {
+    "value": null,
+    "type": "java.lang.String",
+    "description": "A namespace used to prefix the ResultsDB testcase name. This is usually something identifying your team",
+    "required": true
+  },
+  "version": {
+    "value": '"0.1.0"',
+    "type": "java.lang.String",
+    "description": "Version of the specification",
+    "required": true
+  },
+  "lifetime": {
+    "value": 0,
+    "type": "java.math.BigInteger",
+    "description": "Number of minutes the test is expected to run",
+    "required": false
+  },
+  "ci": {
+    "value": {},
+    "type": "groovy.lang.Closure",
+    "description": "The ci content Map",
+    "required": true
+  },
+  "run": {
+    "value": {},
+    "type": "groovy.lang.Closure",
+    "description": "The run content Map",
+    "required": true
+  },
+  "artifact": {
+    "value": {},
+    "type": "groovy.lang.Closure",
+    "description": "The artifact content Map",
+    "required": true
+  }
+}

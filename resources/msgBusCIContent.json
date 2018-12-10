@@ -1,0 +1,37 @@
+{
+  "name":
+    {
+      "value": null,
+      "type": "java.lang.String",
+      "description": "Name of pipeline or effort",
+      "required": true
+    },
+  "team":
+    {
+      "value": null,
+      "type": "java.lang.String",
+      "description": "Name of team running this test/pipeline",
+      "required": true
+    },
+  "url":
+    {
+      "value": null,
+      "type": "java.lang.String",
+      "description": "URL link to the CI system",
+      "required": true
+    },
+  "irc":
+    {
+      "value": null,
+      "type": "java.lang.String",
+      "description": "IRC contact for help (prefix with # for channel)",
+      "required": false
+    },
+  "email":
+    {
+      "value": null,
+      "type": "java.lang.String",
+      "description": "Contact email",
+      "required": true
+    }
+}

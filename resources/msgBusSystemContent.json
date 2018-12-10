@@ -1,0 +1,37 @@
+{
+  "label":
+    {
+      "value": null,
+      "type": "java.lang.String",
+      "description": "Label of the system",
+      "required": false
+    },
+  "os":
+    {
+      "value": null,
+      "type": "java.lang.String",
+      "description": "Identificator of the system, depending on the provider (often image name).",
+      "required": true
+    },
+  "provider":
+    {
+      "value": null,
+      "type": "java.lang.String",
+      "description": "One of [openstack, beaker, openshift, rhev, ANY_OTHER_PROVIDER]", 
+      "required": true
+    },
+  "architecture":
+    {
+      "value": "x86_64",
+      "type": "java.lang.String",
+      "description": "Architecture of the system/distro used for testing. Examples include x86_64, ppc64le, s390x, aarch64.",
+      "required": true
+    },
+  "variant":
+    {
+      "value": null,
+      "type": "java.lang.String",
+      "description": "The compose or image variant, if application. Examples include Server and Workstation",
+      "required": false
+    }
+}

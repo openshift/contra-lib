@@ -1,0 +1,14 @@
+{
+  "name": {
+    "value": null,
+    "type": "java.lang.String",
+    "description": "The name of the pipeline stage this message pertains to",
+    "required": true
+  },
+  "status": {
+    "value": "complete",
+    "type": "java.lang.String",
+    "description": "Values: running, complete",
+    "required": true
+  }
+}

@@ -260,3 +260,164 @@ def getCredentialsById(String credsId, String credsType = 'any') {
             jenkins.model.Jenkins.instance
     ).findAll { cred -> cred.id == credsId }[0]
 }
+
+/**
+ *
+ * @param a list of Maps to merge
+ * @return
+ */
+def mapMerge(def sources) {
+    if (sources.size() == 0) return [:]
+    if (sources.size() == 1) return sources[0]
+
+    sources.inject([:]) { result, source ->
+        source.each { k, v ->
+            result[k] = result[k] instanceof Map ? merge(result[k], v) : v
+        }
+        result
+    }
+}
+
+/**
+ *
+ * @param a list of Maps to merge
+ * @return
+ */
+def mapMergeQuotes(def sources) {
+    if (sources.size() == 0) return [:]
+    if (sources.size() == 1) return sources[0]
+
+    sources.inject([:]) { result, source ->
+        source.each { k, v ->
+            if (v instanceof String && !(v[0] in ["\"", "{"])) {
+                v2 = "\"" + v + "\""
+            } else {
+                v2 = v
+            }
+            result[k] = result[k] instanceof Map ? merge(result[k], v2) : v2
+        }
+        result
+    }
+}
+
+/**
+ * Merge two messages. Used to merge the default message with a user supplied message.
+ * @param content
+ * @param defaults
+ * @return
+ */
+def mergeBusMessage(Map content, Map defaults) {
+
+    def mergedContent = [:]
+
+    // merge in defaults value only
+    defaults.each { k, v ->
+        if (v['required']) {
+            mergedContent[k] = v['value']
+        }
+    }
+    // merge in user supplied content
+    mergedContent << content
+
+     // Now check if merged content contains required values and types
+    mergedContent.each { k, v ->
+        if (!validateBusKeyValue(k, v, defaults)) {
+            throw new GroovyRuntimeException()
+        }
+    }
+
+    return mergedContent
+}
+
+/**
+ * Return a string of k:v pairs for a Map
+ * @param Map myMap
+ * @return String
+ */
+def getMapStringColon(Map myMap) {
+   myString = "{"
+   myMap.each { k, v ->
+       myString = myString + "\"" + k + "\":" + v + ","
+   }
+   return myString.substring(0, myString.length() - 1) + "}"
+}
+
+/**
+ * Return a string of k=v pairs for a Map
+ * @param Map myMap
+ * @return String
+ */
+def getMapString(Map myMap) {
+   myString = ""
+   myMap.each { k, v ->
+       myString = myString + k + "=" + v + "\n"
+   }
+   return myString
+}
+
+/**
+ * Compare a message key with the Message Bus Spec.
+ * @param key
+ * @param value
+ * @param defaults
+ * @return
+ */
+def validateBusKeyValue(def key, def value, Map defaults) {
+
+    def isValid = false
+
+    if (!defaults.containsKey(key)) {
+        print "Invalid key for ${key}, ${value}"
+    } else if ((value == null) && (defaults[key]['required'])) {
+        print "Required value missing for ${key}, ${value}"
+    // if value's type != expected type from defaults
+    } else if (!jenkinsIsAssignableFrom(value.getClass(), Class.forName(defaults[key]['type']))) {
+        print "Invalid type used for ${key}, ${value}"
+    } else {
+        isValid = true
+    }
+
+    return isValid
+}
+
+/**
+ * Find out if Class A is a subclass of B
+ * This duplicates Class.isAssignableFrom, but
+ * works on the classes provided by plugins that
+ * groovy doesn't know about
+ * @param A - Class
+ * @param B - Class
+ * @return bool
+ */
+def jenkinsIsAssignableFrom(Class A, Class B) {
+    if (A.isAssignableFrom(B)) {
+        return true
+    } else if (A.getSuperclass() != null) {
+        return jenkinsIsAssignableFrom(A.getSuperclass(), B)
+    } else {
+        return false
+    }
+    
+}
+
+/**
+ * ResultsDB and Jenkins use different terminology for
+ * results, so get the ResultsDB one from the Jenkins one
+ * @return
+ */
+def getBuildStatus() {
+   myResult = null
+   switch (currentBuild.currentResult) {
+       case 'SUCCESS':
+           myResult = 'PASSED'
+           break
+       case 'UNSTABLE':
+           myResult = 'NEEDS_INSPECTION'
+           break
+       case 'FAILURE':
+           myResult = 'FAILED'
+           break
+   }
+   return myResult
+}
+
