@@ -1,0 +1,30 @@
+{
+  "name":
+    {
+      "value": null,
+      "type": "java.lang.String",
+      "description": "<pipeline_name> value",
+      "required": true
+    },
+  "id":
+    {
+      "value": null,
+      "type": "java.lang.String",
+      "description": "UUID for this pipeline run",
+      "required": true
+    },
+  "status":
+    {
+      "value": null,
+      "type": "java.lang.String",
+      "description": "Status of the pipeline (overall) values: running, complete, error, aborted, unstable",
+      "required": true
+    },
+  "build":
+    {
+      "value": null,
+      "type": "java.lang.String",
+      "description": "Build number for this given pipeline run",
+      "required": false
+    }
+}

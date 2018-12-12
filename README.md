@@ -21,8 +21,8 @@ the pipeline.
 Parameters:
 - buildPrefix: A prefix to set that describes the build. This is mainly used for metrics.
 - package_name: If building a package like an RPM set this to its name. e.g. 'vim'
-- errorMsg: A fedMsgError to send on pipeline failure.
-- completeMsg: A fedMsgComplete to send on pipeline completion.
+- errorMsg: A msgBusTestError to send on pipeline failure.
+- completeMsg: A msgBusTestComplete to send on pipeline completion.
 - decorateBuild: A Closure that decorates the build such as the function decoratePRBuild()
 - preBuild: A closure that contains pre build steps.
 - postBuild: A Closure that contains any post build steps. e.g. ArtifactArchiver step.
@@ -71,9 +71,9 @@ After the pipeline finishes, the ciPipeline library will send all collected metr
 #### Example Usage:
 ```
 package_name = env.CI_MESSAGE['name']
-msgHeader = fedMsgHeader(branch: 'fed_repo', topic: '/fedMsgTopic', username: 'currentUser')
-msgComplete = fedMsgComplete(header: header)
-msgError = fedMsgError(header: header)
+msgHeader = msgBusHeader(type: 'koji-build', component: package_name, issuer: 'currentUser', scratch: false, topic: '/fedMsgTopic', id: '000000', nvr: 'foo-1.0-fc27')
+msgComplete = msgBusTestComplete(header: header)
+msgError = msgBusTestError(header: header)
 
 // containers to be deployed
 containers = ['rpmbuild', 'singlehost-test']

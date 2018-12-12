@@ -1,0 +1,30 @@
+{
+  "url":
+    {
+      "value": null,
+      "type": "java.lang.String",
+      "description": "Specific build URL",
+      "required": true
+    },
+  "log":
+    {
+      "value": null,
+      "type": "java.lang.String",
+      "description": "URL link to build log",
+      "required": true
+    },
+  "debug":
+    {
+      "value": null,
+      "type": "java.lang.String",
+      "description": "URL of debug log",
+      "required": false
+    },
+  "rebuild":
+    {
+      "value": null,
+      "type": "java.lang.String",
+      "description": "URL link to rebuild the run",
+      "required": false
+    }
+}
