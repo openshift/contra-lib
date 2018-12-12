@@ -22,7 +22,7 @@ def call(Map parameters = [:]) {
         executeInContainer(containerName: buildContainer, containerScript: cmd, stageVars: [], credentials: credentials)
     }
 
-    stage('prepare-build') {
+    stage("prepare-build-${image_name}") {
         handlePipelineStep {
             deleteDir()
 
@@ -33,7 +33,7 @@ def call(Map parameters = [:]) {
     }
 
     dir(build_root) {
-        stage('Build-Container-Image') {
+        stage("Build-Container-Image-${image_name}") {
             def cmd = """
         set -x
         make ${build_cmd}
@@ -50,7 +50,7 @@ def call(Map parameters = [:]) {
         }
 
         versions.each { VERSION ->
-            stage("Tag-Push-Image-${VERSION}") {
+            stage("Tag-Push-Image-${image_name}-${VERSION}") {
                 def cmd = """
             set -x
             make push VERSION=${VERSION} USERNAME=\${CONTAINER_USERNAME} PASSWORD=\${CONTAINER_PASSWORD}
