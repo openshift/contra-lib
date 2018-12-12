@@ -49,24 +49,13 @@ def call(Map parameters = [:]) {
             containerWrapper(cmd)
         }
 
-        if (versions) {
-            stage('Tag-Push-image') {
-                def cmd = 'set -x'<<'\n'
-                versions.each { version ->
-                    cmd << "buildah tag ${image_name} ${image_name}:${version}"
-                    cmd << "\n"
-
-                    if (credentials) {
-                        cmd << "buildah push --creds \${CONTAINER_USERNAME}:\${CONTAINER_PASSWORD} localhost/${image_name}:${version} ${container_registry}/${container_namespace}/${image_name}:${version}"
-                        cmd << "\n"
-                    } else {
-                        cmd << "buildah push localhost/${image_name}:${version} ${container_registry}/${container_namespace}/${image_name}:${version}"
-                        cmd << "\n"
-                    }
-
-                }
-
-                containerWrapper(cmd.toString())
+        versions.each { VERSION ->
+            stage("Tag-Push-Image-${VERSION}") {
+                def cmd = """
+            set -x
+            make push VERSION=${VERSION} USERNAME=\${CONTAINER_USERNAME} PASSWORD=\${CONTAINER_PASSWORD}
+            """
+                containerWrapper(cmd)
             }
         }
     }
