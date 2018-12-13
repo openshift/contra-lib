@@ -10,7 +10,7 @@
     {
       "value": 0,
       "type": "java.math.BigInteger",
-      "description": "Task ID of the brew/koji build",
+      "description": "Task ID of the brew/koji build or pull request ID",
       "required": true
     },
   "component":
@@ -60,6 +60,34 @@
       "value": {},
       "type": "java.util.AbstractMap",
       "description": "A list of NVR's of additional dependencies that were needed to install the brew/koji rpm build artifact.",
+      "required": false
+    },
+  "comment_id":
+    {
+      "value": 0,
+      "type": "java.math.BigInteger",
+      "description": "Number of comment in pull request",
+      "required": false
+    },
+  "commit_hash":
+    {
+      "value": null,
+      "type": "java.lang.String",
+      "description": "Hash of newest commit",
+      "required": false
+    },
+  "repository":
+    {
+      "value": null,
+      "type": "java.lang.String",
+      "description": "Path to dist git repository in form namespace/reponame (e.g. rpms/bash)",
+      "required": false
+    },
+  "uid":
+    {
+      "value": null,
+      "type": "java.lang.String",
+      "description": "ID of pull request unique across pagure",
       "required": false
     }
 }
