@@ -289,7 +289,7 @@ def mapMergeQuotes(def sources) {
 
     sources.inject([:]) { result, source ->
         source.each { k, v ->
-            if (v instanceof String && !(v[0] in ["\"", "{"])) {
+            if (v instanceof String && (v == "" || !(v[0] in ["\"", "{"]))) {
                 v2 = "\"" + v + "\""
             } else {
                 v2 = v
