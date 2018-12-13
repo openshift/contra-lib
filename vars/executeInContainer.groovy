@@ -16,6 +16,7 @@ def call(Map parameters) {
     def stageName = parameters.get('stageName', env.STAGE_NAME)
     def loadProps = parameters.get('loadProps', [])
     def credentials = parameters.get('credentials', [])
+    def returnStdout = parameters.get('returnStdout', false)
 
     handlePipelineStep {
         withCredentials(credentials) {
@@ -35,7 +36,7 @@ def call(Map parameters) {
             try {
                 withEnv(containerEnv) {
                     container(containerName) {
-                        sh containerScript
+                        sh script: containerScript, returnStdout: returnStdout
                     }
                 }
 
