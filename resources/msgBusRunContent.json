@@ -26,5 +26,12 @@
       "type": "java.lang.String",
       "description": "URL link to rebuild the run",
       "required": false
+    },
+  "result_files":
+    {
+      "value": {},
+      "type": "java.util.AbstractMap",
+      "description": "Relative path from the run URL to the result files (wildcards allowed). Only to be used when the pipeline ends. If not provided, all files will be pulled.",
+      "required": false
     }
 }
