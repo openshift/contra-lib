@@ -10,5 +10,12 @@
     "type": "java.lang.String",
     "description": "Values: running, complete",
     "required": true
-  }
+  },
+  "runtime":
+    {
+      "value": 0.0,
+      "type": "java.math.BigDecimal",
+      "description": "The runtime in seconds of the stage",
+      "required": false
+    }
 }

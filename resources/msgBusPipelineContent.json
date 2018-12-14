@@ -26,5 +26,12 @@
       "type": "java.lang.String",
       "description": "Build number for this given pipeline run",
       "required": false
+    },
+  "runtime":
+    {
+      "value": 0.0,
+      "type": "java.math.BigDecimal",
+      "description": "The runtime in seconds of the pipeline",
+      "required": false
     }
 }
