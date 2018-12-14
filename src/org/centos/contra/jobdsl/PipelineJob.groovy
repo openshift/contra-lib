@@ -120,7 +120,7 @@ class PipelineJob {
     void addGit(Map parameters = [:]) {
         String repo_url = parameters.repo_url
         String repo_branch = parameters.repo_branch ?: 'master'
-        String lightweight_co = parameters.lightweight_co ?: false
+        boolean lightweight_co = parameters.lightweight_co ?: false
         String compare_remote = parameters.compare_remote ?: 'origin'
         String compare_target = parameters.compare_target ?: 'master'
 
