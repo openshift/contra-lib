@@ -15,8 +15,8 @@ def call(Map parameters = [:]) {
     return { Map runtimeArgs = [:] ->
         // Set defaults that can't go in json file
         parameters['name'] = parameters['name'] ?: env.JOB_NAME
-        parameters['status'] = parameters['status'] ?: (currentBuild.result ?: "running")
         parameters['build'] = parameters['build'] ?: env.BUILD_NUMBER
+        parameters['stage'] = parameters['stage'] ?: msgBusStageContent()()
 
         parameters = utils.mapMergeQuotes([parameters, runtimeArgs])
         mergedMessage = utils.mergeBusMessage(parameters, defaults)
