@@ -10,7 +10,7 @@
  *
  * Example Usage:
  *
- *  setMsgEnvVars(stageName: 'run-stage') {
+ *  setEnvVars(stageName: 'run-stage') {
  *      runCode()
  *  }
  *

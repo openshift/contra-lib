@@ -262,6 +262,71 @@ def getCredentialsById(String credsId, String credsType = 'any') {
 }
 
 /**
+ * Library to send message
+ * @param msgProps - The message properties in key=value form, one key/value per line ending in '\n'
+ * @param msgContent - Message content.
+ * @param provider - Provider to send message on. If not passed, will default to env.MSG_PROVIDER
+ * @return
+ */
+def sendMessage(String msgTopic, String msgProps, String msgContent, def provider=null) {
+
+    msg_provider = provider ?: env.MSG_PROVIDER
+
+    retry(10) {
+        try {
+            // 1 minute should be more than enough time to send the topic msg
+            timeout(1) {
+                try {
+                    // Send message and return SendResult
+                    sendResult = sendCIMessage messageContent: msgContent,
+                            messageProperties: msgProps,
+                            messageType: 'Custom',
+                            overrides: [topic: msgTopic],
+                            failOnError: true,
+                            providerName: msg_provider
+                    return sendResult
+                } catch(e) {
+                    throw e
+                }
+            }
+        } catch(e) {
+            echo "FAIL: Could not send message to ${msg_provider}"
+            echo e.getMessage()
+            sleep 30
+            error e.getMessage()
+        }
+    }
+}
+
+/**
+ * Check data grepper for presence of a message
+ * @param messageID message ID to track.
+ * @param retryCount number of times to keep trying.
+ * @param dataGrepperWebAddr - The url to the datagrepper instance. If not passed, it will default to env.dataGrepperUrl
+ * @return
+ */
+def trackMessage(String messageID, int retryCount, def dataGrepperWebAddr=null) {
+    dGWebAddress = dataGrepperWebAddr ?: env.dataGrepperUrl
+
+    retry(retryCount) {
+        echo "Checking datagrapper for presence of message..."
+        def STATUSCODE = sh (returnStdout: true, script: """
+            curl --insecure --silent --output /dev/null --write-out "%{http_code}" \'${dGWebAddress}/id?id=${messageID}&chrome=false&is_raw=false\'
+        """).trim()
+        // We only want to wait if there are 404 errors
+        echo "${STATUSCODE}"
+        if (STATUSCODE.equals("404")) {
+            error("message not found on datagrepper...")
+        }
+        if (STATUSCODE.startsWith("5")) {
+            echo("WARNING: internal datagrepper server error...")
+        } else {
+            echo "found!"
+        }
+    }
+}
+
+/**
  *
  * @param a list of Maps to merge
  * @return
