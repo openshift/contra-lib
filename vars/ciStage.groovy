@@ -20,10 +20,10 @@
  */
 
 def call(String stageName, Closure body) {
-    // Make sure required env variables are set
-    if (!env.topicPrefix || !env.effortName || !env.teamName || !env.teamEmail || !env.pipelineId) {
-        println("Missing required variables to use ciStage")
-        sh "exit 1"
+    // Make sure required env variables are set. The ones used in the
+    // message bodies are enforced by the json closures.
+    if (!env.topicPrefix) {
+        error("Missing required variables to use ciStage")
     }
     def runningTopic = env.topicPrefix + ".pipeline.stage.running"
     def completeTopic = env.topicPrefix + ".pipeline.stage.complete"
@@ -36,9 +36,7 @@ def call(String stageName, Closure body) {
     // Create stage running message
     runningMsg = msgBusStageMsg(ci: myCIArray(), pipeline: myPipelineArray())
     // send running message
-    //sendMessageWithAudit(msgTopic: runningTopic, msgContent: runningMsg())
-    println("topic is " + runningTopic)
-    println("running message is " + runningMsg())
+    sendMessageWithAudit(msgTopic: runningTopic, msgContent: runningMsg())
 
     // Get current time
     long startTimeMillis = System.currentTimeMillis()
@@ -58,6 +56,5 @@ def call(String stageName, Closure body) {
     // Create stage complete message
     completeMsg = msgBusStageMsg(ci: myCIArray(), pipeline: myPipelineArray())
     // Send complete message
-    //sendMessageWithAudit(msgTopic: completeTopic, msgContent: completeMsg())
-    println("complete message is " + completeMsg())
+    sendMessageWithAudit(msgTopic: completeTopic, msgContent: completeMsg())
 }
