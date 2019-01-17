@@ -31,6 +31,35 @@ Parameters:
 ```groovy
 ciPipeline(buildPrefix: 'myrpmbuilder', decorateBuild: {currentBuild.displayName: 'env.BUILD_ID'})
 ```
+#### ciStage
+This function wraps a stage to run the steps preceded by sending
+a conforming message on the pipeline.stage.running topic and
+followed by a message on the pipeline.stage.complete topic.<br>
+The one argument it takes is the stage name (string).<br>
+This function only works if the required environment variables
+to populate the two messages are defined. These variables are:
+- env.topicPrefix: The prefix of the message topic. Choices include org.fedoraproject.prod.ci and VirtualTopic.eng.ci
+- env.effortName: Name of the effort or pipeline
+- env.teamName: Name of the team responsible for the pipeline
+- env.teamEmail: Mailing list for the team responsible for the pipeline
+- env.pipelineId: UUID for this pipeline run
+- env.MSG_PROVIDER: This is actually required by the sendMessage function that ciStage uses. It is the provider configured in Jenkins on which to send messages.
+- env.dataGrepperUrl: This is required by the sendMessageWithAudit function that ciStage uses. It tells the function where to look to confirm the message was sent as expected.
+
+The following variables are optional:
+- env.teamIRC: IRC channel for team responsible for this pipeline. Can be left out
+- env.pipelineName: For use if there is a desire for a name for the pipeline differing from the name of the effort. Defaults to env.effortName
+
+Example usage (setEnvVars need only be done once per Jenkinsfile):
+```groovy
+setEnvVars(topicPrefix: 'org.fedoraproject.prod.ci', effortName: 'someEffort', teamName: 'ateam', teamEmail: 'team@org.com', pipelineId: 'teamPipeline', teamIRC: '#team', pipelineName: 'my-pipeline', MSG_PROVIDER: 'fedmsg', dataGrepperUrl: 'https://apps.fedoraproject.org/datagrepper')
+ciStage('my-stage') {
+    println('I am running in a stage')
+}
+ciStage('my-other-stage') {
+    println('I am running in another stage')
+}
+```
 #### executeInContainer
 This function executes a script in a container. It's wrapped by handlePipelineStep.
 Parameters:
