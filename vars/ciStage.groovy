@@ -8,6 +8,9 @@
  * optional:
  * env.teamIRC: team's irc channel
  * env.pipelineName: For use if the pipeline name differs from the effort name
+ * env.MSG_PROVIDER: This is actually required by the sendMessage function that ciStage uses. It is the provider configured in Jenkins on which to send messages
+ * env.dataGrepperUrl: This is required by the sendMessageWithAudit function that ciStage uses. It tells the function where to look to confirm the message was sent as expected
+ *
  * Example Usage:
  *
  *  ciStage('run-stage') {
@@ -22,8 +25,9 @@
 def call(String stageName, Closure body) {
     // Make sure required env variables are set. The ones used in the
     // message bodies are enforced by the json closures.
+    // Note: Error message should be changed if variables are added here
     if (!env.topicPrefix) {
-        error("Missing required variables to use ciStage")
+        error("Missing topicPrefix required variable to use ciStage")
     }
     def runningTopic = env.topicPrefix + ".pipeline.stage.running"
     def completeTopic = env.topicPrefix + ".pipeline.stage.complete"
@@ -31,7 +35,7 @@ def call(String stageName, Closure body) {
     // Create ci and pipeline arrays to place in messages
     myCIArray = env.teamIRC ? msgBusCIContent(name: env.effortName, team: env.teamName, irc: env.teamIRC, email: env.teamEmail) : msgBusCIContent(name: env.effortName, team: env.teamName, email: env.teamEmail)
     myStageArray = msgBusStageContent(name: stageName)
-    myPipelineArray = env.pipelineName ? msgBusPipelineContent(name: env.pipelineName, id: env.pipelineId, stage: myStageArray()) : msgBusPipelineContent(name: env.teamName, id: env.pipelineId, stage: myStageArray())
+    myPipelineArray = env.pipelineName ? msgBusPipelineContent(name: env.pipelineName, id: env.pipelineId, stage: myStageArray()) : msgBusPipelineContent(name: env.effortName, id: env.pipelineId, stage: myStageArray())
 
     // Create stage running message
     runningMsg = msgBusStageMsg(ci: myCIArray(), pipeline: myPipelineArray())

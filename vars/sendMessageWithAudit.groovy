@@ -11,8 +11,8 @@ import org.centos.contra.pipeline.Utils
 
 def call(Map parameters = [:]) {
     def msgTopic = parameters.get('msgTopic')
-    def msgProps = parameters.get('msgProps') ?: ""
-    def msgContent = parameters.get('msgContent') ?: ""
+    def msgProps = parameters.get('msgProps', '')
+    def msgContent = parameters.get('msgContent', '')
     def msgAuditFile = parameters.get('msgAuditFile', 'auditfile.json')
     def msgRetryCount = parameters.get('msgRetryCount', 3)
 

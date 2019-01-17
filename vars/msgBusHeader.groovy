@@ -17,7 +17,11 @@ def call(Map parameters = [:]) {
         parameters['topic'] = parameters['topic'] ?: "org.fedoraproject.prod.ci.koji-build.test.complete"
 
         parameters = utils.mapMerge([parameters, runtimeArgs])
-        mergedMessage = utils.mergeBusMessage(parameters, defaults)
+        try {
+            mergedMessage = utils.mergeBusMessage(parameters, defaults)
+        } catch(e) {
+            throw new Exception("Creating the message header failed!")
+        }
 
         // sendCIMessage expects String arguments
         return utils.getMapString(mergedMessage)

@@ -19,7 +19,11 @@ def call(Map parameters = [:]) {
         parameters['stage'] = parameters['stage'] ?: msgBusStageContent()()
 
         parameters = utils.mapMergeQuotes([parameters, runtimeArgs])
-        mergedMessage = utils.mergeBusMessage(parameters, defaults)
+        try {
+            mergedMessage = utils.mergeBusMessage(parameters, defaults)
+        } catch(e) {
+            throw new Exception("Creating message for pipeline array failed!")
+        }
 
         // sendCIMessage expects String arguments
         return utils.getMapStringColon(mergedMessage)
