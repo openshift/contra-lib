@@ -16,13 +16,15 @@ def call(Map parameters = [:]) {
         // Set defaults that can't go in json file
         parameters['ci'] = parameters['ci'] ?: msgBusCIContent()()
         parameters['run'] = parameters['run'] ?: msgBusRunContent()()
-        parameters['artifact'] = parameters['artifact'] ?: msgBusArtifactContent()()
         parameters['pipeline'] = parameters['pipeline'] ?: msgBusPipelineContent()()
-        parameters['stage'] = parameters['stage'] ?: msgBusStageContent()()
         parameters['generated_at'] = parameters['generated_at'] ?: java.time.Instant.now().toString()
 
         parameters = utils.mapMergeQuotes([parameters, runtimeArgs])
-        mergedMessage = utils.mergeBusMessage(parameters, defaults)
+        try {
+            mergedMessage = utils.mergeBusMessage(parameters, defaults)
+        } catch(e) {
+            throw new Exception("Creating the stage message failed!")
+        }
 
         // sendCIMessage expects String arguments
         return utils.getMapStringColon(mergedMessage)

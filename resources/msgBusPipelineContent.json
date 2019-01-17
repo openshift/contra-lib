@@ -13,13 +13,6 @@
       "description": "UUID for this pipeline run",
       "required": true
     },
-  "status":
-    {
-      "value": null,
-      "type": "java.lang.String",
-      "description": "Status of the pipeline (overall) values: running, complete, error, aborted, unstable",
-      "required": true
-    },
   "build":
     {
       "value": null,
@@ -33,5 +26,11 @@
       "type": "java.math.BigDecimal",
       "description": "The runtime in seconds of the pipeline",
       "required": false
-    }
+    },
+  "stage": {
+    "value": {},
+    "type": "groovy.lang.Closure",
+    "description": "The stage content Map",
+    "required": true
+  }
 }

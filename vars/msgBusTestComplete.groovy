@@ -23,7 +23,11 @@ def call(Map parameters = [:]) {
         parameters['status'] = parameters['status'] ?: utils.getBuildStatus()
 
         parameters = utils.mapMergeQuotes([parameters, runtimeArgs])
-        mergedMessage = utils.mergeBusMessage(parameters, defaults)
+        try {
+            mergedMessage = utils.mergeBusMessage(parameters, defaults)
+        } catch(e) {
+            throw new Exception("Creating the test complete message failed!")
+        }
 
         // sendCIMessage expects String arguments
         return utils.getMapStringColon(mergedMessage)

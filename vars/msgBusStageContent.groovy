@@ -13,10 +13,12 @@ def call(Map parameters = [:]) {
     def defaults = readJSON text: libraryResource('msgBusStageContent.json')
 
     return { Map runtimeArgs = [:] ->
-        parameters['status'] = parameters['status'] ?: (currentBuild.currentResult == "SUCCESS") ? "complete" : "error"
-
         parameters = utils.mapMergeQuotes([parameters, runtimeArgs])
-        mergedMessage = utils.mergeBusMessage(parameters, defaults)
+        try {
+            mergedMessage = utils.mergeBusMessage(parameters, defaults)
+        } catch(e) {
+            throw new Exception("Creating message for stage array failed!")
+        }
 
         // sendCIMessage expects String arguments
         return utils.getMapStringColon(mergedMessage)

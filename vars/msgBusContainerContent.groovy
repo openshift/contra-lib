@@ -14,7 +14,11 @@ def call(Map parameters = [:]) {
 
     return { Map runtimeArgs = [:] ->
         parameters = utils.mapMergeQuotes([parameters, runtimeArgs])
-        mergedMessage = utils.mergeBusMessage(parameters, defaults)
+        try {
+            mergedMessage = utils.mergeBusMessage(parameters, defaults)
+        } catch(e) {
+            throw new Exception("Creating message for container array failed!")
+        }
 
         // sendCIMessage expects String arguments
         return utils.getMapStringColon(mergedMessage)

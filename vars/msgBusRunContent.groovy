@@ -19,7 +19,11 @@ def call(Map parameters = [:]) {
         parameters['rebuild'] = parameters['rebuild'] ?: env.BUILD_URL + 'rebuild/parameterized'
 
         parameters = utils.mapMergeQuotes([parameters, runtimeArgs])
-        mergedMessage = utils.mergeBusMessage(parameters, defaults)
+        try {
+            mergedMessage = utils.mergeBusMessage(parameters, defaults)
+        } catch(e) {
+            throw new Exception("Creating message for run array failed!")
+        }
 
         // sendCIMessage expects String arguments
         return utils.getMapStringColon(mergedMessage)
