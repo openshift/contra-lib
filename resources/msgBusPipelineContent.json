@@ -31,6 +31,6 @@
     "value": {},
     "type": "groovy.lang.Closure",
     "description": "The stage content Map",
-    "required": true
+    "required": false
   }
 }
