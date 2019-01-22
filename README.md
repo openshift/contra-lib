@@ -17,7 +17,14 @@ deployOpenShiftTemplate(containers: ['rpmbuild-container'], openshift_namespace:
 ```
 #### ciPipeline
 This function wraps the whole pipeline in a try/catch/finally block while accepting parameters to initialize and tear down
-the pipeline.
+the pipeline.<br>
+If env.topicPrefix is defined, the ciPipeline function will attempt
+to send out a message on env.topicPrefix.pipeline.running when it begins
+and one on env.topicPrefix.pipeline.<complete,error> when it finishes,
+based on the return code. The success of sending these messages
+depend on the other environment variables listed in the ciStage section
+being defined. However, no extra parameter need be passed as an argument
+to ciPipeline.<br>
 Parameters:
 - buildPrefix: A prefix to set that describes the build. This is mainly used for metrics.
 - package_name: If building a package like an RPM set this to its name. e.g. 'vim'
