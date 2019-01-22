@@ -45,14 +45,15 @@ def call(Map parameters = [:], Closure body) {
         try {
             def runningTopic = env.topicPrefix + ".pipeline.running"
             // Create ci and pipeline arrays to place in messages
-            def myCIArray = env.teamIRC ? msgBusCIContent(name: env.effortName, team: env.teamName, irc: env.teamIRC, email: env.teamEmail) : msgBusCIContent(name: env.effortName, team: env.teamName, email: env.teamEmail)
+            // no def for myCIArray for scoping reasons
+            myCIArray = env.teamIRC ? msgBusCIContent(name: env.effortName, team: env.teamName, irc: env.teamIRC, email: env.teamEmail) : msgBusCIContent(name: env.effortName, team: env.teamName, email: env.teamEmail)
             def myPipelineArray = env.pipelineName ? msgBusPipelineContent(name: env.pipelineName, id: env.pipelineId) : msgBusPipelineContent(name: env.effortName, id: env.pipelineId)
             // Create message
             runningMsg = msgBusPipelineMsg(ci: myCIArray(), pipeline: myPipelineArray())
             // Send message
             sendMessageWithAudit(msgTopic: runningTopic, msgContent: runningMsg())
             // Get current time to use later for pipeline runtime
-            def long startTimeMillis = System.currentTimeMillis()
+            startTimeMillis = System.currentTimeMillis()
         } catch(e) {
             println("No message was sent out on topic " + env.topicPrefix + ".pipeline.running. The error encountered was: " + e)
         }
@@ -124,9 +125,6 @@ def call(Map parameters = [:], Closure body) {
 
             if (decorateBuild) {
                 decorateBuild()
-            } else {
-                currentBuild.displayName = currentBuild.displayName ?: "Build #${env.BUILD_NUMBER}"
-                currentBuild.description = currentBuild.description ?: currentBuild.result
             }
 
         }
