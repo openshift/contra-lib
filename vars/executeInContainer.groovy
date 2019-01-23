@@ -32,23 +32,17 @@ def call(Map parameters) {
             }
 
             def containerEnv = localVars.collect { key, value -> return key+'='+value }
-            sh "mkdir -p ${stageName}"
+
             try {
-                withEnv(containerEnv) {
-                    container(containerName) {
-                        sh script: containerScript, returnStdout: returnStdout
+                dir(stageName) {
+                    withEnv(containerEnv) {
+                        container(containerName) {
+                            sh script: containerScript, returnStdout: returnStdout
+                        }
                     }
                 }
-
-            } catch (err) {
+            } catch(err) {
                 throw err
-            } finally {
-                if (fileExists("logs/")) {
-                    sh "mv -vf logs ${stageName}/logs || true"
-                }
-                if (fileExists("job.props")) {
-                    sh "mv -vf job.props ${stageName}/job.props || true"
-                }
             }
         }
     }
