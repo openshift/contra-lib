@@ -18,8 +18,11 @@ def call(Map parameters) {
     def credentials = parameters.get('credentials', [])
     def returnStdout = parameters.get('returnStdout', false)
 
+    def stageDir = "${WORKSPACE}/${stageName}"
+
     handlePipelineStep {
         withCredentials(credentials) {
+
             def localVars = [:]
 
             stageVars.each { key, value ->
@@ -27,22 +30,31 @@ def call(Map parameters) {
             }
 
             loadProps.each { stage ->
-                def jobProps = readProperties file: "${stage}/job.props"
+                def jobProps = readProperties file: "${stageDir}/job.props"
                 localVars << jobProps
             }
 
             def containerEnv = localVars.collect { key, value -> return key+'='+value }
 
+            sh "mkdir ${stageDir}"
+
             try {
-                dir(stageName) {
-                    withEnv(containerEnv) {
-                        container(containerName) {
-                            sh script: containerScript, returnStdout: returnStdout
-                        }
+                withEnv(containerEnv) {
+                    container(containerName) {
+                        sh script: containerScript, returnStdout: returnStdout
                     }
                 }
+
             } catch(err) {
-                throw err
+                throw "Error running ${containerScript}: ${err.toString()}"
+            } finally {
+                if (fileExists("logs/")) {
+                    sh "mv logs ${stageDir}/logs"
+                }
+
+                if (fileExists("job.props")) {
+                    sh "mv job.props ${stageDir}/job.props"
+                }
             }
         }
     }
