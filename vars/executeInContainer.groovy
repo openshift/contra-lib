@@ -43,7 +43,7 @@ def call(Map parameters) {
             } catch (err) {
                 throw err
             } finally {
-                if (fileExists("${stageName}/logs/")) {
+                if (fileExists("${stageName}/logs/*")) {
                     sh "mv -vf logs ${stageName}/logs || true"
                 }
                 if (fileExists("${stageName}/job.props")) {
