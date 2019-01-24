@@ -7,7 +7,7 @@ def call(Map parameters = [:]) {
 
     def utils = new Utils()
 
-    def parsedMsg = readJSON text: message.replace("\n", "\\n")
+    def parsedMsg = utils.flattenJSON(message)
 
     parsedMsg['repo'] = utils.repoFromRequest(parsedMsg['request'][0])
     def branch = utils.setBuildBranch(parsedMsg['request'][1])
