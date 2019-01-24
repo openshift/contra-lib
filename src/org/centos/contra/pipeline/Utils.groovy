@@ -44,8 +44,8 @@ def flattenJSON(String message) {
 
 /**
  * Traverse a CI_MESSAGE with nested keys.
- * @param prefix
- * @param message
+ * @param ci_data
+ * @param ciMessage
  * @return env map with all keys at top level
  */
 def injectCIMessage(def ci_data, def ciMessage) {
@@ -65,6 +65,19 @@ def injectCIMessage(def ci_data, def ciMessage) {
     }
 
     return ci_data
+}
+
+/**
+ * Inject array values
+ * @param ci_data
+ * @param message
+ * @return
+ */
+def injectArray(def ci_data, def message) {
+    message.eachWithIndex { value, index ->
+        ci_data[value] =
+            value.toString().split('\n')[0].replaceAll('"', '\'')
+    }
 }
 
 /**
