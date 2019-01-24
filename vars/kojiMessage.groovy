@@ -8,7 +8,7 @@ def call(Map parameters = [:]) {
 
     def utils = new Utils()
 
-    def parsedMsg = utils.flattenJSON(message)
+    def parsedMsg = readJSON text: message.replace("\n", "\\n")
 
     try {
         parsedMsg['repo'] = utils.repoFromRequest(parsedMsg['request'][0])
