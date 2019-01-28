@@ -20,9 +20,13 @@ def call(String topicSuffix) {
     try {
         def msgTopic = env.topicPrefix + ".pipeline." + topicSuffix
         def myCIArray = env.teamIRC ? msgBusCIContent(name: env.effortName, team: env.teamName, irc: env.teamIRC, email: env.teamEmail) : msgBusCIContent(name: env.effortName, team: env.teamName, email: env.teamEmail)
-        // Get runtime for pipeline array
-        float runTimeSeconds = (currentBuild.getDuration() / 1000)
-        def myPipelineArray = env.pipelineName ? msgBusPipelineContent(name: env.pipelineName, id: env.pipelineId) : msgBusPipelineContent(name: env.effortName, id: env.pipelineId, runtime: runTimeSeconds)
+        if (topicSuffix in ['complete','error']) {
+            // Get runtime for pipeline array
+            float runTimeSeconds = (currentBuild.getDuration() / 1000)
+            myPipelineArray = env.pipelineName ? msgBusPipelineContent(name: env.pipelineName, id: env.pipelineId, runtime: runTimeSeconds) : msgBusPipelineContent(name: env.effortName, id: env.pipelineId, runtime: runTimeSeconds)
+        } else {
+            myPipelineArray = env.pipelineName ? msgBusPipelineContent(name: env.pipelineName, id: env.pipelineId) : msgBusPipelineContent(name: env.effortName, id: env.pipelineId)
+        }
 
         // Create message
         pipelineMsg = msgBusPipelineMsg(ci: myCIArray(), pipeline: myPipelineArray())
