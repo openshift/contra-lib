@@ -36,7 +36,7 @@ def call(Map parameters) {
 
             def containerEnv = localVars.collect { key, value -> return key+'='+value }
 
-            sh "mkdir ${stageDir}"
+            sh "mkdir -p ${stageDir}"
 
             try {
                 withEnv(containerEnv) {
