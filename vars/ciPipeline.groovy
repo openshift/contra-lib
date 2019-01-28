@@ -42,21 +42,7 @@ def call(Map parameters = [:], Closure body) {
     cimetrics.prefix = buildPrefix
 
     if (env.topicPrefix) {
-        try {
-            def runningTopic = env.topicPrefix + ".pipeline.running"
-            // Create ci and pipeline arrays to place in messages
-            // no def for myCIArray for scoping reasons
-            myCIArray = env.teamIRC ? msgBusCIContent(name: env.effortName, team: env.teamName, irc: env.teamIRC, email: env.teamEmail) : msgBusCIContent(name: env.effortName, team: env.teamName, email: env.teamEmail)
-            def myPipelineArray = env.pipelineName ? msgBusPipelineContent(name: env.pipelineName, id: env.pipelineId) : msgBusPipelineContent(name: env.effortName, id: env.pipelineId)
-            // Create message
-            runningMsg = msgBusPipelineMsg(ci: myCIArray(), pipeline: myPipelineArray())
-            // Send message
-            sendMessageWithAudit(msgTopic: runningTopic, msgContent: runningMsg())
-            // Get current time to use later for pipeline runtime
-            startTimeMillis = System.currentTimeMillis()
-        } catch(e) {
-            println("No message was sent out on topic " + env.topicPrefix + ".pipeline.running. The error encountered was: " + e)
-        }
+        sendPipelineStatusMsg('running')
     }
 
     timeout(time: timeoutValue, unit: 'MINUTES') {
@@ -95,20 +81,7 @@ def call(Map parameters = [:], Closure body) {
             currentBuild.result = currentBuild.result ?: 'SUCCESS'
 
             if (env.topicPrefix) {
-                try {
-                    def endTopic = env.topicPrefix + ".pipeline." + topicSuffix
-                    // Get end time
-                    long endTimeMillis = System.currentTimeMillis()
-                    float runTimeSeconds = ((endTimeMillis - startTimeMillis) / 1000)
-                    // Recreate pipeline array with runtime
-                    myPipelineArray = env.pipelineName ? msgBusPipelineContent(name: env.pipelineName, id: env.pipelineId, runtime: runTimeSeconds) : msgBusPipelineContent(name: env.effortName, id: env.pipelineId, runtime: runTimeSeconds)
-                    // Create message
-                    endMsg = msgBusPipelineMsg(ci: myCIArray(), pipeline: myPipelineArray())
-                    // Send message
-                    sendMessageWithAudit(msgTopic: endTopic, msgContent: endMsg())
-                } catch(e) {
-                    println("No message was sent out on topic " + env.topicPrefix + ".pipeline." + topicSuffix + ". The error encountered was: " + e)
-                }
+                sendPipelineStatusMsg(topicSuffix)
             }
 
             if (sendMetrics) {
