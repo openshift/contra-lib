@@ -67,6 +67,56 @@ ciStage('my-other-stage') {
     println('I am running in another stage')
 }
 ```
+#### sendPipelineStatusMsg
+The intent of this function is to enable the messaging aspects of the
+ciPipeline function for declarative pipelines. Due to syntactical
+limitations in declarative Jenkinsfiles, there is not a clean way to
+utilize ciPipeline. However, sendPipelineStatusMsg can be added to a
+pipeline to easily send out proper messages on the
+pipeline.[running,complete,error] topics. Again, setting the environment
+variables listed in the ciStage section is required.
+
+Declarative pipeline example usage:
+```groovy
+pipeline {
+    agent {
+        label 'master'
+    }
+    stages {
+        stage('Stage 1') {
+            steps {
+                script {
+                    ciStage('Stage 1') {
+                        sendPipelineStatusMsg('running')
+                    }
+                }
+            }
+        }
+    }
+    post {
+        success {
+            sendPipelineStatusMsg('complete')
+        }
+        failure {
+            sendPipelineStatusMsg('error')
+        }
+    }
+}
+```
+Scripted pipeline example (recommended to use ciPipeline function which includes these functions for free instead):
+```groovy
+node('master') {
+    try {
+        sendPipelineStatusMsg('running')
+        ciStage('Stage 1') {
+            ...
+        }
+        ...
+    } catch (e) {
+        sendPipelineStatusMsg('error')
+    }
+}
+```
 #### executeInContainer
 This function executes a script in a container. It's wrapped by handlePipelineStep.
 Parameters:
