@@ -26,7 +26,25 @@
   "category": {
     "value": null,
     "type": "java.lang.String",
-    "description": "N/A",
+    "description": "Values: static-analysis, functional, integration, validation",
+    "required": true
+  },
+  "namespace": {
+    "value": null,
+    "type": "java.lang.String",
+    "description": "A namespace used to prefix the ResultsDB testcase name. This is usually something identifying your team",
+    "required": true
+  },
+  "type": {
+    "value": null,
+    "type": "java.lang.String",
+    "description": "A string identifying the tests being run in this execution. Example: tier1, tier2, pipeline",
+    "required": true
+  },
+  "label": {
+    "value": null,
+    "type": "java.lang.String",
+    "description": "Additional test label",
     "required": false
   },
   "xunit_files": {
@@ -45,6 +63,12 @@
     "value": 0.0,
     "type": "java.math.BigDecimal",
     "description": "The runtime of the test",
+    "required": false
+  },
+  "lifetime": {
+    "value": 0,
+    "type": "java.math.BigInteger",
+    "description": "number of minutes the test is expected to run",
     "required": false
   }
 }

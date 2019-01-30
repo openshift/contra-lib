@@ -41,6 +41,12 @@
     "description": "The artifact content Map",
     "required": true
   },
+  "pipeline": {
+    "value": {},
+    "type": "groovy.lang.Closure",
+    "description": "The pipeline content Map",
+    "required": true
+  },
   "test": {
     "value": {},
     "type": "groovy.lang.Closure",

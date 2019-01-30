@@ -29,6 +29,12 @@
     "description": "Version of the specification",
     "required": true
   },
+  "reason": {
+    "value": null,
+    "type": "java.lang.String",
+    "description": "Reason of the failure",
+    "required": true
+  },
   "issue_url": {
     "value": null,
     "type": "java.lang.String",
@@ -51,6 +57,12 @@
     "value": {},
     "type": "groovy.lang.Closure",
     "description": "The artifact content Map",
+    "required": true
+  },
+  "pipeline": {
+    "value": {},
+    "type": "groovy.lang.Closure",
+    "description": "The pipeline content Map",
     "required": true
   },
   "test": {
