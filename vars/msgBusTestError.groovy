@@ -26,7 +26,7 @@ oString()
         try {
             mergedMessage = utils.mergeBusMessage(parameters, defaults)
         } catch(e) {
-            throw new Exception("Creating the test error message failed!")
+            throw new Exception("Creating the test error message failed: " + e)
         }
 
         // sendCIMessage expects String arguments

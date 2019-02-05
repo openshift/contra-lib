@@ -23,7 +23,7 @@ def call(Map parameters = [:]) {
         try {
             mergedMessage = utils.mergeBusMessage(parameters, defaults)
         } catch(e) {
-            throw new Exception("Creating the pipeline message failed!")
+            throw new Exception("Creating the pipeline message failed: " + e)
         }
 
         // sendCIMessage expects String arguments
