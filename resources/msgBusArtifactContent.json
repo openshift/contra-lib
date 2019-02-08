@@ -18,7 +18,7 @@
       "value": null,
       "type": "java.lang.String",
       "description": "Name of the component tested",
-      "required": true
+      "required": false
     },
   "issuer":
     {
@@ -32,14 +32,14 @@
       "value": null,
       "type": "java.lang.String",
       "description": "Name-version-release of the artifact",
-      "required": true
+      "required": false
     },
   "scratch":
     {
       "value": true,
       "type": "java.lang.Boolean",
       "description": "Indication if the build is a scratch build",
-      "required": true
+      "required": false
     },
   "baseline":
     {
