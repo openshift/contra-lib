@@ -24,7 +24,10 @@ and one on env.topicPrefix.pipeline.<complete,error> when it finishes,
 based on the return code. The success of sending these messages
 depend on the other environment variables listed in the ciStage section
 being defined. However, no extra parameter need be passed as an argument
-to ciPipeline.<br>
+to ciPipeline.
+
+\* See Required scriptApprovals for Messaging
+
 Parameters:
 - buildPrefix: A prefix to set that describes the build. This is mainly used for metrics.
 - package_name: If building a package like an RPM set this to its name. e.g. 'vim'
@@ -57,6 +60,8 @@ The following variables are optional:
 - env.teamIRC: IRC channel for team responsible for this pipeline. Can be left out
 - env.pipelineName: For use if there is a desire for a name for the pipeline differing from the name of the effort. Defaults to env.effortName
 
+\* See Required scriptApprovals for Messaging
+
 Example usage (setEnvVars need only be done once per Jenkinsfile):
 ```groovy
 setEnvVars(topicPrefix: 'org.fedoraproject.prod.ci', effortName: 'someEffort', teamName: 'ateam', teamEmail: 'team@org.com', pipelineId: 'teamPipeline', teamIRC: '#team', pipelineName: 'my-pipeline', MSG_PROVIDER: 'fedmsg', dataGrepperUrl: 'https://apps.fedoraproject.org/datagrepper')
@@ -75,6 +80,8 @@ utilize ciPipeline. However, sendPipelineStatusMsg can be added to a
 pipeline to easily send out proper messages on the
 pipeline.[running,complete,error] topics. Again, setting the environment
 variables listed in the ciStage section is required.
+
+\* See Required scriptApprovals for Messaging section
 
 Declarative pipeline example usage:
 ```groovy
@@ -117,6 +124,14 @@ node('master') {
     }
 }
 ```
+#### Required scriptApprovals for Messaging
+In order to use the message aspects of ciPipeline, the ciStage function, sendPipelineStatusMsg, or any of the msgBus*.groovy functions, the following scriptApprovals must be approved on the Jenkins master:
+- method java.lang.Class getSuperclass
+- method java.lang.Class isAssignableFrom java.lang.Class
+- method java.lang.Class isInstance java.lang.Object
+- staticMethod java.lang.Class forName java.lang.String
+- staticMethod java.time.Instant now
+- new groovy.lang.GroovyRuntimeException
 #### executeInContainer
 This function executes a script in a container. It's wrapped by handlePipelineStep.
 Parameters:
