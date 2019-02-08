@@ -11,7 +11,7 @@
       "value": null,
       "type": "java.lang.String",
       "description": "Name of the component tested",
-      "required": true
+      "required": false
     },
   "issuer":
     {
@@ -25,7 +25,7 @@
       "value": true,
       "type": "java.lang.Boolean",
       "description": "Indication if the build is a scratch build",
-      "required": true
+      "required": false
     },
   "topic":
     {
@@ -46,6 +46,34 @@
       "value": null,
       "type": "java.lang.String",
       "description": "Name-version-release of the artifact",
-      "required": true
+      "required": false
+    },
+  "repository":
+    {
+      "value": null,
+      "type": "java.lang.String",
+      "description": "Path to dist git repository in form of namespace/reponame (e.g. rpms/bash)",
+      "required": false
+    },
+  "commit_hash":
+    {
+      "value": null,
+      "type": "java.lang.String",
+      "description": "Hash of newest commit",
+      "required": false
+    },
+  "uid":
+    {
+      "value": null,
+      "type": "java.lang.String",
+      "description": "ID of pull request unique across pagure",
+      "required": false
+    },
+  "comment_id":
+    {
+      "value": null,
+      "type": "java.lang.String",
+      "description": "Number of comment in pull request",
+      "required": false
     }
 }
