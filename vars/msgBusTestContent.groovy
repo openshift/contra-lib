@@ -13,8 +13,6 @@ def call(Map parameters = [:]) {
     def defaults = readJSON text: libraryResource('msgBusTestContent.json')
 
     return { Map runtimeArgs = [:] ->
-        parameters['result'] = parameters['result'] ?: utils.getBuildStatus()
-        parameters['raw'] = parameters['raw'] ?: utils.getBuildStatus()
 
         parameters = utils.mapMergeQuotes([parameters, runtimeArgs])
         try {

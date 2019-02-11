@@ -8,18 +8,18 @@
   "result": {
     "value": null,
     "type": "java.lang.String",
-    "description": "This is an ‘interpreted’ result, and the choices are designed to match what resultsDB expects.PASSED, FAILED, INFO, NEEDS_INSPECTION",
+    "description": "One of the following states (in conformance with ResultsDB): passed, failed, info, needs_inspection, not_applicable",
     "required": false
   },
-  "raw": {
+  "output": {
     "value": null,
     "type": "java.lang.String",
     "description": "This is a raw result, such as a ‘1 liner’ from a perf test. This field should be limited in length, say 500 chars or less. If you need more (see raw_url field)",
     "required": false
   },
-  "raw_url": {
-    "value": null,
-    "type": "java.lang.String",
+  "output_urls": {
+    "value": [],
+    "type": "java.util.ArrayList",
     "description": "If the raw result is too large to be sent via a bus message, provide a URL to the result information so that it can be parsed",
     "required": false
   },

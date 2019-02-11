@@ -496,7 +496,7 @@ def getBuildStatus() {
            myResult = 'FAILED'
            break
    }
-   return myResult
+   return myResult.toLowerCase()
 }
 
 /**
