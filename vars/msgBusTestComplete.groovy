@@ -20,7 +20,6 @@ def call(Map parameters = [:]) {
         parameters['pipeline'] = parameters['pipeline'] ?: msgBusPipelineContent()()
         parameters['system'] = parameters['system'] ?: msgBusSystemContent()()
         parameters['generated_at'] = parameters['generated_at'] ?: java.time.Instant.now().toString()
-        parameters['status'] = parameters['status'] ?: utils.getBuildStatus()
         parameters['thread_id'] = parameters['thread_id'] ?: UUID.randomUUID().toString()
 
         parameters = utils.mapMergeQuotes([parameters, runtimeArgs])
