@@ -12,10 +12,13 @@ def repoFromRequest(String request) {
         def gitMatcher = request =~ /git.+?\/([a-z0-9A-Z_\-\+\.]+?)(?:\.git|\?|#).*/
         def buildMatcher = request =~ /(?:koji-shadow|cli-build).+?\/([a-zA-Z0-9\-_\+\.]+)-.*/
         def pkgMatcher = request =~ /^([a-zA-Z0-9\-_\+\.]+$)/
+        def srpmMatcher = request =~ /.+?\/([a-zA-Z0-9\.\-_\+]+)-[0-9a-zA-Z\.\_]+-[0-9\.].+.src.rpm/
 
 
         if (gitMatcher.matches()) {
             repo = gitMatcher[0][1]
+        } else if (srpmMatcher.matches()) {
+            repo = srpmMatcher[0][1]
         } else if (buildMatcher.matches()) {
             repo = buildMatcher[0][1]
         } else if (pkgMatcher.matches()) {
@@ -123,26 +126,46 @@ def initializeAuditFile(String auditFile) {
 
 /**
  * Test if $tag tests exist for $mypackage on $mybranch in fedora dist-git
- * For mybranch, use fXX or master, or PR number (digits only)
+ * For mybranch, use fXX or master and pr_id is PR number (digits only)
  * @param mypackage
- * @param mybranch - Fedora branch or PR number
+ * @param mybranch - Fedora branch
  * @param tag
+ * @param pr_id    - PR number
+ * @param namespace - rpms (default) or container
  * @return
  */
-def checkTests(String mypackage, String mybranch, String tag) {
+def checkTests(String mypackage, String mybranch, String tag, String pr_id=null, String namespace='rpms') {
     echo "Currently checking if package tests exist"
     sh "rm -rf ${mypackage}"
-    if (mybranch.isNumber()) {
-        sh "git clone https://src.fedoraproject.org/rpms/${mypackage}"
+    def repo_url = "https://src.fedoraproject.org/${namespace}/${mypackage}/"
+    retry(5) {
+        sh "git clone -b ${mybranch} --single-branch --depth 1 ${repo_url}"
+    }
+    if (pr_id != null) {
         dir("${mypackage}") {
-            sh "git fetch -fu origin refs/pull/${mybranch}/head:pr"
-            sh "git checkout pr"
-            return sh (returnStatus: true, script: """
-            grep -r '\\- '${tag}'\$' tests""") == 0
+            sh "curl --insecure -L ${repo_url}/pull-request/${pr_id}.patch > pr_${pr_id}.patch"
+            // If fail to apply patch do not exit with error, but instead ignore the patch
+            // this should avoid the pipeline to exit here without sending any topic to fedmsg
+            try {
+                sh "git apply pr_${pr_id}.patch"
+            } catch (err) {
+                echo "FAIL to apply patch from PR, ignoring it..."
+            }
+        }
+    }
+    // if STR is installed use it to check for tags as it is more reliable
+    if (sh(returnStatus: true, script: """rpm -q standard-test-roles""") == 0) {
+        if (namespace != "tests") {
+            return sh (returnStatus: true, script: "ansible-playbook --list-tags ${mypackage}/tests/tests*.yml | grep -e \"TASK TAGS: \\[.*\\<${tag}\\>.*\\]\"") == 0
+        } else {
+            return sh (returnStatus: true, script: "ansible-playbook --list-tags ${mypackage}/tests*.yml | grep -e \"TASK TAGS: \\[.*\\<${tag}\\>.*\\]\"") == 0
         }
     } else {
-        return sh (returnStatus: true, script: """
-        git clone -b ${mybranch} --single-branch https://src.fedoraproject.org/rpms/${mypackage}/ && grep -r '\\- '${tag}'\$' ${mypackage}/tests""") == 0
+        if (namespace != "tests") {
+            return sh (returnStatus: true, script: """grep -r '\\- '${tag}'\$' ${mypackage}/tests""") == 0
+        } else {
+            return sh (returnStatus: true, script: """grep -r '\\- '${tag}'\$' ${mypackage}""") == 0
+        }
     }
 }
 
@@ -212,6 +235,29 @@ def verifyPod(String openshiftProject, String nodeName=env.NODE_NAME) {
                     }
                 }
             }
+        }
+    }
+}
+
+/**
+ *
+ * @param openshiftProject name of openshift namespace/project.
+ * @param nodeName podName we are going to get container logs from.
+ * @return
+ */
+def getContainerLogsFromPod(String openshiftProject, String nodeName=env.NODE_NAME) {
+    openshift.withCluster() {
+        openshift.withProject(openshiftProject) {
+            sh 'mkdir -p podInfo'
+            names       = openshift.raw("get", "pod",  "${nodeName}", '-o=jsonpath="{.status.containerStatuses[*].name}"')
+            String containerNames = names.out.trim()
+        
+            containerNames.split().each {
+                String log = containerLog name: it, returnLog: true
+                writeFile file: "podInfo/containerLog-${it}-${nodeName}.txt",
+                            text: log
+            }
+            archiveArtifacts "podInfo/containerLog-*.txt"
         }
     }
 }
@@ -537,4 +583,88 @@ def getOpenshiftDockerRegistryURL() {
         def registryUrl = urlParts[0]
         registryUrl
     }
+}
+
+/**
+ * Library to parse Pagure PR CI_MESSAGE and check if
+ * it is for a new commit added, the comment contains
+ * some keyword, or if the PR was rebased
+ * If notification = true, commit was added or it was rebased
+ * @param message - The CI_MESSAGE
+ * @param keyword - The keyword we care about
+ * @return bool
+ */
+def checkUpdatedPR(String message, String keyword) {
+
+    // Parse the message into a Map
+    def ci_data = readJSON text: message.replace("\n", "\\n")
+
+    if (ci_data['pullrequest']['status']) {
+        if (ci_data['pullrequest']['status'] != 'Open') {
+            return false
+        }
+    }
+    if (ci_data['pullrequest']['comments']) {
+        if (ci_data['pullrequest']['comments'].last()['notification'] || ci_data['pullrequest']['comments'].last()['comment'].contains(keyword)) {
+            return true
+        } else {
+            return false
+        }
+    }
+    // Default to return true because this is called for pr.new messages as well
+    return true
+}
+
+/**
+ * Using the currentBuild, get a string representation
+ * of the changelog.
+ * @return String of changelog
+ */
+@NonCPS
+def getChangeLogFromCurrentBuild() {
+    MAX_MSG_LEN = 100
+    def changeString = ""
+
+    echo "Gathering SCM changes"
+    def changeLogSets = currentBuild.changeSets
+    for (int i = 0; i < changeLogSets.size(); i++) {
+        def entries = changeLogSets[i].items
+        for (int j = 0; j < entries.length; j++) {
+            def entry = entries[j]
+            truncated_msg = entry.msg.take(MAX_MSG_LEN)
+            changeString += " - ${truncated_msg} [${entry.author}]\n"
+            def files = new ArrayList(entry.affectedFiles)
+            for (int k = 0; k < files.size(); k++) {
+                def file = files[k]
+                changeString += "    | (${file.editType.name})  ${file.path}\n"
+            }
+        }
+    }
+
+    if (!changeString) {
+        changeString = " - No new changes\n"
+    }
+    return changeString
+}
+
+/**
+ *
+ * @param nick nickname to connect to IRC with
+ * @param channel channel to connect to
+ * @param message message to send
+ * @param ircServer optional IRC server defaults to irc.freenode.net:6697
+ * @return
+ */
+def sendIRCNotification(String nick, String channel, String message, String ircServer="irc.freenode.net:6697") {
+    sh """
+        (
+        echo NICK ${nick}
+        echo USER ${nick} 8 * : ${nick}
+        sleep 5
+        echo "JOIN ${channel}"
+        sleep 10
+        echo "NOTICE ${channel} :${message}"
+        echo QUIT
+        ) | openssl s_client -connect ${ircServer}
+    """
 }
