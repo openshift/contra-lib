@@ -19,7 +19,6 @@ def call(Map parameters = [:]) {
         parameters['artifact'] = parameters['artifact'] ?: msgBusArtifactContent()()
         parameters['generated_at'] = parameters['generated_at'] ?: java.time.Instant.now().toString()
         parameters['reason'] = parameters['reason'] ?: "Unknown execution error"
-        parameters['thread_id'] = parameters['thread_id'] ?: UUID.randomUUID().toString()
 
         parameters = utils.mapMergeQuotes([parameters, runtimeArgs])
         try {
