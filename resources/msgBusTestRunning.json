@@ -5,12 +5,6 @@
     "description": "Timestamp of message creation (ISO-8601)",
     "required": true
   },
-  "thread_id": {
-    "value": null,
-    "type": "java.lang.String",
-    "description": "Unique identification string",
-    "required": false
-  },
   "note": {
     "value": null,
     "type": "java.lang.String",

@@ -11,12 +11,6 @@
     "description": "A list of notification recipients",
     "required": false
   },
-  "thread_id": {
-    "value": null,
-    "type": "java.lang.String",
-    "description": "Unique identification string",
-    "required": false
-  },
   "note": {
     "value": null,
     "type": "java.lang.String",
