@@ -36,12 +36,13 @@ def call(Map parameters = [:], Closure body) {
         def podName = parameters.get('podName', "${env.BUILD_TAG}-${UUID.randomUUID().toString()}")
         def openshift_service_account = parameters.get('openshift_service_account', (env.oc_serviceaccount_name ?: 'jenkins'))
         def jenkins_slave_image = parameters.get('jenkins_slave_image', 'jenkins-continuous-infra-slave:stable')
+        def jenkins_slave_namespace = parameters.get('jenkins_slave_namespace', openshift_namespace)
 
         def containerTemplates = []
 
         // add default jenkins slave container
         containerTemplates << containerTemplate(name: 'jnlp',
-                image: "${docker_repo_url}/${openshift_namespace}/${jenkins_slave_image}",
+                image: "${docker_repo_url}/${jenkins_slave_namespace}/${jenkins_slave_image}",
                 ttyEnabled: false,
                 args: '${computer.jnlpmac} ${computer.name}',
                 command: '',
@@ -65,7 +66,8 @@ def call(Map parameters = [:], Closure body) {
             def cmd = containerProps.get('command', 'cat')
             def privileged = containerProps.get('privileged', true)
             def containerImageName = containerProps.get('image', containerName)
-            def imageUrl = "${docker_repo_url}/${openshift_namespace}/${containerImageName}:${tag}"
+            def namespace = containerProps.get('namespace', openshift_namespace)
+            def imageUrl = "${docker_repo_url}/${namespace}/${containerImageName}:${tag}"
 
             containerTemplates << containerTemplate(name: containerName,
                     alwaysPullImage: true,
