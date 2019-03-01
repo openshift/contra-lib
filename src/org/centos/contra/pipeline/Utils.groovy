@@ -143,11 +143,12 @@ def checkTests(String mypackage, String mybranch, String tag, String pr_id=null,
     }
     if (pr_id != null) {
         dir("${mypackage}") {
-            sh "curl --insecure -L ${repo_url}/pull-request/${pr_id}.patch > pr_${pr_id}.patch"
+            sh "git fetch -fu origin refs/pull/${pr_id}/head:pr"
             // If fail to apply patch do not exit with error, but instead ignore the patch
             // this should avoid the pipeline to exit here without sending any topic to fedmsg
             try {
-                sh "git apply pr_${pr_id}.patch"
+                // Setting git config and merge message in case we try to merge a closed PR
+                sh "git -c 'user.name=Fedora CI' -c 'user.email=ci@lists.fedoraproject.org'  merge pr -m 'Fedora CI pipeline'"
             } catch (err) {
                 echo "FAIL to apply patch from PR, ignoring it..."
             }
@@ -251,7 +252,7 @@ def getContainerLogsFromPod(String openshiftProject, String nodeName=env.NODE_NA
             sh 'mkdir -p podInfo'
             names       = openshift.raw("get", "pod",  "${nodeName}", '-o=jsonpath="{.status.containerStatuses[*].name}"')
             String containerNames = names.out.trim()
-        
+
             containerNames.split().each {
                 String log = containerLog name: it, returnLog: true
                 writeFile file: "podInfo/containerLog-${it}-${nodeName}.txt",
@@ -521,7 +522,7 @@ def jenkinsIsAssignableFrom(Class A, Class B) {
     } else {
         return false
     }
-    
+
 }
 
 /**
