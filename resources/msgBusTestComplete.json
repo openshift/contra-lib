@@ -48,9 +48,9 @@
     "required": true
   },
   "system": {
-    "value": {},
-    "type": "groovy.lang.Closure",
-    "description": "The system content Map",
+    "value": [],
+    "type": "java.util.ArrayList",
+    "description": "The system content list",
     "required": true
   },
   "pipeline": {
