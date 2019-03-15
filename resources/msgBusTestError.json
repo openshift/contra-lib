@@ -5,35 +5,11 @@
     "description": "Timestamp of message creation (ISO-8601)",
     "required": true
   },
-  "recipients": {
-    "value": [],
-    "type": "java.util.ArrayList",
-    "description": "A list of notification recipients",
-    "required": false
-  },
-  "note": {
-    "value": null,
-    "type": "java.lang.String",
-    "description": "Arbitrary note",
-    "required": false
-  },
   "version": {
     "value": '"0.2.0"',
     "type": "java.lang.String",
     "description": "Version of the specification",
     "required": true
-  },
-  "reason": {
-    "value": null,
-    "type": "java.lang.String",
-    "description": "Reason of the failure",
-    "required": true
-  },
-  "issue_url": {
-    "value": null,
-    "type": "java.lang.String",
-    "description": "URL of the issue/ticket tracking the error",
-    "required": false
   },
   "ci": {
     "value": {},
@@ -64,5 +40,17 @@
     "type": "groovy.lang.Closure",
     "description": "The test content Map",
     "required": true
+  },
+  "notification": {
+    "value": {},
+    "type": "groovy.lang.Closure",
+    "description": "The notification content Map",
+    "required": false
+  },
+  "error": {
+    "value": {},
+    "type": "groovy.lang.Closure",
+    "description": "The error content Map",
+    "required": false
   }
 }

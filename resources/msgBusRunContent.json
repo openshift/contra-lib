@@ -1,37 +1,38 @@
 {
-  "url":
-    {
-      "value": null,
-      "type": "java.lang.String",
-      "description": "Specific build URL",
-      "required": true
-    },
-  "log":
-    {
-      "value": null,
-      "type": "java.lang.String",
-      "description": "URL link to build log",
-      "required": true
-    },
-  "debug":
-    {
-      "value": null,
-      "type": "java.lang.String",
-      "description": "URL of debug log",
-      "required": false
-    },
-  "rebuild":
-    {
-      "value": null,
-      "type": "java.lang.String",
-      "description": "URL link to rebuild the run",
-      "required": false
-    },
-  "result_files":
-    {
-      "value": {},
-      "type": "java.util.AbstractMap",
-      "description": "Relative path from the run URL to the result files (wildcards allowed). Only to be used when the pipeline ends. If not provided, all files will be pulled.",
-      "required": false
-    }
+  "url": {
+    "value": null,
+    "type": "java.lang.String",
+    "description": "Specific build URL (e.g. Jenkins build URL).",
+    "required": true
+  },
+  "log": {
+    "value": null,
+    "type": "java.lang.String",
+    "description": "URL link to build log. Can be an HTML page.",
+    "required": true
+  },
+  "log_raw": {
+    "value": null,
+    "type": "java.lang.String",
+    "description": "URL of a plain-text build log.",
+    "required": false
+  },
+  "log_stream": {
+    "value": null,
+    "type": "java.lang.String",
+    "description": "URL of a plain-text build log, which can be followed for progress. Serves different goal than log_raw - while these two may share the same value, it is alsao quite possible taht log_raw would point to some external (cold) storage, making it unsuitable for streaming the output. They also disagree on the time when they are valid - log_raw is supposed to be valid as long as log while log_stream makes sense only when the testing process is running.",
+    "required": false
+  },
+  "rebuild": {
+    "value": null,
+    "type": "java.lang.String",
+    "description": "URL link to rebuild the run.",
+    "required": false
+  },
+  "debug": {
+    "value": null,
+    "type": "java.lang.String",
+    "description": "URL of debug log.",
+    "required": false
+  }
 }

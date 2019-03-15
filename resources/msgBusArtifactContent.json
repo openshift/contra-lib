@@ -1,93 +1,80 @@
 {
-  "type":
-    {
-      "value": null,
-      "type": "java.lang.String",
-      "description": "Artifact type",
-      "required": true
-    },
-  "id":
-    {
-      "value": 0,
-      "type": "java.math.BigInteger",
-      "description": "Task ID of the brew/koji build or pull request ID",
-      "required": true
-    },
-  "component":
-    {
-      "value": null,
-      "type": "java.lang.String",
-      "description": "Name of the component tested",
-      "required": false
-    },
-  "issuer":
-    {
-      "value": null,
-      "type": "java.lang.String",
-      "description": "Build issuer of the artifact",
-      "required": true
-    },
-  "nvr":
-    {
-      "value": null,
-      "type": "java.lang.String",
-      "description": "Name-version-release of the artifact",
-      "required": false
-    },
-  "scratch":
-    {
-      "value": true,
-      "type": "java.lang.Boolean",
-      "description": "Indication if the build is a scratch build",
-      "required": false
-    },
-  "baseline":
-    {
-      "value": null,
-      "type": "java.lang.String",
-      "description": "NVR of baseline brew/koji build (for comparison)",
-      "required": false
-    },
-  "source":
-    {
-      "value": null,
-      "type": "java.lang.String",
-      "description": "The first item in the request field from task details. This is usually a link to git repository with a reference.",
-      "required": false
-    },
-  "dependencies":
-    {
-      "value": {},
-      "type": "java.util.AbstractMap",
-      "description": "A list of NVR's of additional dependencies that were needed to install the brew/koji rpm build artifact.",
-      "required": false
-    },
-  "comment_id":
-    {
-      "value": 0,
-      "type": "java.math.BigInteger",
-      "description": "Number of comment in pull request",
-      "required": false
-    },
-  "commit_hash":
-    {
-      "value": null,
-      "type": "java.lang.String",
-      "description": "Hash of newest commit",
-      "required": false
-    },
-  "repository":
-    {
-      "value": null,
-      "type": "java.lang.String",
-      "description": "Path to dist git repository in form namespace/reponame (e.g. rpms/bash)",
-      "required": false
-    },
-  "uid":
-    {
-      "value": null,
-      "type": "java.lang.String",
-      "description": "ID of pull request unique across pagure",
-      "required": false
-    }
+  "type": {
+    "value": null,
+    "type": "java.lang.String",
+    "description": "Artifact type",
+    "required": true
+  },
+  "id": {
+    "value": 0,
+    "type": "java.math.BigInteger",
+    "description": "Task ID of the brew/koji build or pull request ID",
+    "required": true
+  },
+  "component": {
+    "value": null,
+    "type": "java.lang.String",
+    "description": "Name of the component tested",
+    "required": false
+  },
+  "issuer": {
+    "value": null,
+    "type": "java.lang.String",
+    "description": "Build issuer of the artifact",
+    "required": true
+  },
+  "nvr": {
+    "value": null,
+    "type": "java.lang.String",
+    "description": "Name-version-release of the artifact",
+    "required": false
+  },
+  "scratch": {
+    "value": true,
+    "type": "java.lang.Boolean",
+    "description": "Indication if the build is a scratch build",
+    "required": false
+  },
+  "baseline": {
+    "value": null,
+    "type": "java.lang.String",
+    "description": "NVR of baseline brew/koji build (for comparison)",
+    "required": false
+  },
+  "source": {
+    "value": null,
+    "type": "java.lang.String",
+    "description": "The first item in the request field from task details. This is usually a link to git repository with a reference.",
+    "required": false
+  },
+  "dependencies": {
+    "value": {},
+    "type": "java.util.AbstractMap",
+    "description": "A list of NVR's of additional dependencies that were needed to install the brew/koji rpm build artifact.",
+    "required": false
+  },
+  "comment_id": {
+    "value": 0,
+    "type": "java.math.BigInteger",
+    "description": "Number of comment in pull request",
+    "required": false
+  },
+  "commit_hash": {
+    "value": null,
+    "type": "java.lang.String",
+    "description": "Hash of newest commit",
+    "required": false
+  },
+  "repository": {
+    "value": null,
+    "type": "java.lang.String",
+    "description": "Path to dist git repository in form namespace/reponame (e.g. rpms/bash)",
+    "required": false
+  },
+  "uid": {
+    "value": null,
+    "type": "java.lang.String",
+    "description": "ID of pull request unique across pagure",
+    "required": false
+  }
 }

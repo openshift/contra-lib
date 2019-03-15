@@ -1,32 +1,28 @@
 {
-  "name":
-    {
-      "value": null,
-      "type": "java.lang.String",
-      "description": "<pipeline_name> value",
-      "required": true
-    },
-  "id":
-    {
-      "value": null,
-      "type": "java.lang.String",
-      "description": "UUID for this pipeline run",
-      "required": true
-    },
-  "build":
-    {
-      "value": null,
-      "type": "java.lang.String",
-      "description": "Build number for this given pipeline run",
-      "required": false
-    },
-  "runtime":
-    {
-      "value": 0.0,
-      "type": "java.math.BigDecimal",
-      "description": "The runtime in seconds of the pipeline",
-      "required": false
-    },
+  "id": {
+    "value": null,
+    "type": "java.lang.String",
+    "description": "Unique identification string. Useful for constructing tree of rebuilds of the same artifact in the Web UI. Note that it is up to the CI system to implement. Replaces thread_id from previous versions of the spec. The value must be unique among all systems reporting on the artifact; it is advised to prefix it with a unique string, e.g. the name of the CI system, etc.",
+    "required": true
+  },
+  "name": {
+    "value": null,
+    "type": "java.lang.String",
+    "description": "A human readable name of the pipeline.",
+    "required": true
+  },
+  "build": {
+    "value": null,
+    "type": "java.lang.String",
+    "description": "An optional pipeline build number.",
+    "required": false
+  },
+  "runtime": {
+    "value": 0.0,
+    "type": "java.math.BigDecimal",
+    "description": "The runtime in seconds of the pipeline.",
+    "required": false
+  },
   "stage": {
     "value": {},
     "type": "groovy.lang.Closure",

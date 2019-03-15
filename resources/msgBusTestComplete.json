@@ -5,24 +5,6 @@
     "description": "Timestamp of message creation (ISO-8601)",
     "required": true
   },
-  "web_url": {
-    "value": null,
-    "type": "java.lang.String",
-    "description": "URL to a web UI with detailed results",
-    "required": false
-  },
-  "recipients": {
-    "value": [],
-    "type": "java.util.ArrayList",
-    "description": "A list of notification recipients",
-    "required": false
-  },
-  "note": {
-    "value": null,
-    "type": "java.lang.String",
-    "description": "Arbitrary note",
-    "required": false
-  },
   "version": {
     "value": '"0.2.0"',
     "type": "java.lang.String",
@@ -63,6 +45,12 @@
     "value": {},
     "type": "groovy.lang.Closure",
     "description": "The test content Map",
+    "required": false
+  },
+  "notification": {
+    "value": {},
+    "type": "groovy.lang.Closure",
+    "description": "The notification content Map",
     "required": false
   }
 }
