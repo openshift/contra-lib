@@ -1,0 +1,14 @@
+{
+  "issue_url": {
+    "value": null,
+    "type": "java.lang.String",
+    "description": "If the CI system is able to automatically file an issue/ticket for the error, put the URL here.",
+    "required": false
+  },
+  "reason": {
+    "value": null,
+    "type": "java.lang.String",
+    "description": "Reason for the error.",
+    "required": true
+  }
+}

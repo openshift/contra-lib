@@ -2,14 +2,13 @@
   "name": {
     "value": null,
     "type": "java.lang.String",
-    "description": "The name of the pipeline stage this message pertains to",
+    "description": "Name of the stage of the pipeline.",
     "required": true
   },
-  "runtime":
-    {
-      "value": 0.0,
-      "type": "java.math.BigDecimal",
-      "description": "The runtime in seconds of the stage",
-      "required": false
-    }
+  "runtime": {
+    "value": 0.0,
+    "type": "java.math.BigDecimal",
+    "description": "The runtime in seconds of the stage.",
+    "required": false
+  }
 }

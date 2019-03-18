@@ -1,0 +1,8 @@
+{
+  "recipients": {
+    "value": [],
+    "type": "java.util.ArrayList",
+    "description": "A list of notification recipients.",
+    "required": false
+  }
+}

@@ -1,74 +1,86 @@
 {
-  "name": {
-    "value": null,
-    "type": "java.lang.String",
-    "description": "Human readable string for test case or suite name. Keeping this unique would be problematic and prone to changing so this is an optional field",
-    "required": false
-  },
-  "result": {
-    "value": null,
-    "type": "java.lang.String",
-    "description": "One of the following states (in conformance with ResultsDB): passed, failed, info, needs_inspection, not_applicable",
-    "required": false
-  },
-  "output": {
-    "value": null,
-    "type": "java.lang.String",
-    "description": "This is a raw result, such as a ‘1 liner’ from a perf test. This field should be limited in length, say 500 chars or less. If you need more (see raw_url field)",
-    "required": false
-  },
-  "output_urls": {
-    "value": [],
-    "type": "java.util.ArrayList",
-    "description": "If the raw result is too large to be sent via a bus message, provide a URL to the result information so that it can be parsed",
-    "required": false
-  },
   "category": {
     "value": null,
     "type": "java.lang.String",
-    "description": "Values: static-analysis, functional, integration, validation",
+    "description": "Test category.",
     "required": true
   },
-  "namespace": {
+  "docs": {
     "value": null,
     "type": "java.lang.String",
-    "description": "A namespace used to prefix the ResultsDB testcase name. This is usually something identifying your team",
-    "required": true
-  },
-  "type": {
-    "value": null,
-    "type": "java.lang.String",
-    "description": "A string identifying the tests being run in this execution. Example: tier1, tier2, pipeline",
-    "required": true
+    "description": "Provides a link to documentation for testing events for distributed CI systems to make them sustainable. Should contain information about how to contribute to the specific test, how to reproduce it, ideally on localhost and how to retrigger the test.",
+    "required": false
   },
   "label": {
-    "value": null,
-    "type": "java.lang.String",
-    "description": "Additional test label",
-    "required": false
-  },
-  "xunit_files": {
     "value": [],
     "type": "java.util.ArrayList",
-    "description": "Relative path from the run URL (above) to the xunit XML files (includes the full file name for this xunit file)",
-    "required": false
-  },
-  "id": {
-    "value": null,
-    "type": "java.lang.String",
-    "description": "UUID for this test (case/suite/whatever)",
-    "required": false
-  },
-  "runtime": {
-    "value": 0.0,
-    "type": "java.math.BigDecimal",
-    "description": "The runtime of the test",
+    "description": "List of additional labels to distinguish the same test types from each other.",
     "required": false
   },
   "lifetime": {
     "value": 0,
     "type": "java.math.BigInteger",
-    "description": "number of minutes the test is expected to run",
+    "description": "Number of minutes the test is expected to run. Makes most sense for queued event status.",
+    "required": false
+  },
+  "namespace": {
+    "value": null,
+    "type": "java.lang.String",
+    "description": "A namespace used to prefix the ResultsDB testcase name. This is usually something identifying your team.",
+    "required": true
+  },
+  "note": {
+    "value": null,
+    "type": "java.lang.String",
+    "description": "Arbitrary note.",
+    "required": false
+  },
+  "progress": {
+    "value": 0,
+    "type": "java.math.BigInteger",
+    "description": "Percentage indicator of progress, expressed as a number from 0 to 100.",
+    "required": false
+  },
+  "type": {
+    "value": null,
+    "type": "java.lang.String",
+    "description": "Test type. Identifies the test(s) being run in this execution. Depending on your test system, this may indicate a single test (possibly with 'scenario' information as well), a group of tests, or you may only ever use one value here if your test system does not emit separate messages per test or test group. A good way to think of this is the 'information a consumer would need to identify runs of 'the same test(s)' on two different artifacts'.",
+    "required": true
+  },
+  "result": {
+    "value": null,
+    "type": "java.lang.String",
+    "description": "Result of the completed testing in conformance with ResultsDB 2.0 API valid outcome values (passed, failed, info, needs_inspection). Use 'not_applicable' when the result is not applicable or skipped. https://resultsdb20.docs.apiary.io/#introduction/changes-since-1.0.",
+    "required": false
+  },
+  "runtime": {
+    "value": 0.0,
+    "type": "java.math.BigDecimal",
+    "description": "Number of seconds the test was running.",
+    "required": false
+  },
+  "output": {
+    "value": null,
+    "type": "java.lang.String",
+    "description": "This is a raw result, such as a one-liner from a perf test. This field should be limited in length, say 500 chars or less. If you need more use the output urls field.",
+    "required": false
+  },
+  "output_urls": {
+    "value": [],
+    "type": "java.util.ArrayList",
+    "description": "If the test run output is too large, provide a list of urls to the output_files.",
+    "required": false
+  },
+  "xunit": {
+    "value": null,
+    "type": "java.lang.String",
+    "description": "Gzipped xunit with detailed results or URL link to xunit/junit results.",
+    "required": false
+  },
+  "xunit_urls": {
+    "value": [],
+    "type": "java.util.ArrayList",
+    "description": "Array with URL links to xunit/junit results.",
     "required": false
   }
 }

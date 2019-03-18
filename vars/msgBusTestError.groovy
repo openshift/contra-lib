@@ -17,8 +17,8 @@ def call(Map parameters = [:]) {
         parameters['ci'] = parameters['ci'] ?: msgBusCIContent()()
         parameters['run'] = parameters['run'] ?: msgBusRunContent()()
         parameters['artifact'] = parameters['artifact'] ?: msgBusArtifactContent()()
+        parameters['error'] = parameters['error'] ?: msgBusErrorContent()()
         parameters['generated_at'] = parameters['generated_at'] ?: java.time.Instant.now().toString()
-        parameters['reason'] = parameters['reason'] ?: "Unknown execution error"
 
         parameters = utils.mapMergeQuotes([parameters, runtimeArgs])
         try {
