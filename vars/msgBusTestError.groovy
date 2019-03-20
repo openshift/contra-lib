@@ -14,7 +14,7 @@ def call(Map parameters = [:]) {
 
     return { Map runtimeArgs = [:] ->
         // Set defaults that can't go in json file
-        parameters['ci'] = parameters['ci'] ?: msgBusCIContent()()
+        parameters['contact'] = parameters['contact'] ?: msgBusContactContent()()
         parameters['run'] = parameters['run'] ?: msgBusRunContent()()
         parameters['artifact'] = parameters['artifact'] ?: msgBusArtifactContent()()
         parameters['error'] = parameters['error'] ?: msgBusErrorContent()()

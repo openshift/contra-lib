@@ -32,13 +32,13 @@ def call(String stageName, Closure body) {
     def runningTopic = env.topicPrefix + ".pipeline.stage.running"
     def completeTopic = env.topicPrefix + ".pipeline.stage.complete"
 
-    // Create ci and pipeline arrays to place in messages
-    myCIArray = env.teamIRC ? msgBusCIContent(name: env.effortName, team: env.teamName, irc: env.teamIRC, email: env.teamEmail) : msgBusCIContent(name: env.effortName, team: env.teamName, email: env.teamEmail)
+    // Create contact and pipeline arrays to place in messages
+    myContactArray = env.teamIRC ? msgBusContactContent(name: env.effortName, team: env.teamName, irc: env.teamIRC, email: env.teamEmail) : msgBusContactContent(name: env.effortName, team: env.teamName, email: env.teamEmail)
     myStageArray = msgBusStageContent(name: stageName)
     myPipelineArray = env.pipelineName ? msgBusPipelineContent(name: env.pipelineName, id: env.pipelineId, stage: myStageArray()) : msgBusPipelineContent(name: env.effortName, id: env.pipelineId, stage: myStageArray())
 
     // Create stage running message
-    runningMsg = msgBusStageMsg(ci: myCIArray(), pipeline: myPipelineArray())
+    runningMsg = msgBusStageMsg(contact: myContactArray(), pipeline: myPipelineArray())
     // send running message
     sendMessageWithAudit(msgTopic: runningTopic, msgContent: runningMsg())
 
@@ -58,7 +58,7 @@ def call(String stageName, Closure body) {
     myPipelineArray = env.pipelineName ? msgBusPipelineContent(name: env.pipelineName, id: env.pipelineId, stage: myStageArray()) : msgBusPipelineContent(name: env.teamName, id: env.pipelineId, stage: myStageArray())
 
     // Create stage complete message
-    completeMsg = msgBusStageMsg(ci: myCIArray(), pipeline: myPipelineArray())
+    completeMsg = msgBusStageMsg(contact: myContactArray(), pipeline: myPipelineArray())
     // Send complete message
     sendMessageWithAudit(msgTopic: completeTopic, msgContent: completeMsg())
 }

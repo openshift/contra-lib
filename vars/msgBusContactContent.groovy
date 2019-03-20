@@ -1,7 +1,7 @@
 import org.centos.contra.pipeline.Utils
 
 /**
- * Defines the CI Content of a message
+ * Defines the Contact Content of a message
  * This will merge parameters with the defaults and will validate each parameter
  * @param parameters
  * @return HashMap
@@ -10,7 +10,7 @@ def call(Map parameters = [:]) {
 
     def utils = new Utils()
 
-    def defaults = readJSON text: libraryResource('msgBusCIContent.json')
+    def defaults = readJSON text: libraryResource('msgBusContactContent.json')
 
     return { Map runtimeArgs = [:] ->
         // Set defaults that can't go in json file
@@ -20,7 +20,7 @@ def call(Map parameters = [:]) {
         try {
             mergedMessage = utils.mergeBusMessage(parameters, defaults)
         } catch(e) {
-            throw new Exception("Creating message for CI array failed: " + e)
+            throw new Exception("Creating message for Contact array failed: " + e)
         }
 
         // sendCIMessage expects String arguments

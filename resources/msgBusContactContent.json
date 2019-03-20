@@ -1,0 +1,44 @@
+{
+  "name": {
+    "value": null,
+    "type": "java.lang.String",
+    "description": "A human readable name for the system.",
+    "required": true
+  },
+  "team": {
+    "value": null,
+    "type": "java.lang.String",
+    "description": "A human readable name of the team running the test or gating. This is useful for example to distinguish multiple teams running on the same Jenkins instance.",
+    "required": true
+  },
+  "docs": {
+    "value": null,
+    "type": "java.lang.String",
+    "description": "Link to the documentation with details about the system.",
+    "required": true
+  },
+  "email": {
+    "value": null,
+    "type": "java.lang.String",
+    "description": "Contact email address.",
+    "required": true
+  },
+  "url": {
+    "value": null,
+    "type": "java.lang.String",
+    "description": "URL link to the system or system's web interface.",
+    "required": false
+  },
+  "irc": {
+    "value": null,
+    "type": "java.lang.String",
+    "description": "IRC contact for help (prefix with # for channel).",
+    "required": false
+  },
+  "version": {
+    "value": null,
+    "type": "java.lang.String",
+    "description": "Version of the system.",
+    "required": false
+  }
+}
