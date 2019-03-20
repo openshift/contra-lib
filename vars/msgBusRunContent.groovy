@@ -15,8 +15,13 @@ def call(Map parameters = [:]) {
     return { Map runtimeArgs = [:] ->
         // Set defaults that can't go in json file
         parameters['url'] = parameters['url'] ?: JENKINS_URL + 'blue/organizations/jenkins/' + env.JOB_NAME + '/detail/' + env.JOB_NAME + '/' + env.BUILD_NUMBER + '/pipeline/'
-        parameters['log'] = parameters['log'] ?: env.BUILD_URL + 'console'
+        //parameters['log'] = parameters['log'] ?: env.BUILD_URL + 'console'
         parameters['rebuild'] = parameters['rebuild'] ?: env.BUILD_URL + 'rebuild/parameterized'
+        if (parameters.containsKey('log')) {
+            println('Log exists')
+        } else {
+            println('Log does not exist')
+        }
 
         parameters = utils.mapMergeQuotes([parameters, runtimeArgs])
         try {
