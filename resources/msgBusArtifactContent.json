@@ -21,7 +21,7 @@
     "value": null,
     "type": "java.lang.String",
     "description": "Build issuer of the artifact",
-    "required": true
+    "required": false
   },
   "nvr": {
     "value": null,
@@ -76,5 +76,29 @@
     "type": "java.lang.String",
     "description": "ID of pull request unique across pagure",
     "required": false
-  }
+  },
+  "name": {
+    "value": null,
+    "type": "java.lang.String",
+    "description": "name as in name-version-release",
+    "required": false
+  },
+  "version": {
+    "value": null,
+    "type": "java.lang.String",
+    "description": "version as in name-version-release",
+    "required": false
+  },
+  "release": {
+    "value": null,
+    "type": "java.lang.String",
+    "description": "release as in name-version-release",
+    "required": false
+  },
+  "digest": {
+    "value": null,
+    "type": "java.lang.String",
+    "description": "",
+    "required": false
+  },
 }
