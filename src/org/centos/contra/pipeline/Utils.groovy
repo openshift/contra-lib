@@ -493,7 +493,7 @@ def validateBusKeyValue(def key, def value, Map defaults) {
 
     if (!defaults.containsKey(key)) {
         print "Invalid key for ${key}, ${value}"
-    } else if ((value == null) && (defaults[key]['required'])) {
+    } else if ((value == 'null') && (defaults[key]['required'])) {
         print "Required value missing for ${key}, ${value}"
     // if value's type != expected type from defaults
     } else if (!jenkinsIsAssignableFrom(value.getClass(), Class.forName(defaults[key]['type']))) {
