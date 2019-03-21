@@ -1,0 +1,20 @@
+{
+  "result": {
+    "value": null,
+    "type": "java.lang.String",
+    "description": "Gating decision result. One of 'go' or 'no-go'.",
+    "required": false
+  },
+  "summary": {
+    "value": null,
+    "type": "java.lang.String",
+    "description": "Short text summarizing the gating decision.",
+    "required": false
+  },
+  "url": {
+    "value": null,
+    "type": "java.lang.String",
+    "description": "Url of the detailed results of the Greenwave decision.",
+    "required": false
+  }
+}

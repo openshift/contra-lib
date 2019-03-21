@@ -29,6 +29,12 @@
     "description": "The artifact content Map",
     "required": true
   },
+  "system": {
+    "value": [],
+    "type": "java.util.ArrayList",
+    "description": "The system content list",
+    "required": true
+  },
   "pipeline": {
     "value": {},
     "type": "groovy.lang.Closure",
@@ -45,12 +51,6 @@
     "value": {},
     "type": "groovy.lang.Closure",
     "description": "The notification content Map",
-    "required": false
-  },
-  "error": {
-    "value": {},
-    "type": "groovy.lang.Closure",
-    "description": "The error content Map",
     "required": false
   }
 }
