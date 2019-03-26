@@ -8,6 +8,7 @@
  * optional:
  * env.teamIRC: team's irc channel
  * env.pipelineName: For use if the pipeline name differs from the effort name
+ * env.docsLink: A link to the docs describing the CI system
  * env.MSG_PROVIDER: This is actually required by the sendMessage function that ciStage uses. It is the provider configured in Jenkins on which to send messages
  * env.dataGrepperUrl: This is required by the sendMessageWithAudit function that ciStage uses. It tells the function where to look to confirm the message was sent as expected
  *
@@ -32,8 +33,9 @@ def call(String stageName, Closure body) {
     def runningTopic = env.topicPrefix + ".pipeline.stage.running"
     def completeTopic = env.topicPrefix + ".pipeline.stage.complete"
 
+    myDocs = env.docsLink ?: env.JENKINS_URL
     // Create contact and pipeline arrays to place in messages
-    myContactArray = env.teamIRC ? msgBusContactContent(name: env.effortName, team: env.teamName, irc: env.teamIRC, email: env.teamEmail) : msgBusContactContent(name: env.effortName, team: env.teamName, email: env.teamEmail)
+    myContactArray = env.teamIRC ? msgBusContactContent(name: env.effortName, team: env.teamName, irc: env.teamIRC, email: env.teamEmail, docs: myDocs) : msgBusContactContent(name: env.effortName, team: env.teamName, email: env.teamEmail, docs: myDocs)
     myStageArray = msgBusStageContent(name: stageName)
     myPipelineArray = env.pipelineName ? msgBusPipelineContent(name: env.pipelineName, id: env.pipelineId, stage: myStageArray()) : msgBusPipelineContent(name: env.effortName, id: env.pipelineId, stage: myStageArray())
 

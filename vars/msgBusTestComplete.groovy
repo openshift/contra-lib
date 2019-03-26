@@ -1,7 +1,7 @@
 import org.centos.contra.pipeline.Utils
 
 /**
- * Defines the test.complete message
+ * Defines the <artifact.type>.test.complete message
  * This will merge parameters with the defaults and will validate each parameter
  * @param parameters
  * @return HashMap
@@ -10,7 +10,7 @@ def call(Map parameters = [:]) {
 
     def utils = new Utils()
 
-    def defaults = readJSON text: libraryResource('msgBusTestComplete.json')
+    def defaults = readJSON text: libraryResource('msgBus-Common-Test-Complete.json')
 
     return { Map runtimeArgs = [:] ->
         // Set defaults that can't go in json file

@@ -2,7 +2,7 @@
   "type": {
     "value": null,
     "type": "java.lang.String",
-    "description": "Artifact type. Examples include: brew-build, component-version, container-image, fedora-dist-git, koji-build, product, productmd-compose, redhat-container-group, redhat-container-image, rpm-build-group.",
+    "description": "Artifact type. Examples include: component-version, container-image, fedora-dist-git, product, productmd-compose, redhat-container-group, redhat-container-image, rpm-build-group, rpm-build.",
     "required": true
   },
   "id": {
