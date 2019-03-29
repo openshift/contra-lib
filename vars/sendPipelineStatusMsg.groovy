@@ -19,7 +19,8 @@ def call(String topicSuffix) {
 
     try {
         def msgTopic = env.topicPrefix + ".pipeline." + topicSuffix
-        def myCIArray = env.teamIRC ? msgBusCIContent(name: env.effortName, team: env.teamName, irc: env.teamIRC, email: env.teamEmail) : msgBusCIContent(name: env.effortName, team: env.teamName, email: env.teamEmail)
+        myDocs = env.docsLink ?: env.JENKINS_URL
+        def myContactArray = env.teamIRC ? msgBusContactContent(name: env.effortName, team: env.teamName, irc: env.teamIRC, email: env.teamEmail, docs: myDocs) : msgBusContactContent(name: env.effortName, team: env.teamName, email: env.teamEmail, docs: myDocs)
         if (topicSuffix in ['complete','error']) {
             // Get runtime for pipeline array
             float runTimeSeconds = (currentBuild.getDuration() / 1000)
@@ -29,7 +30,7 @@ def call(String topicSuffix) {
         }
 
         // Create message
-        pipelineMsg = msgBusPipelineMsg(ci: myCIArray(), pipeline: myPipelineArray())
+        pipelineMsg = msgBusPipelineMsg(contact: myContactArray(), pipeline: myPipelineArray())
         // Send message
         sendMessageWithAudit(msgTopic: msgTopic, msgContent: pipelineMsg())
 

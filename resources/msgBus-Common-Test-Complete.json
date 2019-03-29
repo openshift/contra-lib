@@ -6,15 +6,15 @@
     "required": true
   },
   "version": {
-    "value": '"0.2.0"',
+    "value": '"0.2.1"',
     "type": "java.lang.String",
     "description": "Version of the specification",
     "required": true
   },
-  "ci": {
+  "contact": {
     "value": {},
     "type": "groovy.lang.Closure",
-    "description": "The ci content Map",
+    "description": "The contact content Map",
     "required": true
   },
   "run": {
@@ -27,6 +27,12 @@
     "value": {},
     "type": "groovy.lang.Closure",
     "description": "The artifact content Map",
+    "required": true
+  },
+  "system": {
+    "value": [],
+    "type": "java.util.ArrayList",
+    "description": "The system content list",
     "required": true
   },
   "pipeline": {
@@ -45,12 +51,6 @@
     "value": {},
     "type": "groovy.lang.Closure",
     "description": "The notification content Map",
-    "required": false
-  },
-  "error": {
-    "value": {},
-    "type": "groovy.lang.Closure",
-    "description": "The error content Map",
     "required": false
   }
 }

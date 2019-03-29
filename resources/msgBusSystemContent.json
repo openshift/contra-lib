@@ -2,31 +2,31 @@
   "label": {
     "value": null,
     "type": "java.lang.String",
-    "description": "Label of the system",
+    "description": "Additional label for the system.",
     "required": false
   },
   "os": {
     "value": null,
     "type": "java.lang.String",
-    "description": "Identificator of the system, depending on the provider (often image name).",
+    "description": "Identifier of the system, depending on the provider. In case of * openstack - image name, * beaker - distro name, * openshift - container image name, * any other name specific to the provider.",
     "required": true
   },
   "provider": {
     "value": null,
     "type": "java.lang.String",
-    "description": "One of [openstack, beaker, openshift, rhev, ANY_OTHER_PROVIDER]", 
+    "description": "System used for provisioning. This can also be hostname of the specific system instance.",
     "required": true
   },
   "architecture": {
     "value": "x86_64",
     "type": "java.lang.String",
-    "description": "Architecture of the system/distro used for testing. Examples include x86_64, ppc64le, s390x, aarch64.",
+    "description": "Architecture of the system/distro used for testing.",
     "required": true
   },
   "variant": {
     "value": null,
     "type": "java.lang.String",
-    "description": "The compose or image variant, if application. Examples include Server and Workstation",
+    "description": "The compose or image variant, if applicable.",
     "required": false
   }
 }

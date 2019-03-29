@@ -59,6 +59,7 @@ to populate the two messages are defined. These variables are:
 The following variables are optional:
 - env.teamIRC: IRC channel for team responsible for this pipeline. Can be left out
 - env.pipelineName: For use if there is a desire for a name for the pipeline differing from the name of the effort. Defaults to env.effortName
+- env.docsLink: A link to the docs describing the CI system. Defaults to the Jenkins master page
 
 \* See Required scriptApprovals for Messaging
 

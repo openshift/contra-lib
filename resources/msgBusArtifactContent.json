@@ -2,79 +2,187 @@
   "type": {
     "value": null,
     "type": "java.lang.String",
-    "description": "Artifact type",
+    "description": "Artifact type. Examples include: component-version, container-image, fedora-dist-git, product, productmd-compose, redhat-container-group, redhat-container-image, rpm-build-group, rpm-build.",
     "required": true
   },
   "id": {
-    "value": 0,
-    "type": "java.math.BigInteger",
-    "description": "Task ID of the brew/koji build or pull request ID",
-    "required": true
+    "value": null,
+    "type": "java.lang.String",
+    "description": "ID of the artifact. This is often the task ID from the build system, but in some cases, it will be a human readable pull request ID or the name-version-release in the case of a product artifact.",
+    "required": false
   },
   "component": {
     "value": null,
     "type": "java.lang.String",
-    "description": "Name of the component tested",
+    "description": "Name of the component tested. In certain cases, this ends up being the image's product name, or the name of the product of the group of containers being tested.",
     "required": false
   },
   "issuer": {
     "value": null,
     "type": "java.lang.String",
-    "description": "Build issuer of the artifact",
-    "required": true
+    "description": "Build issuer of the artifact.",
+    "required": false
   },
   "nvr": {
     "value": null,
     "type": "java.lang.String",
-    "description": "Name-version-release of the artifact",
+    "description": "Name-version-release of the artifact.",
     "required": false
   },
   "scratch": {
     "value": true,
     "type": "java.lang.Boolean",
-    "description": "Indication if the build is a scratch build",
+    "description": "Indication if the build is a scratch build.",
     "required": false
   },
   "baseline": {
     "value": null,
     "type": "java.lang.String",
-    "description": "NVR of baseline brew/koji build (for comparison)",
+    "description": "Name-version-release of baseline koji/brew build (for comparison). Only use in the case of rpm-build artifacts.",
     "required": false
   },
   "source": {
     "value": null,
     "type": "java.lang.String",
-    "description": "The first item in the request field from task details. This is usually a link to git repository with a reference.",
+    "description": "The first item in the request field from task details. This is usually a link to git repository with a reference, delimited with the '#' sign. In case of a scratch build or other build built via uploading a src.rpm, the build task source will look like the bash scratch build.",
     "required": false
   },
   "dependencies": {
     "value": {},
     "type": "java.util.AbstractMap",
-    "description": "A list of NVR's of additional dependencies that were needed to install the brew/koji rpm build artifact.",
+    "description": "NVR's of additional dependencies that were needed to install the koji/brew rpm build artifact. Note that usually to install a package, you might need to include packages not yet in production repositories.",
     "required": false
   },
   "comment_id": {
     "value": 0,
     "type": "java.math.BigInteger",
-    "description": "Number of comment in pull request",
+    "description": "Comment number in the pull request.",
     "required": false
   },
   "commit_hash": {
     "value": null,
     "type": "java.lang.String",
-    "description": "Hash of newest commit",
-    "required": false
-  },
-  "repository": {
-    "value": null,
-    "type": "java.lang.String",
-    "description": "Path to dist git repository in form namespace/reponame (e.g. rpms/bash)",
+    "description": "Hash of newest commit.",
     "required": false
   },
   "uid": {
     "value": null,
     "type": "java.lang.String",
-    "description": "ID of pull request unique across pagure",
+    "description": "Pull request id unique across the whole Pagure instance.",
+    "required": false
+  },
+  "repository": {
+    "value": null,
+    "type": "java.lang.String",
+    "description": "Name of the container image repository, URL of the tested repository, or URL of the repository with packages from the side-tag.",
+    "required": false
+  },
+  "format": {
+    "value": null,
+    "type": "java.lang.String",
+    "description": "Format of the container image, for use with the container-image artifact only.",
+    "required": false
+  },
+  "pull_ref": {
+    "value": null,
+    "type": "java.lang.String",
+    "description": "A pull-spec that can be used to pull the image, for use with the container-image artifact only.",
+    "required": false
+  },
+  "full_name": {
+    "value": null,
+    "type": "java.lang.String",
+    "description": "Full name of the container image, in the form of 'registry:port/namespace/name:tag', for use with the redhat-container-image artifact only.",
+    "required": false
+  },
+  "registry_url": {
+    "value": null,
+    "type": "java.lang.String",
+    "description": "Registry URL from the container image full name, for use with the redhat-container-image artifact only.",
+    "required": false
+  },
+  "tag": {
+    "value": null,
+    "type": "java.lang.String",
+    "description": "Tag from the container image full name, for use with the redhat-container-image artifact only.",
+    "required": false
+  },
+  "name": {
+    "value": null,
+    "type": "java.lang.String",
+    "description": "n from nvr of the product or name from the container image full name for artifacts of type product and redhat-container-image, respectively.",
+    "required": false
+  },
+  "version": {
+    "value": null,
+    "type": "java.lang.String",
+    "description": "Version of the component tested or v from nvr of the product for artifacts of type component-version and product, respectively.",
+    "required": false
+  },
+  "release": {
+    "value": null,
+    "type": "java.lang.String",
+    "description": "Release of the product, for use with the product artifact only.",
+    "required": false
+  },
+  "digest": {
+    "value": null,
+    "type": "java.lang.String",
+    "description": "A digest that uniquely identifies the image within a repository.",
+    "required": false
+  },
+  "architecture": {
+    "value": null,
+    "type": "java.lang.String",
+    "description": "Product architecture to test on, for use with the product artifact only.",
+    "required": false
+  },
+  "phase": {
+    "value": null,
+    "type": "java.lang.String",
+    "description": "Product phase, for use with the product artifact only.",
+    "required": false
+  },
+  "build": {
+    "value": null,
+    "type": "java.lang.String",
+    "description": "Product build, for use with the product artifact only.",
+    "required": false
+  },
+  "state": {
+    "value": null,
+    "type": "java.lang.String",
+    "description": "Product ready state, for use with the product artifact only.",
+    "required": false
+  },
+  "repos": {
+    "value": {},
+    "type": "java.util.AbstractMap",
+    "description": "Product preGA list of repos used for install, for use with the product artifact only.",
+    "required": false
+  },
+  "compose_type": {
+    "value": null,
+    "type": "java.lang.String",
+    "description": "Type of compose produced by engineering, for use with the productmd-compose artifact only.",
+    "required": false
+  },
+  "errata_id": {
+    "value": null,
+    "type": "java.lang.String",
+    "description": "ID of the associated advisory, for use with the redhat-container-group artifact only.",
+    "required": false
+  },
+  "images": {
+    "value": {},
+    "type": "java.util.AbstractMap",
+    "description": "List of redhat-container-images in the group, for use with the redhat-container-group artifact only.",
+    "required": false
+  },
+  "builds": {
+    "value": {},
+    "type": "java.util.AbstractMap",
+    "description": "List of the rpm-builds in the group, for use with the rpm-build-group artifact only.",
     "required": false
   }
 }

@@ -5,6 +5,12 @@
     "description": "Timestamp of message creation (ISO-8601)",
     "required": true
   },
+  "version": {
+    "value": '"0.2.1"',
+    "type": "java.lang.String",
+    "description": "Version of the specification",
+    "required": true
+  },
   "contact": {
     "value": {},
     "type": "groovy.lang.Closure",
@@ -17,10 +23,22 @@
     "description": "The run content Map",
     "required": true
   },
+  "artifact": {
+    "value": {},
+    "type": "groovy.lang.Closure",
+    "description": "The artifact content Map",
+    "required": true
+  },
   "pipeline": {
     "value": {},
     "type": "groovy.lang.Closure",
     "description": "The pipeline content Map",
+    "required": true
+  },
+  "test": {
+    "value": {},
+    "type": "groovy.lang.Closure",
+    "description": "The test content Map",
     "required": true
   }
 }
