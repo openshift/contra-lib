@@ -42,7 +42,11 @@ def call(String stageName, Closure body) {
     // Create stage running message
     runningMsg = msgBusStageMsg(contact: myContactArray(), pipeline: myPipelineArray())
     // send running message
-    sendMessageWithAudit(msgTopic: runningTopic, msgContent: runningMsg())
+    try {
+        sendMessageWithAudit(msgTopic: runningTopic, msgContent: runningMsg())
+    } catch(e) {
+        println("sendMessage failed with " + e)
+    }
 
     // Get current time
     long startTimeMillis = System.currentTimeMillis()
@@ -62,5 +66,9 @@ def call(String stageName, Closure body) {
     // Create stage complete message
     completeMsg = msgBusStageMsg(contact: myContactArray(), pipeline: myPipelineArray())
     // Send complete message
-    sendMessageWithAudit(msgTopic: completeTopic, msgContent: completeMsg())
+    try {
+        sendMessageWithAudit(msgTopic: completeTopic, msgContent: completeMsg())
+    } catch(e) {
+        println("sendMessage failed with " + e)
+    }
 }
