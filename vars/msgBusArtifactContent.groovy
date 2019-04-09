@@ -13,7 +13,7 @@ def call(Map parameters = [:]) {
     def defaults = readJSON text: libraryResource('msgBusArtifactContent.json')
 
     return { Map runtimeArgs = [:] ->
-        if (!parameteres.containsKey('type')) {
+        if (!parameters.containsKey('type')) {
             throw new Exception("Error: Did not pass a type in to the artifact closure")
         }
         // Perform checks for type specific required fields
