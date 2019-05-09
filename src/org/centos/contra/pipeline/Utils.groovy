@@ -1,4 +1,5 @@
 package org.centos.contra.pipeline
+import com.redhat.jenkins.plugins.ci.messaging.data.SendResult
 
 /**
  * @param request - the url that refers to the package
@@ -383,6 +384,26 @@ def trackMessage(String messageID, int retryCount, def dataGrepperWebAddr=null) 
         } else {
             echo "found!"
         }
+    }
+}
+
+/**
+ * Allow to check custom service for presence of a message
+ *
+ * It is possible to use method pointer operator (.&) from groovy
+ * if you do not want to create new closure.
+ * http://docs.groovy-lang.org/latest/html/documentation/core-operators.html#method-pointer-operator
+ *
+ * @param trackClosure closure for checking successful delivery of message.
+                       You need to throw exception (or to call error())
+                       in case of failure. Closure need to accept one parameter com.redhat.jenkins.plugins.ci.messaging.data.SendResult
+                       which is returned from the step sendCIMessage.
+ * @param retryCount number of times to keep trying.
+ * @return
+ */
+def trackMessageWithClosure(Closure trackClosure, int retryCount, SendResult sendResult) {
+    retry(retryCount) {
+        trackClosure(sendResult)
     }
 }
 
