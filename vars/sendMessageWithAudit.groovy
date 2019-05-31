@@ -30,6 +30,11 @@ def call(Map parameters = [:]) {
         auditContent = readJSON file: msgAuditFile
     }
 
+    if (binding.hasVariable('env') && env?.SKIP_UMB_SEND?.trim()) {
+        println "contra-lib: env var is not empty: SKIP_UMB_SEND. Do not send message."
+        return
+    }
+
     // Send message and get handle on SendResult
     def sendResult = null
     if (msgProvider) {
