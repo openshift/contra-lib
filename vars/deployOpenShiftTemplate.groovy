@@ -33,7 +33,8 @@ def call(Map parameters = [:], Closure body) {
         def ocContainersWithProps = parameters.get('containersWithProps', [:])
         def openshift_namespace = parameters.get('openshift_namespace', (env.OPENSHIFT_BUILD_NAMESPACE ?: 'continuous-infra'))
         def docker_repo_url = parameters.get('docker_repo_url', 'docker-registry.default.svc:5000')
-        def podName = parameters.get('podName', "${env.BUILD_TAG}-${UUID.randomUUID().toString()}")
+        def podName = parameters.get('podName', env.BUILD_TAG)
+        def podLabel = parameters.get('podLabel', UUID.randomUUID().toString())
         def openshift_service_account = parameters.get('openshift_service_account', (env.oc_serviceaccount_name ?: 'jenkins'))
         def jenkins_slave_image = parameters.get('jenkins_slave_image', 'jenkins-continuous-infra-slave:stable')
         def jenkins_slave_namespace = parameters.get('jenkins_slave_namespace', openshift_namespace)
@@ -79,7 +80,7 @@ def call(Map parameters = [:], Closure body) {
         }
 
         podTemplate(name: podName,
-                label: podName,
+                label: podLabel,
                 cloud: 'openshift',
                 serviceAccount: openshift_service_account,
                 idleMinutes: 0,
@@ -94,7 +95,7 @@ def call(Map parameters = [:], Closure body) {
 
 
         ) {
-            node(podName) {
+            node(podLabel) {
 
                 utils.verifyPod(openshift_namespace)
 
