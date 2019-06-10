@@ -17,6 +17,7 @@ import org.centos.contra.pipeline.Utils
  * openshift_namespace: String - The namespace the containers are running in
  * docker_repo_url: String - The address:port of the docker registry
  * podName: String - The name of the pod to run the containers in
+ * podLabel: String - A unique label for the node
  * openshift_service_account: String - The openshift service account
  * jenkins_slave_image: String - Container:tag of the jenkins slave container
  * @param body
