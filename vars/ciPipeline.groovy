@@ -21,6 +21,7 @@
  *             after the build has run
  * timeoutValue: Integer - How long before the job should timeout. Defaults to 120 minutes.
  * sendMetrics: Boolean - send metrics to influx or not
+ * failureFunction: Closure - A closure that will be called only in the case that the execution of the main closure failed.
  * bodyWrapper: Closure - A closure that wraps the body. This can be used, for example, to alter the environment.
  * @param body
  * @return
@@ -38,6 +39,7 @@ def call(Map parameters = [:], Closure body) {
     def postBuild = parameters.get('postBuild')
     def timeoutValue = parameters.get('timeout', 120)
     def sendMetrics = parameters.get('sendMetrics', true)
+    def failureFunction = parameters.get('failureFunction')
     def bodyWrapper = parameters.get('bodyWrapper', { Closure bodyWrapperClosure -> bodyWrapperClosure() })
 
     def cimetrics = ciMetrics.metricsInstance
@@ -67,6 +69,10 @@ def call(Map parameters = [:], Closure body) {
 
             if (errorMsg) {
                 sendMessageWithAudit(errorMsg())
+            }
+
+            if (failureFunction) {
+                failureFunction()
             }
 
             throw e

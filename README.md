@@ -38,6 +38,7 @@ Parameters:
 - postBuild: A Closure that contains any post build steps. e.g. ArtifactArchiver step.
 - timeout: Set to time the pipeline out after timeout minutes. Defaults to 30.
 - sendMetrics: Whether to send metrics to influxdb. true or false.
+- failureFunction: A Closure that is executed only in the case of the main closure execution failing.
 ```groovy
 ciPipeline(buildPrefix: 'myrpmbuilder', decorateBuild: {currentBuild.displayName: 'env.BUILD_ID'})
 ```
