@@ -118,11 +118,11 @@ def setBuildBranch(String tag) {
  */
 def initializeAuditFile(String auditFile) {
     // Ensure auditFile is available
-    sh "rm -f ${auditFile}"
+    sh script: "rm -f ${auditFile}", label: "Deleting old files"
     String msgAuditFileDir = sh(script: "dirname ${auditFile}", returnStdout: true).trim()
-    sh "mkdir -p ${msgAuditFileDir}"
-    sh "touch ${auditFile}"
-    sh "echo '{}' >> ${auditFile}"
+    sh script: "mkdir -p ${msgAuditFileDir}", label: "Creating directory: ${msgAuditFileDir}"
+    sh script: "touch ${auditFile}", label: "Creating file: ${auditFile}"
+    sh script: "echo '{}' >> ${auditFile}", label: "Adding '{}' to the ${auditFile}"
 }
 
 /**
@@ -137,19 +137,21 @@ def initializeAuditFile(String auditFile) {
  */
 def checkTests(String mypackage, String mybranch, String tag, String pr_id=null, String namespace='rpms') {
     echo "Currently checking if package tests exist"
-    sh "rm -rf ${mypackage}"
+    sh script: "rm -rf ${mypackage}", label: "Deleting old packages"
     def repo_url = "https://src.fedoraproject.org/${namespace}/${mypackage}/"
     retry(5) {
-        sh "git clone -b ${mybranch} --single-branch --depth 1 ${repo_url}"
+        sh script: "git clone -b ${mybranch} --single-branch --depth 1 ${repo_url}",
+        label: "Cloning ${repo_url} into the ${mybranch} branch"
     }
     if (pr_id != null) {
         dir("${mypackage}") {
-            sh "git fetch -fu origin refs/pull/${pr_id}/head:pr"
+            sh script: "git fetch -fu origin refs/pull/${pr_id}/head:pr", label: "Fetching ${pr_id} commit"
             // If fail to apply patch do not exit with error, but instead ignore the patch
             // this should avoid the pipeline to exit here without sending any topic to fedmsg
             try {
                 // Setting git config and merge message in case we try to merge a closed PR
-                sh "git -c 'user.name=Fedora CI' -c 'user.email=ci@lists.fedoraproject.org'  merge pr -m 'Fedora CI pipeline'"
+                sh script: "git -c 'user.name=Fedora CI' -c 'user.email=ci@lists.fedoraproject.org'  merge pr -m 'Fedora CI pipeline'",
+                label: "Applying patch from pull request"
             } catch (err) {
                 echo "FAIL to apply patch from PR, ignoring it..."
             }
@@ -208,7 +210,7 @@ def verifyPod(String openshiftProject, String nodeName=env.NODE_NAME) {
             def describeStr = openshift.selector("pods", nodeName).describe()
             out = describeStr.out.trim()
 
-            sh 'mkdir -p podInfo'
+            sh script: 'mkdir -p podInfo', label: "Creating 'podInfo' directory"
 
             writeFile file: 'podInfo/node-pod-description-' + nodeName + '.txt',
                     text: out
@@ -250,7 +252,7 @@ def verifyPod(String openshiftProject, String nodeName=env.NODE_NAME) {
 def getContainerLogsFromPod(String openshiftProject, String nodeName=env.NODE_NAME) {
     openshift.withCluster() {
         openshift.withProject(openshiftProject) {
-            sh 'mkdir -p podInfo'
+            sh script: 'mkdir -p podInfo', label: "Creating 'podInfo' directory"
             names       = openshift.raw("get", "pod",  "${nodeName}", '-o=jsonpath="{.status.containerStatuses[*].name}"')
             String containerNames = names.out.trim()
 
@@ -678,7 +680,7 @@ def getChangeLogFromCurrentBuild() {
  * @return
  */
 def sendIRCNotification(String nick, String channel, String message, String ircServer="irc.freenode.net:6697") {
-    sh """
+    sh script: """
         (
         echo NICK ${nick}
         echo USER ${nick} 8 * : ${nick}
@@ -688,5 +690,5 @@ def sendIRCNotification(String nick, String channel, String message, String ircS
         echo "NOTICE ${channel} :${message}"
         echo QUIT
         ) | openssl s_client -connect ${ircServer}
-    """
+    """, label: "Sending IRC notification. NICK: ${nick}, CHANNEL: ${channel}, IRC Server: ${ircServer}"
 }

@@ -36,7 +36,7 @@ def call(Map parameters) {
 
             def containerEnv = localVars.collect { key, value -> return key+'='+value }
 
-            sh "mkdir -p ${stageDir}"
+            sh script: "mkdir -p ${stageDir}", label: "Creating directory: ${stageDir}"
 
             try {
                 withEnv(containerEnv) {
@@ -49,11 +49,11 @@ def call(Map parameters) {
                 throw "Error running ${containerScript}: ${err.toString()}"
             } finally {
                 if (fileExists("logs/")) {
-                    sh "mv logs ${stageDir}/logs"
+                    sh script: "mv logs ${stageDir}/logs", label: "Moving logs to the ${stageDir}/logs"
                 }
 
                 if (fileExists("job.props")) {
-                    sh "mv job.props ${stageDir}/job.props"
+                    sh script: "mv job.props ${stageDir}/job.props", label: "Moving job.props to the ${stageDir}/job.props"
                 }
             }
         }

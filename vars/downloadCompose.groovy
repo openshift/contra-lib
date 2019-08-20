@@ -13,10 +13,10 @@ def call(Map parameters = [:]) {
 
     handlePipelineStep() {
 
-        sh """
+        sh script: """
        rm -f images.json 
        curl -LO ${location}/metadata/images.json
-    """
+    """, label: "Getting images.json file"
 
         def imageJson = readJSON file: 'images.json'
         def images = imageJson['payload']['images']
