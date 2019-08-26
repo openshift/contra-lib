@@ -209,3 +209,12 @@ deployOpenShiftTemplate(containers: containers) {
     }
 }
 ```
+#### buildOpenShiftImage
+This function creates a new build of an Image Stream in OpenShift
+Parameters:
+- openshiftProject: The OpenShift project name to work in
+- buildConfig: The OpenShift image stream name (which also should be the build name)
+- tag: The tag to push the new image to. Defaults to latest
+```groovy
+buildOpenShiftImage(openshiftProject: 'New-Project', buildConfig: 'Test-Image', tag: 'PR-1')
+```
