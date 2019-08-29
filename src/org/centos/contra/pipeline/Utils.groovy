@@ -119,7 +119,7 @@ def setBuildBranch(String tag) {
 def initializeAuditFile(String auditFile) {
     // Ensure auditFile is available
     sh script: "rm -f ${auditFile}", label: "Deleting old files"
-    String msgAuditFileDir = sh(script: "dirname ${auditFile}", returnStdout: true).trim()
+    String msgAuditFileDir = sh(script: "dirname ${auditFile}", label: "Getting dirname of the ${auditFile}", returnStdout: true).trim()
     sh script: "mkdir -p ${msgAuditFileDir}", label: "Creating directory: ${msgAuditFileDir}"
     sh script: "touch ${auditFile}", label: "Creating file: ${auditFile}"
     sh script: "echo '{}' >> ${auditFile}", label: "Adding '{}' to the ${auditFile}"
@@ -158,17 +158,17 @@ def checkTests(String mypackage, String mybranch, String tag, String pr_id=null,
         }
     }
     // if STR is installed use it to check for tags as it is more reliable
-    if (sh(returnStatus: true, script: """rpm -q standard-test-roles""") == 0) {
+    if (sh(returnStatus: true, script: """rpm -q standard-test-roles""", label: "Checking if standard-test-roles are installed") == 0) {
         if (namespace != "tests") {
-            return sh (returnStatus: true, script: "ansible-playbook --list-tags ${mypackage}/tests/tests*.yml | grep -e \"TASK TAGS: \\[.*\\<${tag}\\>.*\\]\"") == 0
+            return sh (returnStatus: true, script: "ansible-playbook --list-tags ${mypackage}/tests/tests*.yml | grep -e \"TASK TAGS: \\[.*\\<${tag}\\>.*\\]\"", label: "Getting list of tags") == 0
         } else {
-            return sh (returnStatus: true, script: "ansible-playbook --list-tags ${mypackage}/tests*.yml | grep -e \"TASK TAGS: \\[.*\\<${tag}\\>.*\\]\"") == 0
+            return sh (returnStatus: true, script: "ansible-playbook --list-tags ${mypackage}/tests*.yml | grep -e \"TASK TAGS: \\[.*\\<${tag}\\>.*\\]\"", label: "Getting list of tags") == 0
         }
     } else {
         if (namespace != "tests") {
-            return sh (returnStatus: true, script: """grep -r '\\- '${tag}'\$' ${mypackage}/tests""") == 0
+            return sh (returnStatus: true, script: """grep -r '\\- '${tag}'\$' ${mypackage}/tests""", label: "Getting list of tags") == 0
         } else {
-            return sh (returnStatus: true, script: """grep -r '\\- '${tag}'\$' ${mypackage}""") == 0
+            return sh (returnStatus: true, script: """grep -r '\\- '${tag}'\$' ${mypackage}""", label: "Getting list of tags") == 0
         }
     }
 }
@@ -294,6 +294,7 @@ def buildImage(String openshiftProject, String buildConfig) {
 
             def imageHash = sh(
                     script: "echo \"${out}\" | grep 'Image Digest:' | cut -f2- -d:",
+                    label: "Getting Image Hash",
                     returnStdout: true
             ).trim()
             echo "imageHash: ${imageHash}"
@@ -375,7 +376,7 @@ def trackMessage(String messageID, int retryCount, def dataGrepperWebAddr=null) 
         echo "Checking datagrapper for presence of message..."
         def STATUSCODE = sh (returnStdout: true, script: """
             curl --insecure --silent --output /dev/null --write-out "%{http_code}" \'${dGWebAddress}/id?id=${messageID}&chrome=false&is_raw=false\'
-        """).trim()
+        """, label: "Checking datagrapper for presence of message").trim()
         // We only want to wait if there are 404 errors
         echo "${STATUSCODE}"
         if (STATUSCODE.equals("404")) {
