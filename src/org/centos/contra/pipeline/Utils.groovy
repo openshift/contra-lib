@@ -139,8 +139,13 @@ def checkTests(String mypackage, String mybranch, String tag, String pr_id=null,
     echo "Currently checking if package tests exist"
     sh script: "rm -rf ${mypackage}", label: "Deleting old packages"
     def repo_url = "https://src.fedoraproject.org/${namespace}/${mypackage}/"
+    // Don't use depth 1 if we pass a pr_id, or you will fail
+    depth = ''
+    if (pr_id == null) {
+        depth = '--depth 1 '
+    }
     retry(5) {
-        sh script: "git clone -b ${mybranch} --single-branch --depth 1 ${repo_url}",
+        sh script: "git clone -b ${mybranch} --single-branch ${depth}${repo_url}",
         label: "Cloning ${repo_url} into the ${mybranch} branch"
     }
     if (pr_id != null) {
