@@ -4,6 +4,7 @@
  * openshiftProject: The OpenShift project name to work in
  * buildConfig: The OpenShift image stream name (which also should be the build name)
  * tag: The tag to push the new image to. Defaults to latest
+ * pullId: Specify pull request ID for buildConfig. Defaults to null
  * @return
  */
 
@@ -11,11 +12,20 @@ def call(Map parameters = [:]) {
     def openshiftProject = parameters.get('openshiftProject')
     def buildConfig = parameters.get('buildConfig')
     def tag = parameters.get('tag', 'latest')
+    def pullId = parameters.get('pullId')
 
     openshift.withCluster() {
         openshift.withProject(openshiftProject) {
-            def result = openshift.startBuild(buildConfig,
+            def result = null
+            if (!pullId) {
+                result = openshift.startBuild(buildConfig,
                     "--wait")
+            } else {
+                result = openshift.startBuild(buildConfig,
+                    "--commit",
+                    "refs/pull/" + pullId + "/head",
+                    "--wait")
+            }
             def out = result.out.trim()
             echo "Resulting Build: " + out
 
