@@ -29,20 +29,20 @@ def call(Map parameters = [:]) {
             def out = result.out.trim()
             echo "Resulting Build: " + out
 
-            def describeStr = openshift.selector(out).describe()
-            out = describeStr.out.trim()
+            def outTrim = ""
 
             // --wait is being lost due to socket timeouts
             buildRunning = true
             while (buildRunning) {
                 describeStr = openshift.selector(out).describe()
                 outTrim = describeStr.out.trim()
-                buildRunning = sh(script: "echo \"${outTrim}\" | grep '^Status:' | grep -E 'New|Pending|Running'", returnStatus: true) == 0
+                buildRunning = sh(script: "echo \"${outTrim}\" | grep '^Status:' | grep -E 'New|Pending|Running'", label: "Checking build status", returnStatus: true) == 0
                 sleep 60
             }
 
             def imageHash = sh(
-                    script: "echo \"${out}\" | grep 'Image Digest:' | cut -f2- -d:",
+                    script: "echo \"${outTrim}\" | grep 'Image Digest:' | cut -f2- -d:",
+                    label: "Getting Image Hash",
                     returnStdout: true
             ).trim()
             echo "imageHash: ${imageHash}"
