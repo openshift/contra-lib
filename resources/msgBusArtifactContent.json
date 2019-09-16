@@ -184,5 +184,11 @@
     "type": "java.util.AbstractMap",
     "description": "List of the rpm-builds in the group, for use with the rpm-build-group artifact only.",
     "required": false
+  },
+  "artifacts": {
+    "value": {},
+    "type": "java.util.AbstractMap",
+    "description": "List of child artifacts, from which this product consists. It is required, but can be an empty list, for us with the product-build artifact only.",
+    "required": false
   }
 }
