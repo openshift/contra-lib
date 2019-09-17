@@ -138,7 +138,8 @@ def initializeAuditFile(String auditFile) {
 def checkTests(String mypackage, String mybranch, String tag, String pr_id=null, String namespace='rpms') {
     echo "Currently checking if package tests exist"
     sh script: "rm -rf ${mypackage}", label: "Deleting old packages"
-    def repo_url = "https://src.fedoraproject.org/${namespace}/${mypackage}/"
+    def pagure_url = env.PAGURE_URL ?: "https://src.fedoraproject.org"
+    def repo_url = "${pagure_url}/${namespace}/${mypackage}/"
     // Don't use depth 1 if we pass a pr_id, or you will fail
     depth = ''
     if (pr_id == null) {
