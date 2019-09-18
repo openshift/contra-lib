@@ -52,6 +52,7 @@ def call(Map parameters = [:], Closure body) {
     timeout(time: timeoutValue, unit: 'MINUTES') {
 
         try {
+            topicSuffix = "complete"
             if (preBuild) {
                 preBuild()
             }
@@ -59,7 +60,6 @@ def call(Map parameters = [:], Closure body) {
             bodyWrapper() {
                 body()
             }
-            topicSuffix = "complete"
         } catch (e) {
             // Set build result
             currentBuild.result = "FAILURE"
