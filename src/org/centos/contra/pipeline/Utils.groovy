@@ -180,31 +180,6 @@ def checkTests(String mypackage, String mybranch, String tag, String pr_id=null,
 }
 
 /**
- * Library to parse Pagure PR CI_MESSAGE and check if
- * it is for a new commit added, the comment contains
- * some keyword, or if the PR was rebased
- * If notification = true, commit was added or it was rebased
- * @param message - The CI_MESSAGE
- * @param keyword - The keyword we care about
- * @return bool
- */
-def checkUpdatedPR(def ci_data, String keyword) {
-
-    if (ci_data['pullrequest']['comments']) {
-        // Check if this comment is a merge notification
-        if (ci_data['pullrequest']['status'] == 'Merged') {
-            return false
-        }
-        if (ci_data['pullrequest']['comments'].last()['notification'] || ci_data['pullrequest']['comments'].last()['comment'].contains(keyword)) {
-            return true
-        } else {
-            return false
-        }
-    }
-    return true
-}
-
-/**
  *
  * @param openshiftProject name of openshift namespace/project.
  * @param nodeName podName we are going to verify.
@@ -268,49 +243,6 @@ def getContainerLogsFromPod(String openshiftProject, String nodeName=env.NODE_NA
                             text: log
             }
             archiveArtifacts "podInfo/containerLog-*.txt"
-        }
-    }
-}
-
-/**
- * Build image in openshift
- * @param openshiftProject Openshift Project
- * @param buildConfig
- * @return
- */
-def buildImage(String openshiftProject, String buildConfig) {
-    // - build in Openshift
-    // - startBuild with a commit
-    // - Get result Build and get imagestream manifest
-    // - Use that to create a unique tag
-    // - This tag will then be passed as an image input
-    //   to the podTemplate/containerTemplate to create
-    //   our slave pod.
-    openshift.withCluster() {
-        openshift.withProject(openshiftProject) {
-            def result = openshift.startBuild(buildConfig,
-                    "--commit",
-                    "refs/pull/" + env.ghprbPullId + "/head",
-                    "--wait")
-            def out = result.out.trim()
-            echo "Resulting Build: " + out
-
-            def describeStr = openshift.selector(out).describe()
-            out = describeStr.out.trim()
-
-            def imageHash = sh(
-                    script: "echo \"${out}\" | grep 'Image Digest:' | cut -f2- -d:",
-                    label: "Getting Image Hash",
-                    returnStdout: true
-            ).trim()
-            echo "imageHash: ${imageHash}"
-
-            echo "Creating CI tag for ${openshiftProject}/${buildConfig}: ${buildConfig}:PR-${env.ghprbPullId}"
-
-            openshift.tag("${openshiftProject}/${buildConfig}@${imageHash}",
-                    "${openshiftProject}/${buildConfig}:PR-${env.ghprbPullId}")
-
-            return "PR-" + env.ghprbPullId
         }
     }
 }
