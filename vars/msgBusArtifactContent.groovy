@@ -34,6 +34,12 @@ def call(Map parameters = [:]) {
                 }
                 parameters['nvr'] = parameters['nvr'] ?: parameters['name'] + '-' + parameters['version'] + '-' + parameters['release']
                 break
+            case 'product-build':
+                if (!parameters.containsKey('id') || !parameters.containsKey('name') || !parameters.containsKey('version') || !parameters.containsKey('release')) {
+                    throw new Exception("Error: Missing required fields for product-build artifact")
+                }
+                parameters['nvr'] = parameters['nvr'] ?: parameters['name'] + '-' + parameters['version'] + '-' + parameters['release']
+                break
             case 'productmd-compose':
                 if (!parameters.containsKey('id') || !parameters.containsKey('compose_type')) {
                     throw new Exception("Error: Missing required fields for productmd-compose artifact")
