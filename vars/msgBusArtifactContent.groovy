@@ -24,7 +24,7 @@ def call(Map parameters = [:]) {
                 }
                 break
             case 'container-image':
-                if (!parameters.containsKey('repository') || !parameters.containsKey('digest') || !parameters.containsKey('issuer') || !parameters.containsKey('scratch') || !parameters.containsKey('id')) {
+                if (!parameters.containsKey('repository') || !parameters.containsKey('digest') || !parameters.containsKey('pull_ref') || !parameters.containsKey('id')) {
                     throw new Exception("Error: Missing required fields for container-image artifact")
                 }
                 break
