@@ -65,9 +65,14 @@ def call(Map parameters = [:]) {
                     throw new Exception("Error: Missing required fields for rpm-build-group artifact")
                 }
                 break
-            case 'rpm-build':
+            case 'brew-build':
                 if (!parameters.containsKey('id') || !parameters.containsKey('issuer') || !parameters.containsKey('component') || !parameters.containsKey('nvr') || !parameters.containsKey('scratch')) {
-                    throw new Exception("Error: Missing required fields for rpm-build artifact")
+                    throw new Exception("Error: Missing required fields for brew-build artifact")
+                }
+                break
+            case 'koji-build':
+                if (!parameters.containsKey('id') || !parameters.containsKey('issuer') || !parameters.containsKey('component') || !parameters.containsKey('nvr') || !parameters.containsKey('scratch')) {
+                    throw new Exception("Error: Missing required fields for koji-build artifact")
                 }
                 break
             default:
