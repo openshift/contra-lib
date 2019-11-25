@@ -46,7 +46,7 @@ def call(Map parameters) {
                 }
 
             } catch(err) {
-                throw "Error running ${containerScript}: ${err.toString()}"
+                error("Error running script '${containerScript}' in container ${containerName}: ${err.getMessage()}")
             } finally {
                 if (fileExists("logs/")) {
                     sh script: "mv logs ${stageDir}/logs", label: "Moving logs to the ${stageDir}/logs"
