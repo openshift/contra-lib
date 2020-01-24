@@ -171,10 +171,11 @@ def checkTests(String mypackage, String mybranch, String tag, String pr_id=null,
             return sh (returnStatus: true, script: "ansible-playbook --list-tags ${mypackage}/tests*.yml | grep -e \"TASK TAGS: \\[.*\\<${tag}\\>.*\\]\"", label: "Getting list of tags") == 0
         }
     } else {
+        // There is no standard-test-roles installed, there is no simple way to make sure tag is set properly, just make sure there is test playbook
         if (namespace != "tests") {
-            return sh (returnStatus: true, script: """grep -r '\\- '${tag}'\$' ${mypackage}/tests""", label: "Getting list of tags") == 0
+            return sh (returnStatus: true, script: """ls ${mypackage}/tests/tests*.yml""", label: "Check if there is test playbook") == 0
         } else {
-            return sh (returnStatus: true, script: """grep -r '\\- '${tag}'\$' ${mypackage}""", label: "Getting list of tags") == 0
+            return sh (returnStatus: true, script: """ls ${mypackage}/tests*.yml""", label: "Check if there is test playbook") == 0
         }
     }
 }
