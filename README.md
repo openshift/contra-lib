@@ -173,7 +173,7 @@ writeToInflux(customData: ['build_time': 100], customDataMap: ['mybuild': ['buil
 After the pipeline finishes, the ciPipeline library will send all collected metrics to Influxdb.
 
 #### Example Usage:
-```
+```groovy
 package_name = env.CI_MESSAGE['name']
 msgHeader = msgBusHeader(type: 'koji-build', component: package_name, issuer: 'currentUser', scratch: false, topic: '/fedMsgTopic', id: '000000', nvr: 'foo-1.0-fc27')
 msgComplete = msgBusTestComplete(header: header)
@@ -196,14 +196,14 @@ deployOpenShiftTemplate(containers: containers) {
         stage('koji-build') {
             // wrap the stage in extra debugging information.
             // plus time how long it takes to run the stage
-               executeInContainer(containerName: 'koji-build-container, containerScript: 'verify-build.sh')
+               executeInContainer(containerName: 'koji-build-container', containerScript: 'verify-build.sh')
 
         }
 
         stage('package-tests') {
             // define variables that will be used by the container singlehost-test
             stageVars = [repo: 'myrepo', test-all: true]
-                executeInContainer(containerName: 'singlehost-test, containerScript: 'package-tests.sh',
+                executeInContainer(containerName: 'singlehost-test', containerScript: 'package-tests.sh',
                 stageVars: stageVars)
 
          }
