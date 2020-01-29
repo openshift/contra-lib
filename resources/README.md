@@ -28,3 +28,29 @@ myTestContent = msgBusTestContent(type: 'tier0', category: 'functional', namespa
 myTestRunningMsg = msgBusTestRunning(ci: myCIContent(), artifact: myArtifactContent(), pipeline: myPipelineContent(), test: myTestContent())
 println('My new conforming message is: ' + myTestRunningMsg())
 ```
+
+### Example ciPipeline and ciStage Jenkinsfile
+The below is a minimalistic Jenkinsfile using the ciPipeline and ciStage functions to send metrics.
+If you add the variables and use the functions from the following example, you will, for free, have your Jenkins build send out conforming messages for pipeline and stage.
+The pipeline messages are on topic pipeline.[running,complete,error] and the stage messages are on topic pipeline.stage.[running,complete].
+```
+env.effortName = "A New Effort" // Req for Contact Closure
+env.teamName = "My Team" // Req for Contact Closure
+env.teamEmail = "myteam@email.com" // Req for Contact Closure
+env.pipelineId = UUID.randomUUID().toString() // Req for Pipeline Closure
+env.MSG_PROVIDER = "Message Bus" // Req for sendMessage function. Name of the messaging provider as set up in your Jenkins master config
+env.datagrepperUrl = "https://datagrepper.com" // Req for sendMessageWithAudit. The datagrepper instance for your messaging provider
+env.topicPrefix = "VirtualTopic.eng.ci" // The prefix to append pipeline.* to in order to form your final topic to send the message on
+
+// Checkout contra-lib
+library identifier: "contra-lib@master",
+        retriever: modernSCM([$class: "GitSCMSource", remote: "https://github.com/openshift/contra-lib.git"])
+
+node('master') {
+    ciPipeline(sendMetrics: false) {
+        ciStage('First stage') {
+            println("I'm in a stage that will send metrics")
+        }
+    }
+}
+```
