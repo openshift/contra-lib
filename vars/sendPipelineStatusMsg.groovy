@@ -24,9 +24,9 @@ def call(String topicSuffix) {
         if (topicSuffix in ['complete','error']) {
             // Get runtime for pipeline array
             float runTimeSeconds = (currentBuild.getDuration() / 1000)
-            myPipelineArray = env.pipelineName ? msgBusPipelineContent(name: env.pipelineName, id: env.pipelineId, runtime: runTimeSeconds) : msgBusPipelineContent(name: env.effortName, id: env.pipelineId, runtime: runTimeSeconds)
+            myPipelineArray = env.pipelineName ? msgBusPipelineContent(name: env.pipelineName, id: env.pipelineId, runtime: runTimeSeconds, status: topicSuffix) : msgBusPipelineContent(name: env.effortName, id: env.pipelineId, runtime: runTimeSeconds, status: topicSuffix)
         } else {
-            myPipelineArray = env.pipelineName ? msgBusPipelineContent(name: env.pipelineName, id: env.pipelineId) : msgBusPipelineContent(name: env.effortName, id: env.pipelineId)
+            myPipelineArray = env.pipelineName ? msgBusPipelineContent(name: env.pipelineName, id: env.pipelineId, status: topicSuffix) : msgBusPipelineContent(name: env.effortName, id: env.pipelineId, status: topicSuffix)
         }
 
         // Create message
