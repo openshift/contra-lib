@@ -76,7 +76,7 @@ def call(Map parameters = [:]) {
                 }
                 break
             default:
-                throw new Exception("Error: Unsupported artifact type: " + parameters['type'])
+                println("Warning: Unsupported artifact type: " + parameters['type'])
                 break
         }
         parameters = utils.mapMergeQuotes([parameters, runtimeArgs])
