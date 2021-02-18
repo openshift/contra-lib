@@ -17,17 +17,23 @@ def call(Map parameters = [:]) {
     def msgAuditFile = parameters.get('msgAuditFile', 'auditfile.json')
     def msgRetryCount = parameters.get('msgRetryCount', 3)
     def trackClosure = parameters.get('trackClosure')
+    def freshAuditFile = parameters.get('freshAuditFile', false)
 
     def utils = new Utils()
 
     def auditContent = null
-    try {
-        // Get contents of auditFile
-        auditContent = readJSON file: msgAuditFile
-    } catch(e) {
-        // If could not read audit file, create it
+    if (freshAuditFile) { // Optionally create a new audit file each time
         utils.initializeAuditFile(msgAuditFile)
         auditContent = readJSON file: msgAuditFile
+    } else {
+        try {
+            // Get contents of auditFile
+            auditContent = readJSON file: msgAuditFile
+        } catch(e) {
+            // If could not read audit file, create it
+            utils.initializeAuditFile(msgAuditFile)
+            auditContent = readJSON file: msgAuditFile
+        }
     }
 
     // Send message and get handle on SendResult
