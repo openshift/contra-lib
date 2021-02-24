@@ -18,7 +18,8 @@ def call(Map parameters = [:]) {
     def msgRetryCount = parameters.get('msgRetryCount', 3)
     def trackClosure = parameters.get('trackClosure')
     def freshAuditFile = parameters.get('freshAuditFile', false)
-
+    def archiveMessage = parameters.get('archiveMessage', true)
+    
     def utils = new Utils()
 
     def auditContent = null
@@ -49,10 +50,12 @@ def call(Map parameters = [:]) {
 
     auditContent[id] = msg
 
-    // write to auditFile and archive
-    writeJSON pretty: 4, file: msgAuditFile, json: auditContent
+    if (archiveMessage) {
+        // write to auditFile and archive
+        writeJSON pretty: 4, file: msgAuditFile, json: auditContent
 
-    archiveArtifacts allowEmptyArchive: false, artifacts: msgAuditFile
+        archiveArtifacts allowEmptyArchive: false, artifacts: msgAuditFile
+    }
 
     if (trackClosure) {
         utils.trackMessageWithClosure(trackClosure, msgRetryCount, sendResult)
