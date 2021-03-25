@@ -11,6 +11,7 @@
  * env.docsLink: A link to the docs describing the CI system
  * env.MSG_PROVIDER: This is actually required by the sendMessage function that ciStage uses. It is the provider configured in Jenkins on which to send messages
  * env.dataGrepperUrl: This is required by the sendMessageWithAudit function that ciStage uses. It tells the function where to look to confirm the message was sent as expected
+ * env.msgProperties: This optional variable can be defined to pass along custom message headers in the messages sent by ciStage
  *
  * Example Usage:
  *
@@ -43,7 +44,7 @@ def call(String stageName, Closure body) {
     runningMsg = msgBusStageMsg(contact: myContactArray(), pipeline: myPipelineArray())
     // send running message
     try {
-        sendMessageWithAudit(msgTopic: runningTopic, msgContent: runningMsg())
+        sendMessageWithAudit(msgTopic: runningTopic, msgProps: env.msgProperties ?: "", msgContent: runningMsg())
     } catch(e) {
         println("sendMessage failed with " + e)
     }
@@ -67,7 +68,7 @@ def call(String stageName, Closure body) {
     completeMsg = msgBusStageMsg(contact: myContactArray(), pipeline: myPipelineArray())
     // Send complete message
     try {
-        sendMessageWithAudit(msgTopic: completeTopic, msgContent: completeMsg())
+        sendMessageWithAudit(msgTopic: completeTopic, msgProps: env.msgProperties ?: "", msgContent: completeMsg())
     } catch(e) {
         println("sendMessage failed with " + e)
     }
