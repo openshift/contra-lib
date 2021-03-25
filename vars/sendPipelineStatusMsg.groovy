@@ -1,5 +1,6 @@
 /**
  * requires: env.topicPrefix
+ * optional: env.msgProperties: This optional variable can be defined to pass along custom message headers in the messages sent by sendPipelineStatusMsg
  * Example Usage:
  *
  * sendPipelineStatusMsg('complete') {
@@ -32,7 +33,7 @@ def call(String topicSuffix) {
         // Create message
         pipelineMsg = msgBusPipelineMsg(contact: myContactArray(), pipeline: myPipelineArray())
         // Send message
-        sendMessageWithAudit(msgTopic: msgTopic, msgContent: pipelineMsg())
+        sendMessageWithAudit(msgTopic: msgTopic, msgProps: env.msgProperties ?: "", msgContent: pipelineMsg())
 
     } catch(e) {
         println("No message was sent out on topic " + env.topicPrefix + ".pipeline." + topicSuffix + ". The error encountered was: " + e)

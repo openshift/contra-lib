@@ -41,6 +41,7 @@ env.pipelineId = UUID.randomUUID().toString() // Req for Pipeline Closure
 env.MSG_PROVIDER = "Message Bus" // Req for sendMessage function. Name of the messaging provider as set up in your Jenkins master config
 env.datagrepperUrl = "https://datagrepper.com" // Req for sendMessageWithAudit. The datagrepper instance for your messaging provider
 env.topicPrefix = "VirtualTopic.eng.ci" // The prefix to append pipeline.* to in order to form your final topic to send the message on
+env.msgProperties = "someheader=somevalue\nsomeheader2=somevalue2" // Optionally add keys to the message headers
 
 // Checkout contra-lib
 library identifier: "contra-lib@master",
