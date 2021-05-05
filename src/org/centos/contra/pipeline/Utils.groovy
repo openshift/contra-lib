@@ -312,10 +312,10 @@ def trackMessage(String messageID, int retryCount, def dataGrepperWebAddr=null) 
     dGWebAddress = dataGrepperWebAddr ?: env.dataGrepperUrl
 
     retry(retryCount) {
-        echo "Checking datagrapper for presence of message..."
+        echo "Checking datagrepper for presence of message..."
         def STATUSCODE = sh (returnStdout: true, script: """
             curl --insecure --silent --output /dev/null --write-out "%{http_code}" \'${dGWebAddress}/id?id=${messageID}&chrome=false&is_raw=false\'
-        """, label: "Checking datagrapper for presence of message").trim()
+        """, label: "Checking datagrepper for presence of message").trim()
         // We only want to wait if there are 404 errors
         echo "${STATUSCODE}"
         if (STATUSCODE.equals("404")) {
