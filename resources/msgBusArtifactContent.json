@@ -89,10 +89,10 @@
     "description": "A pull-spec that can be used to pull the image, for use with the container-image artifact only.",
     "required": false
   },
-  "full_name": {
-    "value": null,
-    "type": "java.lang.String",
-    "description": "Full name of the container image, in the form of 'registry:port/namespace/name:tag', for use with the redhat-container-image artifact only.",
+  "full_names": {
+    "value": [],
+    "type": "java.util.ArrayList",
+    "description": "Array of full names of the container image One full name is in the form of 'registry:port/namespace/name:tag', for use with the redhat-container-image artifact only.",
     "required": false
   },
   "registry_url": {

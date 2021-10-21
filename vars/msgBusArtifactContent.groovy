@@ -56,7 +56,7 @@ def call(Map parameters = [:]) {
                 }
                 break
             case 'redhat-container-image':
-                if (!parameters.containsKey('id') || !parameters.containsKey('component') || !parameters.containsKey('full_name') || !parameters.containsKey('issuer') || !parameters.containsKey('nvr') || !parameters.containsKey('scratch')) {
+                if (!parameters.containsKey('id') || !parameters.containsKey('component') || !parameters.containsKey('full_names') || !parameters.containsKey('issuer') || !parameters.containsKey('nvr') || !parameters.containsKey('scratch')) {
                     throw new Exception("Error: Missing required fields for redhat-container-image artifact")
                 }
                 break
