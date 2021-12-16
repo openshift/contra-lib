@@ -1,0 +1,26 @@
+{
+  "name": {
+    "value": null,
+    "type": "java.lang.String",
+    "description": "Name of the external service.",
+    "required": true
+  },
+  "type": {
+    "value": null,
+    "type": "java.lang.String",
+    "description": "Type of call (ie. cli or http).",
+    "required": true
+  },
+  "server": {
+    "value": null,
+    "type": "java.lang.String",
+    "description": "Server contacted in case of not targeting the prod server.",
+    "required": false
+  },
+  "endpoint": {
+    "value": null,
+    "type": "java.lang.String",
+    "description": "Either http endpoint or cli subcommand.",
+    "required": false
+  }
+}

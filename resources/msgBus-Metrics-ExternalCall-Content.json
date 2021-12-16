@@ -1,0 +1,44 @@
+{
+  "service": {
+    "value": {},
+    "type": "groovy.lang.Closure",
+    "description": "The service content Map.",
+    "required": true
+  },
+  "source": {
+    "value": null,
+    "type": "java.lang.String",
+    "description": "Tool/component making the request (eg. midstream, rhprod, service, ...).",
+    "required": true
+  },
+  "success": {
+    "value": true,
+    "type": "java.lang.Boolean",
+    "description": "Whether the call succeeded or not.",
+    "required": true
+  },
+  "error": {
+    "value": null,
+    "type": "groovy.lang.Closure",
+    "description": "The error content Map.",
+    "required": false
+  },
+  "start": {
+    "value": null,
+    "type": "java.lang.String",
+    "description": "Time at which the request started. (ISO-8601).",
+    "required": true
+  },
+  "end": {
+    "value": null,
+    "type": "java.lang.String",
+    "description": "Time at which the final answer was collected (last call or retry with a proper answer) (ISO-8601).",
+    "required": true
+  },
+  "retryData": {
+    "value": {},
+    "type": "groovy.lang.Closure",
+    "description": "The retryData content Map.",
+    "required": true
+  }
+}

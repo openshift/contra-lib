@@ -1,0 +1,26 @@
+{
+  "id": {
+    "value": null,
+    "type": "java.lang.String",
+    "description": "Unique identification string. Useful for constructing tree of rebuilds of the same artifact in the Web UI. Note that it is up to the CI system to implement. Replaces thread_id from previous versions of the spec. The value must be unique among all systems reporting on the artifact; it is advised to prefix it with a unique string, e.g. the name of the CI system, etc.",
+    "required": true
+  },
+  "name": {
+    "value": null,
+    "type": "java.lang.String",
+    "description": "A human readable name of the pipeline.",
+    "required": true
+  },
+  "jenkinsUrl": {
+    "value": null,
+    "type": "java.lang.String",
+    "description": "The jenkins URL.",
+    "required": true
+  },
+  "productId": {
+    "value": null,
+    "type": "java.lang.String",
+    "description": "The product id.",
+    "required": false
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "initialRetryInterval": {
+    "value": 0,
+    "type": "java.math.BigInteger",
+    "description": "Initial retry interval (first retry interval) in seconds.",
+    "required": false
+  },
+  "maxElapsedTime": {
+    "value": 0,
+    "type": "java.math.BigInteger",
+    "description": "Maximum number of seconds for the whole retry process.",
+    "required": false
+  },
+  "maxInterval": {
+    "value": 0,
+    "type": "java.math.BigInteger",
+    "description": "Maximum number of seconds between retries.",
+    "required": false
+  },
+  "maxRetries": {
+    "value": 0,
+    "type": "java.math.BigInteger",
+    "description": "Maximum number of retries.",
+    "required": false
+  },
+  "timeout": {
+    "value": 0,
+    "type": "java.math.BigInteger",
+    "description": "Timeout used for each call to the external service.",
+    "required": false
+  }
+}
