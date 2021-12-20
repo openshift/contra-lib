@@ -10,7 +10,7 @@ def call(Map parameters = [:]) {
 
     def utils = new Utils()
 
-    def defaults = readJSON text: libraryResource('msgBusMetricsMsg.json')
+    def defaults = readJSON text: libraryResource('msgBus-Metrics-Msg.json')
 
     return { Map runtimeArgs = [:] ->
         parameters['externalCall'] = parameters['externalCall'] ?: msgBusMetricsExternalCallContent()()
