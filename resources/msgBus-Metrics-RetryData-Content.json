@@ -1,0 +1,14 @@
+{
+  "configuration": {
+    "value": {},
+    "type": "groovy.lang.Closure",
+    "description": "The RetryDataConfiguration content Map.",
+    "required": false
+  },
+  "iterations": {
+    "value": 0,
+    "type": "java.math.BigInteger",
+    "description": "Number of iterations (ie. number of retries plus 1 for the first call).",
+    "required": true
+  }
+}

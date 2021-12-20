@@ -1,0 +1,14 @@
+{
+  "code": {
+    "value": 0,
+    "type": "java.math.BigInteger",
+    "description": "Error code.",
+    "required": true
+  },
+  "message": {
+    "value": null,
+    "type": "java.lang.String",
+    "description": "Error message.",
+    "required": false
+  }
+}
