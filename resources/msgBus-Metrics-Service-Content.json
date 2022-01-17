@@ -22,5 +22,23 @@
     "type": "java.lang.String",
     "description": "Either http endpoint or cli subcommand.",
     "required": false
+  },
+  "apiVersion": {
+    "value": null,
+    "type": "java.lang.String",
+    "description": "API version for versioned APIs.",
+    "required": false
+  },
+  "method": {
+    "value": null,
+    "type": "java.lang.String",
+    "description": "HTTP method used (eg. post, get, ...).",
+    "required": false
+  },
+  "params": {
+    "value": [],
+    "type": "java.util.ArrayList",
+    "description": "List of params sent to the CLI.",
+    "required": false
   }
 }
