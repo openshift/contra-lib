@@ -17,12 +17,6 @@
     "description": "Whether the call succeeded or not.",
     "required": true
   },
-  "error": {
-    "value": null,
-    "type": "groovy.lang.Closure",
-    "description": "The error content Map.",
-    "required": false
-  },
   "start": {
     "value": null,
     "type": "java.lang.String",

@@ -6,9 +6,9 @@
     "required": false
   },
   "iterations": {
-    "value": 0,
-    "type": "java.math.BigInteger",
-    "description": "Number of iterations (ie. number of retries plus 1 for the first call).",
-    "required": true
+    "value": {},
+    "type": "java.util.ArrayList",
+    "description": "List of RetryDataIterations content Maps.",
+    "required": false
   }
 }

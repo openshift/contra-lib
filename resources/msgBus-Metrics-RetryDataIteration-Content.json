@@ -1,0 +1,26 @@
+{
+  "start": {
+    "value": null,
+    "type": "java.lang.String",
+    "description": "Time at which the iteration started. (ISO-8601).",
+    "required": true
+  },
+  "end": {
+    "value": null,
+    "type": "java.lang.String",
+    "description": "Time at which the answer was collected (ISO-8601).",
+    "required": true
+  },
+  "error": {
+    "value": null,
+    "type": "java.lang.String",
+    "description": "If the iteration failed, error message",
+    "required": false
+  },
+  "statusCode": {
+    "value": 0,
+    "type": "java.math.BigInteger",
+    "description": "Status code of the cli execution or http call.",
+    "required": true
+  }
+}

@@ -23,30 +23,34 @@ def call(Map metricsMap) {
     def msgTopic = env.topicPrefix + ".pipeline.metrics"
 
     try {
+        def params = []
+        if (metricsMap['service']['params']) {
+            metricsMap['service']['params'].each {
+                params.add("\"$it\"")
+            }
+            metricsMap['service']['params'] = params
+        }
         service = msgBusMetricsServiceContent(
                 metricsMap['service']
         )
-        error = metricsMap['error'] ? msgBusMetricsErrorContent(code: metricsMap['error']['code'], message: metricsMap['error']['message']) : null
 
         def retryData
+        def iterations = []
+        metricsMap['retryData']['iterations'].each {
+            iterations.add(
+                    msgBusMetricsRetryDataIterationContent(it)()
+            )
+        }
         if (metricsMap['retryData']['configuration']) {
             retryDataConfiguration = msgBusMetricsRetryDataConfigurationContent(
                     metricsMap['retryData']['configuration']
             )
-            retryData = msgBusMetricsRetryDataContent(configuration: retryDataConfiguration(), iterations: metricsMap['retryData']['iterations'])
+            retryData = msgBusMetricsRetryDataContent(configuration: retryDataConfiguration(), iterations: iterations)
         } else {
-            retryData = msgBusMetricsRetryDataContent(iterations: metricsMap['retryData']['iterations'])
+            retryData = msgBusMetricsRetryDataContent(iterations: iterations)
         }
 
-        externalCall = metricsMap['error'] ? msgBusMetricsExternalCallContent(
-                service: service(),
-                source: metricsMap['source'],
-                success: metricsMap['success'],
-                error: error(),
-                start: metricsMap['start'],
-                end: metricsMap['end'],
-                retryData: retryData()
-        ) : msgBusMetricsExternalCallContent(
+        externalCall = msgBusMetricsExternalCallContent(
                 service: service(),
                 source: metricsMap['source'],
                 success: metricsMap['success'],
