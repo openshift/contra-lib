@@ -26,7 +26,6 @@ def call(Map metricsMap) {
         def params = []
         if (metricsMap['service']['params']) {
             metricsMap['service']['params'].each {
-                println(it.getClass())
                 b = "$it".replaceAll('"','')
                 b = "$b".replaceAll("\n","")
                 params.add("\"$b\"")
