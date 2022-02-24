@@ -13,7 +13,6 @@ import org.centos.contra.pipeline.Utils
  */
 
 def call(Map metricsMap) {
-    string b = ""
     // Make sure required env variables are set. The ones used in the
     // message bodies are enforced by the json closures.
     // Note: Error message should be changed if variables are added here
@@ -27,6 +26,7 @@ def call(Map metricsMap) {
         def params = []
         if (metricsMap['service']['params']) {
             metricsMap['service']['params'].each {
+                string b = ""
                 b = "$it".replaceAll('"','')
                 b = "$b".replaceAll("\n","")
                 params.add("\"$b\"")
