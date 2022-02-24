@@ -11,7 +11,7 @@ import org.centos.contra.pipeline.Utils
  * @param metricsMap: A map containing the metrics to be sent over the bus
  * @return
  */
-
+string b = ""
 def call(Map metricsMap) {
     // Make sure required env variables are set. The ones used in the
     // message bodies are enforced by the json closures.
