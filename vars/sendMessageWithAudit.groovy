@@ -23,19 +23,10 @@ def call(Map parameters = [:]) {
     def utils = new Utils()
 
     def auditContent = null
-    if (freshAuditFile) { // Optionally create a new audit file each time
+    if (freshAuditFile || !fileExists(msgAuditFile)) { 
         utils.initializeAuditFile(msgAuditFile)
-        auditContent = readJSON file: msgAuditFile
-    } else {
-        try {
-            // Get contents of auditFile
-            auditContent = readJSON file: msgAuditFile
-        } catch(e) {
-            // If could not read audit file, create it
-            utils.initializeAuditFile(msgAuditFile)
-            auditContent = readJSON file: msgAuditFile
-        }
     }
+    auditContent = readJSON file: msgAuditFile
 
     // Send message and get handle on SendResult
     def sendResult = null
