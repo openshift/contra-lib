@@ -319,7 +319,7 @@ def trackMessage(String messageID, int retryCount, def dataGrepperWebAddr=null) 
         // We only want to wait if there are 404 errors
         echo "${STATUSCODE}"
         if (STATUSCODE.equals("404")) {
-            error("message not found on datagrepper...")
+            echo("message not found on datagrepper...")
         }
         if (STATUSCODE.startsWith("5")) {
             echo("WARNING: internal datagrepper server error...")
