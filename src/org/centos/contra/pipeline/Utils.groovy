@@ -273,7 +273,7 @@ def getCredentialsById(String credsId, String credsType = 'any') {
  */
 def sendMessage(String msgTopic, String msgProps, String msgContent, def provider=null) {
 
-    msg_provider = provider ?: env.MSG_PROVIDER
+    String msg_provider = provider ?: env.MSG_PROVIDER
 
     retry(10) {
         try {
@@ -281,7 +281,7 @@ def sendMessage(String msgTopic, String msgProps, String msgContent, def provide
             timeout(1) {
                 try {
                     // Send message and return SendResult
-                    sendResult = sendCIMessage messageContent: msgContent,
+                    SendResult sendResult = sendCIMessage messageContent: msgContent,
                             messageProperties: msgProps,
                             messageType: 'Custom',
                             overrides: [topic: msgTopic],
@@ -309,7 +309,7 @@ def sendMessage(String msgTopic, String msgProps, String msgContent, def provide
  * @return
  */
 def trackMessage(String messageID, int retryCount, def dataGrepperWebAddr=null) {
-    dGWebAddress = dataGrepperWebAddr ?: env.dataGrepperUrl
+    String dGWebAddress = dataGrepperWebAddr ?: env.dataGrepperUrl
 
     retry(retryCount) {
         echo "Checking datagrepper for presence of message..."
@@ -375,6 +375,7 @@ def mapMergeQuotes(def sources) {
     if (sources.size() == 0) return [:]
     if (sources.size() == 1) return sources[0]
 
+    String v2 = ""
     sources.inject([:]) { result, source ->
         source.each { k, v ->
             if (v instanceof String && (v == "" || !(v[0] in ["\"", "{"]))) {
@@ -423,7 +424,7 @@ def mergeBusMessage(Map content, Map defaults) {
  * @return String
  */
 def getMapStringColon(Map myMap) {
-   myString = "{"
+   String myString = "{"
    myMap.each { k, v ->
        myString = myString + "\"" + k + "\":" + v + ","
    }
@@ -436,7 +437,7 @@ def getMapStringColon(Map myMap) {
  * @return String
  */
 def getMapString(Map myMap) {
-   myString = ""
+   String myString = ""
    myMap.each { k, v ->
        myString = myString + k + "=" + v + "\n"
    }

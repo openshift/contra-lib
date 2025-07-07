@@ -45,6 +45,7 @@ def call(Map parameters = [:], Closure body) {
     def cimetrics = ciMetrics.metricsInstance
     cimetrics.prefix = buildPrefix
 
+    String topicSuffix = ""
     if (env.topicPrefix) {
         sendPipelineStatusMsg('running')
     }

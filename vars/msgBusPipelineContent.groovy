@@ -19,6 +19,7 @@ def call(Map parameters = [:]) {
         parameters['id'] = parameters['id'] ?: UUID.randomUUID().toString()
 
         parameters = utils.mapMergeQuotes([parameters, runtimeArgs])
+        def mergedMessage
         try {
             mergedMessage = utils.mergeBusMessage(parameters, defaults)
         } catch(e) {

@@ -17,10 +17,11 @@ def call(String topicSuffix) {
     if (!env.topicPrefix) {
         error("Missing env.topicPrefix required variable to use sendPipelineStatusMsg")
     }
-
+    
+    def myPipelineArray
     try {
         def msgTopic = env.topicPrefix + ".pipeline." + topicSuffix
-        myDocs = env.docsLink ?: env.JENKINS_URL
+        String myDocs = env.docsLink ?: env.JENKINS_URL
         def myContactArray = env.teamIRC ? msgBusContactContent(name: env.effortName, team: env.teamName, irc: env.teamIRC, email: env.teamEmail, docs: myDocs) : msgBusContactContent(name: env.effortName, team: env.teamName, email: env.teamEmail, docs: myDocs)
         if (topicSuffix in ['complete','error']) {
             // Get runtime for pipeline array
@@ -31,7 +32,7 @@ def call(String topicSuffix) {
         }
 
         // Create message
-        pipelineMsg = msgBusPipelineMsg(contact: myContactArray(), pipeline: myPipelineArray())
+        def pipelineMsg = msgBusPipelineMsg(contact: myContactArray(), pipeline: myPipelineArray())
         // Send message
         sendMessageWithAudit(msgTopic: msgTopic, msgProps: env.msgProperties ?: "", msgContent: pipelineMsg())
 

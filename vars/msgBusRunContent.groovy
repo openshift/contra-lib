@@ -19,6 +19,7 @@ def call(Map parameters = [:]) {
         parameters['rebuild'] = parameters['rebuild'] ?: env.BUILD_URL + 'rebuild/parameterized'
 
         parameters = utils.mapMergeQuotes([parameters, runtimeArgs])
+        def mergedMessage
         try {
             mergedMessage = utils.mergeBusMessage(parameters, defaults)
         } catch(e) {

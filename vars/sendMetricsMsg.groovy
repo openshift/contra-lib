@@ -26,13 +26,13 @@ def call(Map metricsMap) {
         def params = []
         if (metricsMap['service']['params']) {
             metricsMap['service']['params'].each {
-                string b = "$it".replaceAll('"','')
+                String b = "$it".replaceAll('"','')
                 b = "$b".replaceAll("\n","")
                 params.add("\"$b\"")
             }
             metricsMap['service']['params'] = params
         }
-        service = msgBusMetricsServiceContent(
+        def service = msgBusMetricsServiceContent(
                 metricsMap['service']
         )
 
@@ -52,7 +52,7 @@ def call(Map metricsMap) {
             retryData = msgBusMetricsRetryDataContent(iterations: iterations)
         }
 
-        externalCall = msgBusMetricsExternalCallContent(
+        def externalCall = msgBusMetricsExternalCallContent(
                 service: service(),
                 source: metricsMap['source'],
                 success: metricsMap['success'],
@@ -60,7 +60,7 @@ def call(Map metricsMap) {
                 end: metricsMap['end'],
                 retryData: retryData()
         )
-        pipeline = env.productId ? msgBusMetricsPipelineContent(
+        def pipeline = env.productId ? msgBusMetricsPipelineContent(
                 id: env.pipelineId,
                 name: env.pipelineName,
                 jenkinsUrl: env.JENKINS_URL,
@@ -70,7 +70,7 @@ def call(Map metricsMap) {
                 name: env.pipelineName,
                 jenkinsUrl: env.JENKINS_URL
         )
-        metricsMsg = msgBusMetricsMsg(externalCall: externalCall(), pipeline: pipeline())
+        def metricsMsg = msgBusMetricsMsg(externalCall: externalCall(), pipeline: pipeline())
 
         // Send message
         def utils = new Utils()
@@ -80,3 +80,4 @@ def call(Map metricsMap) {
         println("No message was sent out on topic " + msgTopic + ". The error encountered was: " + e)
     }
 }
+

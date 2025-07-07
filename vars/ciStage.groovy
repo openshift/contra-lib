@@ -34,14 +34,14 @@ def call(String stageName, Closure body) {
     def runningTopic = env.topicPrefix + ".pipeline.stage.running"
     def completeTopic = env.topicPrefix + ".pipeline.stage.complete"
 
-    myDocs = env.docsLink ?: env.JENKINS_URL
+    String myDocs = env.docsLink ?: env.JENKINS_URL
     // Create contact and pipeline arrays to place in messages
-    myContactArray = env.teamIRC ? msgBusContactContent(name: env.effortName, team: env.teamName, irc: env.teamIRC, email: env.teamEmail, docs: myDocs) : msgBusContactContent(name: env.effortName, team: env.teamName, email: env.teamEmail, docs: myDocs)
-    myStageArray = msgBusStageContent(name: stageName)
-    myPipelineArray = env.pipelineName ? msgBusPipelineContent(name: env.pipelineName, id: env.pipelineId, stage: myStageArray()) : msgBusPipelineContent(name: env.effortName, id: env.pipelineId, stage: myStageArray())
+    def myContactArray = env.teamIRC ? msgBusContactContent(name: env.effortName, team: env.teamName, irc: env.teamIRC, email: env.teamEmail, docs: myDocs) : msgBusContactContent(name: env.effortName, team: env.teamName, email: env.teamEmail, docs: myDocs)
+    def myStageArray = msgBusStageContent(name: stageName)
+    def myPipelineArray = env.pipelineName ? msgBusPipelineContent(name: env.pipelineName, id: env.pipelineId, stage: myStageArray()) : msgBusPipelineContent(name: env.effortName, id: env.pipelineId, stage: myStageArray())
 
     // Create stage running message
-    runningMsg = msgBusStageMsg(contact: myContactArray(), pipeline: myPipelineArray())
+    def runningMsg = msgBusStageMsg(contact: myContactArray(), pipeline: myPipelineArray())
     // send running message
     try {
         sendMessageWithAudit(msgTopic: runningTopic, msgProps: env.msgProperties ?: "", msgContent: runningMsg())
@@ -65,7 +65,7 @@ def call(String stageName, Closure body) {
     myPipelineArray = env.pipelineName ? msgBusPipelineContent(name: env.pipelineName, id: env.pipelineId, stage: myStageArray()) : msgBusPipelineContent(name: env.teamName, id: env.pipelineId, stage: myStageArray())
 
     // Create stage complete message
-    completeMsg = msgBusStageMsg(contact: myContactArray(), pipeline: myPipelineArray())
+    def completeMsg = msgBusStageMsg(contact: myContactArray(), pipeline: myPipelineArray())
     // Send complete message
     try {
         sendMessageWithAudit(msgTopic: completeTopic, msgProps: env.msgProperties ?: "", msgContent: completeMsg())

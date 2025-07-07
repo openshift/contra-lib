@@ -17,6 +17,7 @@ def call(Map parameters = [:]) {
         parameters['retryData'] = parameters['retryData'] ?: msgBusMetricsRetryDataContent()()
 
         parameters = utils.mapMergeQuotes([parameters, runtimeArgs])
+        def mergedMessage 
         try {
             mergedMessage = utils.mergeBusMessage(parameters, defaults)
         } catch(e) {

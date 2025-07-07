@@ -14,6 +14,7 @@ def call(Map parameters = [:]) {
 
     return { Map runtimeArgs = [:] ->
         parameters = utils.mapMergeQuotes([parameters, runtimeArgs])
+        def mergedMessage 
         try {
             mergedMessage = utils.mergeBusMessage(parameters, defaults)
         } catch(e) {
