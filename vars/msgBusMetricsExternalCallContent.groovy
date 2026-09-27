@@ -17,14 +17,11 @@ def call(Map parameters = [:]) {
         parameters['retryData'] = parameters['retryData'] ?: msgBusMetricsRetryDataContent()()
 
         parameters = utils.mapMergeQuotes([parameters, runtimeArgs])
-        def mergedMessage 
         try {
-            mergedMessage = utils.mergeBusMessage(parameters, defaults)
+            def mergedMessage = utils.mergeBusMessage(parameters, defaults)
+            return utils.getMapStringColon(mergedMessage)
         } catch(e) {
             throw new Exception("Creating closure for external call content failed: " + e)
         }
-
-        // sendCIMessage expects String arguments
-        return utils.getMapStringColon(mergedMessage)
     }
 }

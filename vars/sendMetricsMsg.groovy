@@ -22,29 +22,32 @@ def call(Map metricsMap) {
 
     def msgTopic = env.topicPrefix + ".pipeline.metrics"
 
+    def params = []
+    def service
+    def retryData
+    def iterations = []
+    def externalCall
+    def pipeline
     try {
-        def params = []
         if (metricsMap['service']['params']) {
             metricsMap['service']['params'].each {
-                String b = "$it".replaceAll('"','')
+                def b = "$it".replaceAll('"','')
                 b = "$b".replaceAll("\n","")
                 params.add("\"$b\"")
             }
             metricsMap['service']['params'] = params
         }
-        def service = msgBusMetricsServiceContent(
+        service = msgBusMetricsServiceContent(
                 metricsMap['service']
         )
 
-        def retryData
-        def iterations = []
         metricsMap['retryData']['iterations'].each {
             iterations.add(
                     msgBusMetricsRetryDataIterationContent(it)()
             )
         }
         if (metricsMap['retryData']['configuration']) {
-            retryDataConfiguration = msgBusMetricsRetryDataConfigurationContent(
+            def retryDataConfiguration = msgBusMetricsRetryDataConfigurationContent(
                     metricsMap['retryData']['configuration']
             )
             retryData = msgBusMetricsRetryDataContent(configuration: retryDataConfiguration(), iterations: iterations)
@@ -52,7 +55,7 @@ def call(Map metricsMap) {
             retryData = msgBusMetricsRetryDataContent(iterations: iterations)
         }
 
-        def externalCall = msgBusMetricsExternalCallContent(
+        externalCall = msgBusMetricsExternalCallContent(
                 service: service(),
                 source: metricsMap['source'],
                 success: metricsMap['success'],
@@ -60,7 +63,7 @@ def call(Map metricsMap) {
                 end: metricsMap['end'],
                 retryData: retryData()
         )
-        def pipeline = env.productId ? msgBusMetricsPipelineContent(
+        pipeline = env.productId ? msgBusMetricsPipelineContent(
                 id: env.pipelineId,
                 name: env.pipelineName,
                 jenkinsUrl: env.JENKINS_URL,
