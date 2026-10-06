@@ -15,12 +15,10 @@ def call(Map parameters = [:]) {
     return { Map runtimeArgs = [:] ->
         parameters = utils.mapMergeQuotes([parameters, runtimeArgs])
         try {
-            mergedMessage = utils.mergeBusMessage(parameters, defaults)
+            def mergedMessage = utils.mergeBusMessage(parameters, defaults)
+            return utils.getMapStringColon(mergedMessage)
         } catch(e) {
             throw new Exception("Creating the retry configuration closure for retry metrics message failed: " + e)
         }
-
-        // sendCIMessage expects String arguments
-        return utils.getMapStringColon(mergedMessage)
     }
 }

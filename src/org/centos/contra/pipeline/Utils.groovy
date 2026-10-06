@@ -273,7 +273,7 @@ def getCredentialsById(String credsId, String credsType = 'any') {
  */
 def sendMessage(String msgTopic, String msgProps, String msgContent, def provider=null) {
 
-    String msg_provider = provider ?: env.MSG_PROVIDER
+    def msg_provider = provider ?: env.MSG_PROVIDER
 
     retry(10) {
         try {
@@ -281,7 +281,7 @@ def sendMessage(String msgTopic, String msgProps, String msgContent, def provide
             timeout(1) {
                 try {
                     // Send message and return SendResult
-                    SendResult sendResult = sendCIMessage messageContent: msgContent,
+                    def sendResult = sendCIMessage messageContent: msgContent,
                             messageProperties: msgProps,
                             messageType: 'Custom',
                             overrides: [topic: msgTopic],
@@ -371,13 +371,14 @@ def mapMerge(def sources) {
  * @param a list of Maps to merge
  * @return
  */
+@NonCPS
 def mapMergeQuotes(def sources) {
     if (sources.size() == 0) return [:]
     if (sources.size() == 1) return sources[0]
 
-    String v2 = ""
     sources.inject([:]) { result, source ->
         source.each { k, v ->
+            def v2
             if (v instanceof String && (v == "" || !(v[0] in ["\"", "{"]))) {
                 v2 = "\"" + v + "\""
             } else {
@@ -395,6 +396,7 @@ def mapMergeQuotes(def sources) {
  * @param defaults
  * @return
  */
+@NonCPS
 def mergeBusMessage(Map content, Map defaults) {
 
     def mergedContent = [:]
@@ -423,8 +425,9 @@ def mergeBusMessage(Map content, Map defaults) {
  * @param Map myMap
  * @return String
  */
+@NonCPS
 def getMapStringColon(Map myMap) {
-   String myString = "{"
+   def myString = "{"
    myMap.each { k, v ->
        myString = myString + "\"" + k + "\":" + v + ","
    }
@@ -436,8 +439,9 @@ def getMapStringColon(Map myMap) {
  * @param Map myMap
  * @return String
  */
+@NonCPS
 def getMapString(Map myMap) {
-   String myString = ""
+   def myString = ""
    myMap.each { k, v ->
        myString = myString + k + "=" + v + "\n"
    }
@@ -451,6 +455,7 @@ def getMapString(Map myMap) {
  * @param defaults
  * @return
  */
+@NonCPS
 def validateBusKeyValue(def key, def value, Map defaults) {
 
     def isValid = false
@@ -478,6 +483,7 @@ def validateBusKeyValue(def key, def value, Map defaults) {
  * @param B - Class
  * @return bool
  */
+@NonCPS
 def jenkinsIsAssignableFrom(Class A, Class B) {
     if (A.isAssignableFrom(B)) {
         return true
